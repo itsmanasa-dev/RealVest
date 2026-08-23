@@ -1,8 +1,9 @@
+
 # REALVEST — AI Real Estate & Business Analytics MVP
 
 **REALVEST** is a production-grade AI Real Estate & Business Analytics platform designed to evaluate Bengaluru property valuations, rental yields, investment deal ratings, business location feasibility, and housing price index trends.
 
----
+
 
 ## Key Features
 
