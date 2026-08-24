@@ -1,159 +1,152 @@
 import streamlit as st
-import plotly.graph_objects as go
 from app.translations import get_text
 from src.models.predict import predict_property_price, predict_rent_price, get_price_model
 from src.analytics.yield_calculator import calculate_rental_yield
 from src.analytics.deal_classifier import classify_property_deal
 from src.analytics.investment_scorer import calculate_investment_score
-from src.models.explain import get_property_price_explanation, get_rent_explanation
+from src.models.explain import get_property_price_explanation
+from src.utils.formatting import format_currency_lakhs, format_rent, format_percentage, format_number
+from src.utils.validation import safe_float, safe_int
+from src.utils.errors import handle_user_errors
 
+@handle_user_errors("Unable to analyze property details. Please verify input numbers and try again.")
 def render_property_analyzer(lang='English'):
     st.markdown(f"""
-    <div style="margin-bottom: 24px;">
-        <h2 style="font-size: 26px; font-weight: 700; color: #F8FAFC;">{get_text('nav_analyzer', lang)}</h2>
-        <p style="color: #94A3B8; font-size: 14px;">Enter property specifications to compute ML Fair Value, Rent estimate, Rental Yield, and Investment Deal Rating.</p>
+    <div>
+        <div class="page-head">{get_text('analyzer_title', lang)}</div>
+        <div class="page-subhead">{get_text('analyzer_sub', lang)}</div>
     </div>
     """, unsafe_allow_html=True)
     
-    # Load top locations list from trained model
     m_data = get_price_model()
     top_locations = m_data['top_locations']
     
-    # Form layout
-    with st.form("analyzer_form"):
-        col_a, col_b, col_c = st.columns(3)
-        
-        with col_a:
-            location = st.selectbox(get_text('lbl_location', lang), top_locations, index=0)
-            sqft = st.number_input(get_text('lbl_area', lang), min_value=300, max_value=20000, value=1350, step=50)
-            bhk = st.number_input(get_text('lbl_bhk', lang), min_value=1, max_value=10, value=2, step=1)
+    with st.form("property_check_form"):
+        st.markdown(f'### {get_text("step1_title", lang)}')
+        c1, c2 = st.columns(2)
+        with c1:
+            city = st.text_input("City", value="Bengaluru", disabled=True)
+        with c2:
+            location = st.selectbox("Locality", top_locations, index=0)
             
-        with col_b:
-            bath = st.number_input(get_text('lbl_bathrooms', lang), min_value=1, max_value=10, value=2, step=1)
-            balcony = st.number_input(get_text('lbl_balconies', lang), min_value=0, max_value=5, value=1, step=1)
-            furnishing = st.selectbox(get_text('lbl_furnishing', lang), ['Semi-Furnished', 'Furnished', 'Unfurnished'], index=0)
+        st.markdown(f'### {get_text("step2_title", lang)}')
+        c3, c4, c5, c6 = st.columns(4)
+        with c3:
+            prop_type = st.selectbox("Property Type", ["Apartment", "Independent House", "Villa"], index=0)
+        with c4:
+            bhk = st.number_input("BHK Configuration", min_value=1, max_value=8, value=2, step=1)
+        with c5:
+            sqft = st.number_input("Area (Sqft)", min_value=300, max_value=15000, value=1250, step=50)
+        with c6:
+            bath = st.number_input("Bathrooms", min_value=1, max_value=8, value=2, step=1)
             
-        with col_c:
-            area_type = st.selectbox("Area Type", ['Super built-up Area', 'Plot Area', 'Built-up Area', 'Carpet Area'], index=0)
-            is_ready = st.selectbox("Availability", ['Ready To Move', 'Under Construction'], index=0)
-            asking_price = st.number_input(f"{get_text('lbl_asking_price', lang)} (₹ Lakhs)", min_value=5.0, max_value=5000.0, value=72.0, step=1.0)
+        st.markdown(f'### {get_text("step3_title", lang)}')
+        c7, c8 = st.columns(2)
+        with c7:
+            asking_price_in = st.number_input("Asking price (₹ Lakhs)", min_value=5.0, max_value=3000.0, value=62.0, step=1.0)
+        with c8:
+            rent_in = st.number_input("Expected monthly rent (₹, optional)", min_value=0, max_value=500000, value=0, step=1000)
             
-        submitted = st.form_submit_button(get_text('btn_analyze', lang), use_container_width=True)
+        submitted = st.form_submit_button(get_text('btn_analyze_submit', lang), use_container_width=True)
         
     if submitted or 'analyzed_data' in st.session_state:
-        # Save or process
-        is_ready_val = 1 if is_ready == 'Ready To Move' else 0
+        asking_price = safe_float(asking_price_in, default=62.0)
+        sqft_val = safe_float(sqft, default=1250.0)
+        bhk_val = safe_int(bhk, default=2)
+        bath_val = safe_int(bath, default=2)
         
         # 1. Predictions
-        val_res = predict_property_price(location, sqft, bhk, bath, balcony, area_type, is_ready_val)
-        fair_val = val_res['estimated_price_lakhs']
+        val_res = predict_property_price(location, sqft_val, bhk_val, bath_val, 1, 'Super built-up Area', 1)
+        fair_val = safe_float(val_res.get('estimated_price_lakhs', 0.0))
         
-        rent_res = predict_rent_price(location, sqft, bhk, bath, balcony, furnishing)
-        monthly_rent = rent_res['estimated_rent_monthly']
+        rent_res = predict_rent_price(location, sqft_val, bhk_val, bath_val, 1, 'Semi-Furnished')
+        user_rent = safe_float(rent_in)
+        monthly_rent = user_rent if user_rent > 0 else safe_float(rent_res.get('estimated_rent_monthly', 0.0))
         
         # 2. Analytics
         yield_res = calculate_rental_yield(monthly_rent, asking_price)
         deal_res = classify_property_deal(asking_price, fair_val)
         score_res = calculate_investment_score(asking_price, fair_val, yield_res['rental_yield_pct'])
         
-        # 3. Explanations
-        price_expl = get_property_price_explanation(location, sqft, bhk, bath, balcony, area_type, is_ready_val)
+        # Verdict Badges
+        deal_status = deal_res.get('status', '')
+        if deal_status == "Potentially Undervalued":
+            verdict_text = get_text('verdict_good', lang)
+            badge_class = "badge-good"
+        elif deal_status == "Potentially Overpriced":
+            verdict_text = get_text('verdict_overpriced', lang)
+            badge_class = "badge-overpriced"
+        else:
+            verdict_text = get_text('verdict_fair', lang)
+            badge_class = "badge-fair"
+            
+        st.markdown("<hr style='border-color: #E2E8F0; margin: 32px 0;'>", unsafe_allow_html=True)
         
-        st.markdown("<hr style='border-color: #1E293B; margin: 30px 0;'>", unsafe_allow_html=True)
-        st.markdown('<h3 style="font-size: 20px; font-weight: 700; color: #F8FAFC;">Valuation & Analytics Summary</h3>', unsafe_allow_html=True)
+        # Verdict Header Banner
+        st.markdown(f"""
+        <div class="rv-card">
+            <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #64748B; letter-spacing: 0.5px;">
+                {get_text('verdict_head', lang)}
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; flex-wrap: wrap; gap: 12px;">
+                <div style="font-size: 28px; font-weight: 800; color: #0F172A;">{verdict_text}</div>
+                <span class="badge {badge_class}">{deal_status}</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
         
-        # Prominent Result KPI Cards
-        kpi1, kpi2, kpi3, kpi4, kpi5, kpi6 = st.columns(6)
-        
-        with kpi1:
-            st.markdown(f"""
-            <div class="realvest-card">
-                <div class="card-label">Fair Value</div>
-                <div class="card-value" style="color: #38BDF8;">₹{fair_val:,.1f}L</div>
-                <div class="card-subtext">Range: ₹{val_res['price_range_lower']}L–{val_res['price_range_upper']}L</div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with kpi2:
-            st.markdown(f"""
-            <div class="realvest-card">
-                <div class="card-label">Asking Price</div>
-                <div class="card-value">₹{asking_price:,.1f}L</div>
-                <div class="card-subtext">₹{val_res['price_per_sqft']:,.0f}/sqft</div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with kpi3:
-            st.markdown(f"""
-            <div class="realvest-card">
-                <div class="card-label">Expected Rent</div>
-                <div class="card-value" style="color: #10B981;">₹{monthly_rent:,.0f}</div>
-                <div class="card-subtext">Range: ₹{rent_res['rent_range_lower']:,.0f}–{rent_res['rent_range_upper']:,.0f}</div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with kpi4:
-            st.markdown(f"""
-            <div class="realvest-card">
-                <div class="card-label">Rental Yield</div>
-                <div class="card-value" style="color: {yield_res['color']};">{yield_res['rental_yield_pct']}%</div>
-                <div class="card-subtext">{yield_res['tier']} Return</div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with kpi5:
-            st.markdown(f"""
-            <div class="realvest-card">
-                <div class="card-label">Score</div>
-                <div class="card-value" style="color: {score_res['color']};">{score_res['total_score']}/100</div>
-                <div class="card-subtext">{score_res['rating']}</div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with kpi6:
-            badge_class = "badge-undervalued" if deal_res['status'] == "Potentially Undervalued" else ("badge-overpriced" if deal_res['status'] == "Potentially Overpriced" else "badge-fair")
-            st.markdown(f"""
-            <div class="realvest-card">
-                <div class="card-label">Deal Status</div>
-                <div style="margin-top: 8px;"><span class="{badge_class}">{deal_res['status']}</span></div>
-                <div class="card-subtext" style="margin-top: 10px;">{deal_res['diff_pct']:+}% vs Fair</div>
-            </div>
-            """, unsafe_allow_html=True)
+        # Visually Clean Metrics Row using native st.metric
+        m1, m2, m3, m4, m5 = st.columns(5)
+        with m1:
+            st.metric(label=get_text('lbl_asking_price', lang), value=format_currency_lakhs(asking_price))
+        with m2:
+            st.metric(label=get_text('lbl_fair_value', lang), value=format_currency_lakhs(fair_val))
+        with m3:
+            st.metric(label=get_text('lbl_rent', lang), value=format_rent(monthly_rent))
+        with m4:
+            st.metric(label=get_text('lbl_yield', lang), value=format_percentage(yield_res['rental_yield_pct']))
+        with m5:
+            st.metric(label=get_text('lbl_score', lang), value=f"{safe_int(score_res['total_score'])}/100")
             
         st.markdown("<br>", unsafe_allow_html=True)
         
-        col_left, col_right = st.columns([6, 6])
+        # WHY THIS RESULT Section
+        st.markdown(f'<div class="section-head">{get_text("why_result_head", lang)}</div>', unsafe_allow_html=True)
         
-        with col_left:
-            st.markdown(f'<div class="section-title">{get_text("sec_why_result", lang)}</div>', unsafe_allow_html=True)
-            st.markdown(f"**Deal Assessment:** {deal_res['explanation']}")
-            st.markdown(f"**Yield Interpretation:** {yield_res['interpretation']}")
+        why_bullets = []
+        if asking_price <= fair_val:
+            diff = fair_val - asking_price
+            why_bullets.append(("✓", f"Asking price is {format_currency_lakhs(diff)} below the estimated fair value"))
+        else:
+            diff = asking_price - fair_val
+            why_bullets.append(("⚠", f"Asking price is {format_currency_lakhs(diff)} higher than estimated fair value"))
             
-            st.markdown("<br><b>Model Attribution Factors:</b>", unsafe_allow_html=True)
-            for item in price_expl['explanations']:
-                st.markdown(f"- {item}")
-                
-        with col_right:
-            st.markdown('<div class="section-title">Asking Price vs Fair Value Comparison</div>', unsafe_allow_html=True)
-            fig = go.Figure(data=[
-                go.Bar(name='Asking Price', x=['Property'], y=[asking_price], marker_color='#94A3B8'),
-                go.Bar(name='ML Fair Value', x=['Property'], y=[fair_val], marker_color='#38BDF8'),
-                go.Bar(name='Lower Bound', x=['Property'], y=[val_res['price_range_lower']], marker_color='#334155'),
-                go.Bar(name='Upper Bound', x=['Property'], y=[val_res['price_range_upper']], marker_color='#0284C7')
-            ])
-            fig.update_layout(
-                barmode='group',
-                template='plotly_dark',
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                margin=dict(l=20, r=20, t=30, b=20),
-                height=260,
-                yaxis=dict(title='Price (₹ Lakhs)', gridcolor='#1E293B')
-            )
-            st.plotly_chart(fig, use_container_width=True)
+        if yield_res['rental_yield_pct'] >= 4.0:
+            why_bullets.append(("✓", f"Estimated rental return of {format_percentage(yield_res['rental_yield_pct'])} is attractive"))
+        else:
+            why_bullets.append(("⚠", f"Estimated rental yield of {format_percentage(yield_res['rental_yield_pct'])} is modest"))
             
-        st.markdown(f"""
-        <div class="disclaimer-box">
-            🛡️ <b>Analytical Guarantee Disclaimer:</b> {deal_res['disclaimer']}
-        </div>
-        """, unsafe_allow_html=True)
+        why_bullets.append(("✓", f"Location in {location} has strong available market indicators"))
+        
+        if user_rent == 0:
+            why_bullets.append(("⚠", "Rental estimate uses micro-market benchmark model data"))
+            
+        for icon, text_msg in why_bullets:
+            color = "#15803D" if icon == "✓" else "#B45309"
+            st.markdown(f"""
+            <div class="why-line">
+                <span style="font-weight: 800; color: {color}; font-size: 16px;">{icon}</span>
+                <div>{text_msg}</div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        # Optional Model Details Toggle
+        with st.expander(f"⚙️ {get_text('toggle_model_details', lang)}"):
+            st.markdown("#### Model Details")
+            st.write(f"• **Fair Value Estimate Range:** {format_currency_lakhs(val_res.get('price_range_lower', 0))} – {format_currency_lakhs(val_res.get('price_range_upper', 0))}")
+            st.write(f"• **Expected Rent Range:** {format_rent(rent_res.get('rent_range_lower', 0))} – {format_rent(rent_res.get('rent_range_upper', 0))}")
+            
+            price_expl = get_property_price_explanation(location, sqft_val, bhk_val, bath_val, 1, 'Super built-up Area', 1)
+            st.markdown("**Key Model Drivers:**")
+            for exp_item in price_expl.get('explanations', []):
+                st.write(f"- {exp_item}")

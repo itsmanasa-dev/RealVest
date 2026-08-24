@@ -1,171 +1,267 @@
 TRANSLATIONS = {
     'English': {
         # Navigation
-        'nav_dashboard': 'Dashboard',
-        'nav_analyzer': 'Property Analyzer',
-        'nav_compare': 'Compare Properties',
-        'nav_insights': 'Investment Insights',
-        'nav_business': 'Business Locations',
-        'nav_trends': 'Market Trends',
+        'nav_home': 'Home',
+        'nav_properties': 'Properties',
+        'nav_invest': 'Invest',
+        'nav_business': 'Business',
+        'nav_market': 'Market',
         'nav_advisor': 'AI Advisor',
-        'nav_language': 'Settings / Language',
+        'nav_language': 'Language',
         
-        # Subtitles & Titles
+        # Legacy fallbacks
+        'nav_dashboard': 'Home',
+        'nav_analyzer': 'Properties',
+        'nav_compare': 'Compare',
+        'nav_insights': 'Invest',
+        'nav_trends': 'Market',
+        
+        # Branding
         'brand_title': 'REALVEST',
-        'brand_tagline': 'AI Real Estate & Business Analytics',
-        'hero_title': 'Data-Driven Real Estate & Location Intelligence',
-        'hero_desc': 'Evaluate Bengaluru property valuations, rental yields, investment deal status, business location density, and historical HPI index metrics using verified data models.',
+        'brand_tagline': 'Make smarter property decisions.',
+        'brand_sub': 'Data-backed insights for buying, investing and opening your next business.',
         
-        # Labels & Buttons
-        'btn_analyze': 'Analyze Property Valuation',
-        'btn_compare': 'Compare Selected Properties',
-        'btn_business_score': 'Calculate Business Location Score',
-        'btn_ask_ai': 'Get AI Recommendation',
+        # Homepage
+        'hero_title': 'Is your next property actually worth it?',
+        'hero_sub': 'RealVest combines property data, rental potential and market signals to help you make a smarter decision.',
+        'btn_analyze_prop': 'Analyze a Property',
+        'btn_explore_invest': 'Explore Investments',
         
-        # Metrics
-        'lbl_fair_value': 'ML Estimated Fair Value',
-        'lbl_asking_price': 'Asking Price',
-        'lbl_monthly_rent': 'Expected Monthly Rent',
-        'lbl_annual_rent': 'Annual Rent',
-        'lbl_rental_yield': 'Rental Yield',
-        'lbl_investment_score': 'Investment Score',
-        'lbl_deal_status': 'Deal Valuation Status',
-        'lbl_location': 'Location / Micro-Market',
-        'lbl_area': 'Built-up Area (Sqft)',
-        'lbl_bhk': 'BHK Configuration',
-        'lbl_bathrooms': 'Bathrooms',
-        'lbl_balconies': 'Balconies',
-        'lbl_furnishing': 'Furnishing Status',
-        'lbl_business_type': 'Target Business Type',
-        'lbl_radius': 'Analysis Radius (km)',
+        'choice_buy_title': 'BUY',
+        'choice_buy_sub': 'Check a property',
+        'choice_invest_title': 'INVEST',
+        'choice_invest_sub': 'Find high-potential properties',
+        'choice_biz_title': 'BUSINESS',
+        'choice_biz_sub': 'Find a better location',
         
-        # Statuses
-        'status_undervalued': 'Potentially Undervalued',
-        'status_fairly_priced': 'Fairly Priced',
-        'status_overpriced': 'Potentially Overpriced',
+        # Property Analyzer
+        'analyzer_title': 'Check a property',
+        'analyzer_sub': "Enter a few details. We'll estimate its value and investment potential.",
+        'step1_title': 'STEP 1: Where is the property?',
+        'step2_title': 'STEP 2: Tell us about it',
+        'step3_title': 'STEP 3: The numbers',
+        'btn_analyze_submit': 'Analyze this property →',
         
-        # Sections
-        'sec_why_result': 'Why This Prediction?',
-        'sec_model_metrics': 'Model Performance & Confidence',
-        'sec_score_breakdown': 'Investment Score Breakdown',
-        'sec_disclaimer': 'Analytical Disclaimer',
+        # Verdicts & Metrics
+        'verdict_head': 'PROPERTY VERDICT',
+        'verdict_good': 'Good deal',
+        'verdict_overpriced': 'Looks overpriced',
+        'verdict_fair': 'Needs a closer look',
+        
+        'lbl_asking_price': 'Asking price',
+        'lbl_fair_value': 'Estimated fair value',
+        'lbl_rent': 'Expected monthly rent',
+        'lbl_yield': 'Estimated rental yield',
+        'lbl_score': 'Investment score',
+        
+        'why_result_head': 'WHY THIS RESULT?',
+        'toggle_model_details': 'Model details',
+        
+        # Investments
+        'invest_title': 'Find your next investment.',
+        'invest_sub': 'Filter verified market properties by your budget and target returns.',
+        'btn_show_opps': 'Show me opportunities →',
+        'btn_view_analysis': 'View analysis',
+        
+        # Compare
+        'compare_title': 'Compare properties',
+        'our_pick_head': 'OUR PICK',
+        'why_pick_head': 'Why?',
+        
+        # Business Location
+        'biz_title': 'Where should your business open?',
+        'biz_q1': 'What kind of business are you opening?',
+        'biz_q2': 'Which area are you considering?',
+        'lbl_loc_score': 'LOCATION SCORE',
+        'lbl_competition': 'Competition',
+        'lbl_population': 'Population',
+        'lbl_cost': 'Property cost',
+        'why_area_head': 'Why this area?',
+        
+        # Market
+        'market_title': 'Bengaluru property market',
+        'market_sub': 'Track historical Housing Price Index growth and market movements.',
         
         # AI Advisor
-        'ai_placeholder': 'Ask REALVEST AI (e.g. "Find me a 2 BHK under 60 lakh in Whitefield with good rental yield")',
-        'ai_rec_title': 'Top AI Recommended Properties',
-        'ai_why_rec': 'Why Recommended:'
+        'advisor_title': 'AI Advisor',
+        'advisor_sub': 'Describe your property requirement in natural language to search verified dataset listings.',
+        'btn_ai_search': 'Find matching properties →'
     },
     'Hindi': {
         # Navigation
-        'nav_dashboard': 'डैशबोर्ड (Dashboard)',
-        'nav_analyzer': 'संपत्ति विश्लेषक (Property Analyzer)',
-        'nav_compare': 'संपत्ति तुलना (Compare)',
-        'nav_insights': 'निवेश अंतर्दृष्टि (Investment Insights)',
-        'nav_business': 'व्यवसाय स्थान (Business Locations)',
-        'nav_trends': 'बाज़ार रुझान (Market Trends)',
-        'nav_advisor': 'एआई सलाहकार (AI Advisor)',
-        'nav_language': 'सेटिंग्स / भाषा',
+        'nav_home': 'होम',
+        'nav_properties': 'संपत्तियां',
+        'nav_invest': 'निवेश',
+        'nav_business': 'व्यवसाय',
+        'nav_market': 'मार्केट',
+        'nav_advisor': 'एआई एडवाइजर',
+        'nav_language': 'भाषा',
         
-        # Subtitles & Titles
+        # Legacy fallbacks
+        'nav_dashboard': 'होम',
+        'nav_analyzer': 'संपत्तियां',
+        'nav_compare': 'तुलना',
+        'nav_insights': 'निवेश',
+        'nav_trends': 'मार्केट',
+        
+        # Branding
         'brand_title': 'REALVEST',
-        'brand_tagline': 'एआई रीयल एस्टेट और बिजनेस एनालिटिक्स',
-        'hero_title': 'डेटा-संचालित रियल एस्टेट और स्थान बुद्धिमत्ता',
-        'hero_desc': 'सत्यापित डेटा मॉडल का उपयोग करके बेंगलुरु संपत्ति मूल्यांकन, किराये की उपज, सौदा स्थिति और व्यावसायिक स्थान घनत्व का मूल्यांकन करें।',
+        'brand_tagline': 'संपत्ति के बेहतर निर्णय लें।',
+        'brand_sub': 'खरीदने, निवेश करने और व्यवसाय खोलने के लिए डेटा-आधारित अंतर्दृष्टि।',
         
-        # Labels & Buttons
-        'btn_analyze': 'संपत्ति मूल्यांकन का विश्लेषण करें',
-        'btn_compare': 'चयनित संपत्तियों की तुलना करें',
-        'btn_business_score': 'व्यावसायिक स्थान स्कोर की गणना करें',
-        'btn_ask_ai': 'एआई सिफारिश प्राप्त करें',
+        # Homepage
+        'hero_title': 'क्या आपकी अगली संपत्ति वास्तव में इसके लायक है?',
+        'hero_sub': 'RealVest संपत्ति डेटा, रेंटल क्षमता और मार्केट सिग्नल्स को मिलाकर सही निर्णय लेने में आपकी मदद करता है।',
+        'btn_analyze_prop': 'संपत्ति का विश्लेषण करें',
+        'btn_explore_invest': 'निवेश विकल्प देखें',
         
-        # Metrics
-        'lbl_fair_value': 'एमएल अनुमानित उचित मूल्य',
+        'choice_buy_title': 'खरीदें',
+        'choice_buy_sub': 'संपत्ति की जांच करें',
+        'choice_invest_title': 'निवेश',
+        'choice_invest_sub': 'उच्च क्षमता वाली संपत्तियां खोजें',
+        'choice_biz_title': 'व्यवसाय',
+        'choice_biz_sub': 'एक बेहतर स्थान खोजें',
+        
+        # Property Analyzer
+        'analyzer_title': 'संपत्ति की जांच करें',
+        'analyzer_sub': 'कुछ विवरण दर्ज करें। हम इसके मूल्य और निवेश क्षमता का अनुमान लगाएंगे।',
+        'step1_title': 'चरण 1: संपत्ति कहां है?',
+        'step2_title': 'चरण 2: इसके बारे में बताएं',
+        'step3_title': 'चरण 3: संख्याएं',
+        'btn_analyze_submit': 'इस संपत्ति का विश्लेषण करें →',
+        
+        # Verdicts & Metrics
+        'verdict_head': 'संपत्ति फैसला',
+        'verdict_good': 'अच्छी डील (Good deal)',
+        'verdict_overpriced': 'अधिक कीमत (Looks overpriced)',
+        'verdict_fair': 'और जांच की जरूरत (Needs a closer look)',
+        
         'lbl_asking_price': 'मांगी गई कीमत',
-        'lbl_monthly_rent': 'अनुमानित मासिक किराया',
-        'lbl_annual_rent': 'वार्षिक किराया',
-        'lbl_rental_yield': 'किराया उपज (Rental Yield)',
-        'lbl_investment_score': 'निवेश स्कोर (Investment Score)',
-        'lbl_deal_status': 'सौदा स्थिति (Deal Status)',
-        'lbl_location': 'स्थान / माइक्रोलॉकेशन',
-        'lbl_area': 'क्षेत्रफल (वर्ग फीट)',
-        'lbl_bhk': 'बीएचके विन्यास',
-        'lbl_bathrooms': 'स्नानघर',
-        'lbl_balconies': 'बालकनी',
-        'lbl_furnishing': 'फर्निचर स्थिति',
-        'lbl_business_type': 'लक्ष्य व्यवसाय का प्रकार',
-        'lbl_radius': 'विश्लेषण त्रिज्या (किमी)',
+        'lbl_fair_value': 'अनुमानित उचित मूल्य',
+        'lbl_rent': 'अनुमानित मासिक किराया',
+        'lbl_yield': 'अनुमानित रेंटल उपज',
+        'lbl_score': 'इन्वेस्टमेंट स्कोर',
         
-        # Statuses
-        'status_undervalued': 'संभावित रूप से कम आंका गया (Undervalued)',
-        'status_fairly_priced': 'उचित मूल्य (Fairly Priced)',
-        'status_overpriced': 'संभावित रूप से अधिक कीमत (Overpriced)',
+        'why_result_head': 'यह परिणाम क्यों?',
+        'toggle_model_details': 'मॉडल विवरण (Model details)',
         
-        # Sections
-        'sec_why_result': 'यह परिणाम क्यों?',
-        'sec_model_metrics': 'मॉडल प्रदर्शन और विश्वसनीयता',
-        'sec_score_breakdown': 'निवेश स्कोर विवरण',
-        'sec_disclaimer': 'विश्लेषणात्मक अस्वीकरण',
+        # Investments
+        'invest_title': 'अपना अगला निवेश खोजें।',
+        'invest_sub': 'बजट और रिटर्न के आधार पर संपत्तियों को फ़िल्टर करें।',
+        'btn_show_opps': 'अवसर दिखाएं →',
+        'btn_view_analysis': 'विश्लेषण देखें',
+        
+        # Compare
+        'compare_title': 'संपत्तियों की तुलना करें',
+        'our_pick_head': 'हमारी पसंद (OUR PICK)',
+        'why_pick_head': 'क्यों?',
+        
+        # Business Location
+        'biz_title': 'आपका व्यवसाय कहां खुलना चाहिए?',
+        'biz_q1': 'आप किस प्रकार का व्यवसाय खोल रहे हैं?',
+        'biz_q2': 'आप किस क्षेत्र पर विचार कर रहे हैं?',
+        'lbl_loc_score': 'स्थान स्कोर',
+        'lbl_competition': 'प्रतिस्पर्धा (Competition)',
+        'lbl_population': 'जनसंख्या (Population)',
+        'lbl_cost': 'संपत्ति लागत',
+        'why_area_head': 'यह क्षेत्र क्यों?',
+        
+        # Market
+        'market_title': 'बेंगलुरु संपत्ति बाज़ार',
+        'market_sub': 'ऐतिहासिक हाउसिंग प्राइस इंडेक्स वृद्धि और बाज़ार के रुझानों को ट्रैक करें।',
         
         # AI Advisor
-        'ai_placeholder': 'REALVEST AI से पूछें (उदा. "व्हाइटफील्ड में 60 लाख से कम में 2 BHK खोजें")',
-        'ai_rec_title': 'शीर्ष एआई अनुशंसित संपत्तियां',
-        'ai_why_rec': 'सिफारिश का कारण:'
+        'advisor_title': 'एआई एडवाइजर',
+        'advisor_sub': 'सत्यापित लिस्टिंग में खोजने के लिए अपनी आवश्यकता सरल भाषा में लिखें।',
+        'btn_ai_search': 'मैचिंग संपत्तियां खोजें →'
     },
     'Kannada': {
         # Navigation
-        'nav_dashboard': 'ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ (Dashboard)',
-        'nav_analyzer': 'ಆಸ್ತಿ ವಿಶ್ಲೇಷಕ (Property Analyzer)',
-        'nav_compare': 'ಆಸ್ತಿ ಹೋಲಿಕೆ (Compare)',
-        'nav_insights': 'ಹೂಡಿಕೆ ವಿವರಣೆ (Investment Insights)',
-        'nav_business': 'ವ್ಯಾಪಾರ ಸ್ಥಳಗಳು (Business Locations)',
-        'nav_trends': 'ಮಾರುಕಟ್ಟೆ ಪ್ರವೃತ್ತಿಗಳು (Market Trends)',
-        'nav_advisor': 'ಎಐ ಸಲಹೆಗಾರ (AI Advisor)',
-        'nav_language': 'ಸೆಟ್ಟಿಂಗ್‌ಗಳು / ಭಾಷೆ',
+        'nav_home': 'ಹೋಮ್',
+        'nav_properties': 'ಆಸ್ತಿಗಳು',
+        'nav_invest': 'ಹೂಡಿಕೆ',
+        'nav_business': 'ವ್ಯಾಪಾರ',
+        'nav_market': 'ಮಾರುಕಟ್ಟೆ',
+        'nav_advisor': 'ಎಐ ಸಲಹೆಗಾರ',
+        'nav_language': 'ಭಾಷೆ',
         
-        # Subtitles & Titles
+        # Legacy fallbacks
+        'nav_dashboard': 'ಹೋಮ್',
+        'nav_analyzer': 'ಆಸ್ತಿಗಳು',
+        'nav_compare': 'ಹೋಲಿಕೆ',
+        'nav_insights': 'ಹೂಡಿಕೆ',
+        'nav_trends': 'ಮಾರುಕಟ್ಟೆ',
+        
+        # Branding
         'brand_title': 'REALVEST',
-        'brand_tagline': 'ಎಐ ರಿಯಲ್ ಎಸ್ಟೇಟ್ ಮತ್ತು ಬಿಸಿನೆಸ್ ಅನಾಲಿಟಿಕ್ಸ್',
-        'hero_title': 'ಡೇಟಾ-ಚಾಲಿತ ರಿಯಲ್ ಎಸ್ಟೇಟ್ ಮತ್ತು ಸ್ಥಳೀಯ ಮಾಹಿತಿ',
-        'hero_desc': 'ಬೆಂಗಳೂರು ಆಸ್ತಿ ಮೌಲ್ಯಮಾಪನ, ಬಾಡಿಗೆ ಆದಾಯ, ಹೂಡಿಕೆ ವ್ಯವಹಾರದ ಸ್ಥಿತಿ ಮತ್ತು ವ್ಯಾಪಾರ ಸ್ಥಳ ಸಾಂದ್ರತೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.',
+        'brand_tagline': 'ಉತ್ತಮ ಆಸ್ತಿ ನಿರ್ಧಾರಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳಿ.',
+        'brand_sub': 'ಖರೀದಿಸಲು, ಹೂಡಿಕೆ ಮಾಡಲು ಮತ್ತು ವ್ಯಾಪಾರ ಪ್ರಾರಂಭಿಸಲು ಡೇಟಾ-ಆಧಾರಿತ ಮಾಹಿತಿ.',
         
-        # Labels & Buttons
-        'btn_analyze': 'ಆಸ್ತಿ ಮೌಲ್ಯಮಾಪನ ವಿಶ್ಲೇಷಿಸಿ',
-        'btn_compare': 'ಆಯ್ಕೆಮಾಡಿದ ಆಸ್ತಿಗಳನ್ನು ಹೋಲಿಕೆ ಮಾಡಿ',
-        'btn_business_score': 'ವ್ಯಾಪಾರ ಸ್ಥಳ ಸ್ಕೋರ್ ಲೆಕ್ಕಹಾಕಿ',
-        'btn_ask_ai': 'ಎಐ ಶಿಫಾರಸು ಪಡೆಯಿರಿ',
+        # Homepage
+        'hero_title': 'ನಿಮ್ಮ ಮುಂದಿನ ಆಸ್ತಿ ನಿಜವಾಗಿಯೂ ಮೌಲ್ಯಯುತವಾಗಿದೆಯೇ?',
+        'hero_sub': 'RealVest ಆಸ್ತಿ ಡೇಟಾ, ಬಾಡಿಗೆ ಸಾಮರ್ಥ್ಯ ಮತ್ತು ಮಾರುಕಟ್ಟೆ ಮಾಹಿತಿಯನ್ನು ಸಂಯೋಜಿಸಿ ಸ್ಮಾರ್ಟ್ ನಿರ್ಧಾರ ತೆಗೆದುಕೊಳ್ಳಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.',
+        'btn_analyze_prop': 'ಆಸ್ತಿಯನ್ನು ವಿಶ್ಲೇಷಿಸಿ',
+        'btn_explore_invest': 'ಹೂಡಿಕೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ',
         
-        # Metrics
-        'lbl_fair_value': 'ಎಮ್‌ಎಲ್ ಅಂದಾಜು ನ್ಯಾಯಯುತ ಮೌಲ್ಯ',
+        'choice_buy_title': 'ಖರೀದಿ',
+        'choice_buy_sub': 'ಆಸ್ತಿಯನ್ನು ಪರಿಶೀಲಿಸಿ',
+        'choice_invest_title': 'ಹೂಡಿಕೆ',
+        'choice_invest_sub': 'ಉನ್ನತ ಸಾಮರ್ಥ್ಯದ ಆಸ್ತಿಗಳನ್ನು ಹುಡುಕಿ',
+        'choice_biz_title': 'ವ್ಯಾಪಾರ',
+        'choice_biz_sub': 'ಉತ್ತಮ ಸ್ಥಳವನ್ನು ಹುಡುಕಿ',
+        
+        # Property Analyzer
+        'analyzer_title': 'ಆಸ್ತಿಯನ್ನು ಪರಿಶೀಲಿಸಿ',
+        'analyzer_sub': 'ಕೆಲವು ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ. ನಾವು ಅದರ ಮೌಲ್ಯ ಮತ್ತು ಹೂಡಿಕೆ ಸಾಮರ್ಥ್ಯವನ್ನು ಅಂದಾಜು ಮಾಡುತ್ತೇವೆ.',
+        'step1_title': 'ಹಂತ 1: ಆಸ್ತಿ ಎಲ್ಲಿದೆ?',
+        'step2_title': 'ಹಂತ 2: ವಿವರಗಳನ್ನು ನೀಡಿ',
+        'step3_title': 'ಹಂತ 3: ಬೆಲೆ ಮತ್ತು ಬಾಡಿಗೆ',
+        'btn_analyze_submit': 'ಈ ಆಸ್ತಿಯನ್ನು ವಿಶ್ಲೇಷಿಸಿ →',
+        
+        # Verdicts & Metrics
+        'verdict_head': 'ಆಸ್ತಿ ನಿರ್ಧಾರ',
+        'verdict_good': 'ಉತ್ತಮ ಡೀಲ್ (Good deal)',
+        'verdict_overpriced': 'ಹೆಚ್ಚಿನ ಬೆಲೆ (Looks overpriced)',
+        'verdict_fair': 'ಇನ್ನಷ್ಟು ಪರಿಶೀಲನೆ ಅಗತ್ಯ (Needs a closer look)',
+        
         'lbl_asking_price': 'ಕೇಳಲಾದ ಬೆಲೆ',
-        'lbl_monthly_rent': 'ನಿರೀಕ್ಷಿತ ಮಾಸಿಕ ಬಾಡಿಗೆ',
-        'lbl_annual_rent': 'ವಾರ್ಷಿಕ ಬಾಡಿಗೆ',
-        'lbl_rental_yield': 'ಬಾಡಿಗೆ ಇಳುವರಿ (Rental Yield)',
-        'lbl_investment_score': 'ಹೂಡಿಕೆ ಸ್ಕೋರ್ (Investment Score)',
-        'lbl_deal_status': 'ವ್ಯವಹಾರದ ಸ್ಥಿತಿ (Deal Status)',
-        'lbl_location': 'ಸ್ಥಳ / ಪ್ರದೇಶ',
-        'lbl_area': 'ವಿಸ್ತೀರ್ಣ (ಚದರ ಅಡಿ)',
-        'lbl_bhk': 'ಬಿಎಚ್‌ಕೆ ಕಾನ್ಫಿಗರೇಶನ್',
-        'lbl_bathrooms': 'ಸ್ನಾನಗೃಹಗಳು',
-        'lbl_balconies': 'ಬಾಲ್ಕನಿಗಳು',
-        'lbl_furnishing': 'ಫರ್ನಿಷಿಂಗ್ ಸ್ಥಿತಿ',
-        'lbl_business_type': 'ವ್ಯಾಪಾರದ ಪ್ರಕಾರ',
-        'lbl_radius': 'ವಿಶ್ಲೇಷಣೆ ತ್ರಿಜ್ಯ (ಕಿಮೀ)',
+        'lbl_fair_value': 'ಅಂದಾಜು ಮೌಲ್ಯ',
+        'lbl_rent': 'ನಿರೀಕ್ಷಿತ ಮಾಸಿಕ ಬಾಡಿಗೆ',
+        'lbl_yield': 'ಅಂದಾಜು ಬಾಡಿಗೆ ಇಳುವರಿ',
+        'lbl_score': 'ಹೂಡಿಕೆ ಸ್ಕೋರ್',
         
-        # Statuses
-        'status_undervalued': 'ಸಾಧ್ಯತೆ ಇರುವ ಕಡಿಮೆ ಬೆಲೆ (Undervalued)',
-        'status_fairly_priced': 'ಸರಿಯಾದ ಬೆಲೆ (Fairly Priced)',
-        'status_overpriced': 'ಸಾಧ್ಯತೆ ಇರುವ ಹೆಚ್ಚಿನ ಬೆಲೆ (Overpriced)',
+        'why_result_head': 'ಈ ಫಲಿತಾಂಶ ಏಕೆ?',
+        'toggle_model_details': 'ಮಾಡೆಲ್ ವಿವರಗಳು (Model details)',
         
-        # Sections
-        'sec_why_result': 'ಈ ಫಲಿತಾಂಶ ಏಕೆ?',
-        'sec_model_metrics': 'ಮಾಡೆಲ್ ಸಾಧನೆ ಮತ್ತು ವಿಶ್ವಾಸಾರ್ಹತೆ',
-        'sec_score_breakdown': 'ಹೂಡಿಕೆ ಸ್ಕೋರ್ ವಿವರಣೆ',
-        'sec_disclaimer': 'ವಿಶ್ಲೇಷಣಾತ್ಮಕ ಹಕ್ಕುತ್ಯಾಗ',
+        # Investments
+        'invest_title': 'ನಿಮ್ಮ ಮುಂದಿನ ಹೂಡಿಕೆಯನ್ನು ಹುಡುಕಿ.',
+        'invest_sub': 'ಬಜೆಟ್ ಮತ್ತು ಆದಾಯದ ಗುರಿಗಳ ಆಧಾರದ ಮೇಲೆ ಆಸ್ತಿಗಳನ್ನು ಫಿಲ್ಟರ್ ಮಾಡಿ.',
+        'btn_show_opps': 'ಅವಕಾಶಗಳನ್ನು ತೋರಿಸಿ →',
+        'btn_view_analysis': 'ವಿಶ್ಲೇಷಣೆ ವೀಕ್ಷಿಸಿ',
+        
+        # Compare
+        'compare_title': 'ಆಸ್ತಿಗಳನ್ನು ಹೋಲಿಕೆ ಮಾಡಿ',
+        'our_pick_head': 'ನಮ್ಮ ಆಯ್ಕೆ (OUR PICK)',
+        'why_pick_head': 'ಏಕೆ?',
+        
+        # Business Location
+        'biz_title': 'ನಿಮ್ಮ ವ್ಯಾಪಾರವನ್ನು ಎಲ್ಲಿ ಪ್ರಾರಂಭಿಸಬೇಕು?',
+        'biz_q1': 'ನೀವು ಯಾವ ರೀತಿಯ ವ್ಯಾಪಾರವನ್ನು ಪ್ರಾರಂಭಿಸುತ್ತಿದ್ದೀರಿ?',
+        'biz_q2': 'ನೀವು ಯಾವ ಪ್ರದೇಶವನ್ನು ಪರಿಗಣಿಸುತ್ತಿದ್ದೀರಿ?',
+        'lbl_loc_score': 'ಸ್ಥಳ ಸ್ಕೋರ್',
+        'lbl_competition': 'ಸ್ಪರ್ಧೆ (Competition)',
+        'lbl_population': 'ಜನಸಂಖ್ಯೆ (Population)',
+        'lbl_cost': 'ಆಸ್ತಿ ವೆಚ್ಚ',
+        'why_area_head': 'ಈ ಪ್ರದೇಶ ಏಕೆ?',
+        
+        # Market
+        'market_title': 'ಬೆಂಗಳೂರು ಮಾರುಕಟ್ಟೆ',
+        'market_sub': 'ಮನೆ ಬೆಲೆ ಸೂಚ್ಯಂಕ ಬೆಳವಣಿಗೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.',
         
         # AI Advisor
-        'ai_placeholder': 'REALVEST AI ಅನ್ನು ಕೇಳಿ (ಉದಾ. "ವೈಟ್‌ಫೀಲ್ಡ್‌ನಲ್ಲಿ 60 ಲಕ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ 2 BHK ಹುಡುಕಿ")',
-        'ai_rec_title': 'ಉನ್ನತ ಎಐ ಶಿಫಾರಸು ಮಾಡಿದ ಆಸ್ತಿಗಳು',
-        'ai_why_rec': 'ಶಿಫಾರಸು ಮಾಡಲು ಕಾರಣ:'
+        'advisor_title': 'ಎಐ ಸಲಹೆಗಾರ',
+        'advisor_sub': 'ಖಚಿತಪಡಿಸಿದ ಪಟ್ಟಿಯಲ್ಲಿ ಹುಡುಕಲು ನಿಮ್ಮ ಅಗತ್ಯವನ್ನು ಸರಳ ಪದಗಳಲ್ಲಿ ಬರೆಯಿರಿ.',
+        'btn_ai_search': 'ಆಸ್ತಿಗಳನ್ನು ಹುಡುಕಿ →'
     }
 }
 
