@@ -4,6 +4,8 @@ from src.models.predict import predict_property_price, predict_rent_price, get_p
 from src.analytics.yield_calculator import calculate_rental_yield
 from src.analytics.deal_classifier import classify_property_deal
 from src.analytics.investment_scorer import calculate_investment_score
+from src.analytics.risk_radar import calculate_risk_radar
+from src.analytics.decision_engine import generate_property_decision
 from src.models.explain import get_property_price_explanation
 from src.utils.formatting import format_currency_lakhs, format_rent, format_percentage, format_number
 from src.utils.validation import safe_float, safe_int
@@ -13,15 +15,14 @@ from src.utils.errors import handle_user_errors
 def render_property_analyzer(lang='English'):
     st.markdown(f"""
     <div>
-        <div class="page-head">{t('analyzer_title', lang)}</div>
-        <div class="page-subhead">{t('analyzer_sub', lang)}</div>
+        <div class="page-head">Property Analysis & Decision Engine</div>
+        <div class="page-subhead">Evaluate fair value estimates, risk radar indicators, explainable factor contributions, and clear decision recommendations.</div>
     </div>
     """, unsafe_allow_html=True)
     
     m_data = get_price_model()
     top_locations = m_data['top_locations']
     
-    # Multilingual property type mapping
     prop_type_opts = [
         t('opt_apartment', lang),
         t('opt_house', lang),
@@ -50,14 +51,14 @@ def render_property_analyzer(lang='English'):
         st.markdown(f'### {t("step3_title", lang)}')
         c7, c8 = st.columns(2)
         with c7:
-            asking_price_in = st.number_input(t('lbl_asking_price_in', lang), min_value=5.0, max_value=3000.0, value=62.0, step=1.0)
+            asking_price_in = st.number_input(t('lbl_asking_price_in', lang), min_value=5.0, max_value=3000.0, value=65.0, step=1.0)
         with c8:
             rent_in = st.number_input(t('lbl_expected_rent_in', lang), min_value=0, max_value=500000, value=0, step=1000)
             
         submitted = st.form_submit_button(t('btn_analyze_submit', lang), use_container_width=True)
         
     if submitted or 'analyzed_data' in st.session_state:
-        asking_price = safe_float(asking_price_in, default=62.0)
+        asking_price = safe_float(asking_price_in, default=65.0)
         sqft_val = safe_float(sqft, default=1250.0)
         bhk_val = safe_int(bhk, default=2)
         bath_val = safe_int(bath, default=2)
@@ -70,37 +71,50 @@ def render_property_analyzer(lang='English'):
         user_rent = safe_float(rent_in)
         monthly_rent = user_rent if user_rent > 0 else safe_float(rent_res.get('estimated_rent_monthly', 0.0))
         
-        # 2. Analytics
+        # 2. Analytics & Decision Engine
         yield_res = calculate_rental_yield(monthly_rent, asking_price)
         deal_res = classify_property_deal(asking_price, fair_val)
         score_res = calculate_investment_score(asking_price, fair_val, yield_res['rental_yield_pct'])
         
-        # Verdict Badges (Fully Multilingual)
-        deal_status = deal_res.get('status', '')
-        if deal_status == "Potentially Undervalued":
-            verdict_text = t('verdict_good', lang)
-            badge_text = t('badge_good_deal', lang)
-            badge_class = "badge-good"
-        elif deal_status == "Potentially Overpriced":
-            verdict_text = t('verdict_overpriced', lang)
-            badge_text = t('badge_overpriced', lang)
-            badge_class = "badge-overpriced"
-        else:
-            verdict_text = t('verdict_fair', lang)
-            badge_text = t('badge_fair_price', lang)
-            badge_class = "badge-fair"
-            
+        dec_engine = generate_property_decision(
+            asking_price,
+            fair_val,
+            yield_res['rental_yield_pct'],
+            location_used=location,
+            mae_margin_lakhs=val_res.get('mae_margin', 12.5)
+        )
+        
+        risk_radar = dec_engine['risk_radar']
+        
         st.markdown("<hr style='border-color: #E2E8F0; margin: 32px 0;'>", unsafe_allow_html=True)
         
-        # Verdict Banner
+        # DECISION ENGINE BANNER
         st.markdown(f"""
-        <div class="rv-card">
-            <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #64748B; letter-spacing: 0.5px;">
-                {t('verdict_head', lang)}
+        <div class="rv-card rv-card-winner">
+            <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #1E40AF; letter-spacing: 0.5px;">
+                REALVEST DECISION ENGINE RECOMMENDATION
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; flex-wrap: wrap; gap: 12px;">
-                <div style="font-size: 28px; font-weight: 800; color: #0F172A;">{verdict_text}</div>
-                <span class="badge {badge_class}">{badge_text}</span>
+                <div>
+                    <span style="font-size: 36px; font-weight: 800; color: {dec_engine['color']}; margin-right: 12px;">
+                        {dec_engine['decision']}
+                    </span>
+                    <span style="font-size: 16px; font-weight: 700; color: #475569;">
+                        (Confidence: {dec_engine['confidence_pct']}%)
+                    </span>
+                </div>
+                <span class="badge badge-good">{deal_res['status']}</span>
+            </div>
+            
+            <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #DBEAFE; display: flex; gap: 24px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 250px;">
+                    <div style="font-size: 14px; font-weight: 700; color: #15803D; margin-bottom: 6px;">✓ KEY SUPPORTING REASONS</div>
+                    {"".join(f'<div class="why-line"><span style="color: #15803D; font-weight: 800;">✓</span> {r}</div>' for r in dec_engine['reasons'])}
+                </div>
+                <div style="flex: 1; min-width: 250px;">
+                    <div style="font-size: 14px; font-weight: 700; color: #B91C1C; margin-bottom: 6px;">⚠ RISK SIGNALS</div>
+                    {"".join(f'<div class="why-line"><span style="color: #B91C1C; font-weight: 800;">⚠</span> {r}</div>' for r in dec_engine['risks'])}
+                </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -120,44 +134,56 @@ def render_property_analyzer(lang='English'):
             
         st.markdown("<br>", unsafe_allow_html=True)
         
-        # WHY THIS RESULT Section
-        st.markdown(f'<div class="section-head">{t("why_result_head", lang)}</div>', unsafe_allow_html=True)
+        # EXPLAINABLE VALUATION WATERFALL
+        st.markdown('<div class="section-head">EXPLAINABLE VALUATION BREAKDOWN</div>', unsafe_allow_html=True)
+        st.markdown("Quantified factor contributions explaining how the ML fair value estimate was derived:")
         
-        why_bullets = []
-        if asking_price <= fair_val:
-            diff_str = format_currency_lakhs(fair_val - asking_price)
-            why_bullets.append(("✓", t('why_asking_below', lang, diff=diff_str)))
-        else:
-            diff_str = format_currency_lakhs(asking_price - fair_val)
-            why_bullets.append(("⚠", t('why_asking_above', lang, diff=diff_str)))
-            
-        yield_str = format_percentage(yield_res['rental_yield_pct'])
-        if yield_res['rental_yield_pct'] >= 4.0:
-            why_bullets.append(("✓", t('why_yield_attractive', lang, yield_pct=yield_str)))
-        else:
-            why_bullets.append(("⚠", t('why_yield_modest', lang, yield_pct=yield_str)))
-            
-        why_bullets.append(("✓", t('why_location_indicators', lang, location=location)))
+        price_expl = get_property_price_explanation(location, sqft_val, bhk_val, bath_val, 1, 'Super built-up Area', 1)
         
-        if user_rent == 0:
-            why_bullets.append(("⚠", t('why_rent_benchmark', lang)))
-            
-        for icon, text_msg in why_bullets:
-            color = "#15803D" if icon == "✓" else "#B45309"
+        for factor in price_expl['waterfall_factors']:
+            val_str = f"₹{abs(factor['contribution_lakhs']):,.2f} Lakhs"
+            if factor['sign'] == 'base':
+                icon = "📌"
+                color = "#2563EB"
+            elif factor['sign'] == '+':
+                icon = "▲ +"
+                color = "#15803D"
+            else:
+                icon = "▼ -"
+                color = "#B91C1C"
+                
             st.markdown(f"""
-            <div class="why-line">
-                <span style="font-weight: 800; color: {color}; font-size: 16px;">{icon}</span>
-                <div>{text_msg}</div>
+            <div class="why-line" style="justify-content: space-between;">
+                <div>
+                    <span style="font-weight: 800; color: {color}; margin-right: 8px;">{icon}</span>
+                    <b>{factor['factor']}</b>
+                </div>
+                <div style="font-weight: 800; color: {color};">{val_str}</div>
             </div>
             """, unsafe_allow_html=True)
             
-        # Optional Model Details Toggle
-        with st.expander(f"⚙️ {t('toggle_model_details', lang)}"):
-            st.markdown(f"#### {t('model_details_head', lang)}")
-            st.write(f"• **{t('fair_range_lbl', lang)}** {format_currency_lakhs(val_res.get('price_range_lower', 0))} – {format_currency_lakhs(val_res.get('price_range_upper', 0))}")
-            st.write(f"• **{t('rent_range_lbl', lang)}** {format_rent(rent_res.get('rent_range_lower', 0))} – {format_rent(rent_res.get('rent_range_upper', 0))}")
-            
-            price_expl = get_property_price_explanation(location, sqft_val, bhk_val, bath_val, 1, 'Super built-up Area', 1)
-            st.markdown(f"**{t('key_drivers_lbl', lang)}**")
-            for exp_item in price_expl.get('explanations', []):
-                st.write(f"- {exp_item}")
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        # RISK RADAR SECTION
+        st.markdown('<div class="section-head">PROPERTY RISK RADAR</div>', unsafe_allow_html=True)
+        st.markdown(f"Overall Risk Profile: <b style='color: {risk_radar['overall_color']};'>{risk_radar['overall_risk']}</b> (Score: {risk_radar['risk_score']}/100)", unsafe_allow_html=True)
+        
+        for item in risk_radar['breakdown']:
+            st.markdown(f"""
+            <div class="rv-card" style="margin-bottom: 12px; padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div style="font-size: 16px; font-weight: 800; color: #0F172A;">
+                        {item['category']}
+                    </div>
+                    <div>
+                        <span style="font-size: 12px; font-weight: 700; color: #64748B; margin-right: 12px;">{item['metric_label']}: {item['metric_value']}</span>
+                        <span style="background-color: {item['color']}; color: #FFFFFF; font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 12px;">
+                            {item['level']}
+                        </span>
+                    </div>
+                </div>
+                <div style="font-size: 13px; color: #475569; margin-top: 8px;">
+                    <b>Why?</b> {item['why']}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)

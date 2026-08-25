@@ -4,6 +4,10 @@ from src.analytics.deal_classifier import classify_property_deal
 from src.analytics.investment_scorer import calculate_investment_score
 from src.analytics.comparison import compare_properties
 from src.analytics.hpi_analytics import get_hpi_trend_analysis
+from src.analytics.risk_radar import calculate_risk_radar
+from src.analytics.decision_engine import generate_property_decision
+from src.analytics.decision_simulator import simulate_investment_scenario, compare_base_vs_scenario
+from src.analytics.decision_flip import calculate_decision_flip_boundaries
 
 def test_calculate_rental_yield():
     res = calculate_rental_yield(25000, 60.0) # 25k/mo rent, 60L price -> 300k/6M = 5.0%
@@ -38,3 +42,26 @@ def test_hpi_analytics():
     hpi_res = get_hpi_trend_analysis()
     assert 'latest_hpi' in hpi_res
     assert hpi_res['total_growth_%'] > 0
+
+def test_risk_radar():
+    radar = calculate_risk_radar(70.0, 80.0, 4.5, 'Whitefield')
+    assert 'overall_risk' in radar
+    assert len(radar['breakdown']) == 5
+
+def test_decision_engine():
+    dec = generate_property_decision(65.0, 80.0, 4.5, 'Whitefield')
+    assert dec['decision'] in ['BUY', 'HOLD', 'AVOID']
+    assert dec['confidence_pct'] >= 50
+    assert len(dec['reasons']) > 0
+
+def test_decision_simulator():
+    sim = simulate_investment_scenario(purchase_price_lakhs=75.0, monthly_rent_inr=25000)
+    assert sim['monthly_emi_inr'] > 0
+    assert 'net_monthly_cash_flow' in sim
+    assert 'total_roi_pct' in sim
+
+def test_decision_flip():
+    flip = calculate_decision_flip_boundaries(current_price_lakhs=75.0, fair_value_lakhs=80.0, current_rent_inr=25000)
+    assert 'current_decision' in flip
+    assert 'price_flip_text' in flip
+    assert 'rent_flip_text' in flip

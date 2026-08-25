@@ -10,7 +10,7 @@ import streamlit as st
 
 # Page config
 st.set_page_config(
-    page_title="REALVEST",
+    page_title="REALVEST — Real Estate Decision Intelligence",
     page_icon="🏢",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -19,11 +19,13 @@ st.set_page_config(
 from app.styles import inject_custom_css
 from app.translations import t
 from app.views.dashboard import render_dashboard
+from app.views.property_explorer import render_property_explorer
 from app.views.property_analyzer import render_property_analyzer
 from app.views.compare_properties import render_compare_properties
 from app.views.investment_insights import render_investment_insights
 from app.views.business_locations import render_business_locations
 from app.views.market_trends import render_market_trends
+from app.views.decision_simulator_view import render_decision_simulator
 from app.views.ai_advisor import render_ai_advisor
 from src.utils.errors import handle_user_errors
 
@@ -53,17 +55,29 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # Navigation Controls Row (Top Bar)
-col_nav, col_lang = st.columns([8, 3])
+col_nav, col_lang = st.columns([10, 2])
 
 with col_nav:
-    nav_keys = ['Home', 'Properties', 'Invest', 'Business', 'Market', 'AI Advisor']
+    nav_keys = [
+        'Home', 
+        'Explorer', 
+        'Analysis', 
+        'Compare', 
+        'Invest', 
+        'Market', 
+        'Simulator', 
+        'AI Advisor'
+    ]
+    
     nav_labels = [
-        t('nav_home', lang),
-        t('nav_properties', lang),
-        t('nav_invest', lang),
-        t('nav_business', lang),
-        t('nav_market', lang),
-        t('nav_advisor', lang)
+        'Home',
+        'Explorer',
+        'Analysis',
+        'Compare',
+        'Investment',
+        'Market',
+        'Simulator',
+        'AI Advisor'
     ]
     
     current_nav = st.session_state.get('active_nav', 'Home')
@@ -99,22 +113,26 @@ with col_lang:
 st.markdown("<hr style='border-color: #E2E8F0; margin: 16px 0 28px 0;'>", unsafe_allow_html=True)
 
 # Safe Router Call with Error Interceptor
-@handle_user_errors(t('error_generic', lang))
+@handle_user_errors("Unable to load requested page.")
 def route_page(nav_item, current_lang):
     if nav_item == 'Home':
         render_dashboard(current_lang)
-    elif nav_item == 'Properties':
+    elif nav_item == 'Explorer':
+        render_property_explorer(current_lang)
+    elif nav_item == 'Analysis' or nav_item == 'Properties':
         render_property_analyzer(current_lang)
-    elif nav_item == 'Invest':
-        render_investment_insights(current_lang)
-    elif nav_item == 'Business':
-        render_business_locations(current_lang)
-    elif nav_item == 'Market':
-        render_market_trends(current_lang)
-    elif nav_item == 'AI Advisor':
-        render_ai_advisor(current_lang)
     elif nav_item == 'Compare':
         render_compare_properties(current_lang)
+    elif nav_item == 'Invest':
+        render_investment_insights(current_lang)
+    elif nav_item == 'Market':
+        render_market_trends(current_lang)
+    elif nav_item == 'Simulator':
+        render_decision_simulator(current_lang)
+    elif nav_item == 'AI Advisor':
+        render_ai_advisor(current_lang)
+    elif nav_item == 'Business':
+        render_business_locations(current_lang)
     else:
         render_dashboard(current_lang)
 
