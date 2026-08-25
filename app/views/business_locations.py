@@ -1,7 +1,7 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-from app.translations import get_text
+from app.translations import t
 from src.location.business_analyzer import analyze_business_location
 from src.utils.formatting import format_number
 from src.utils.validation import safe_float, safe_int
@@ -11,8 +11,8 @@ from src.utils.errors import handle_user_errors
 def render_business_locations(lang='English'):
     st.markdown(f"""
     <div>
-        <div class="page-head">{get_text('biz_title', lang)}</div>
-        <div class="page-subhead">Analyze spatial competitor density, ward demographic benchmarks, and commercial property cost tiers.</div>
+        <div class="page-head">{t('biz_title', lang)}</div>
+        <div class="page-subhead">{t('biz_sub', lang)}</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -27,11 +27,19 @@ def render_business_locations(lang='English'):
         'Yelahanka New Town': (13.099162, 77.592162)
     }
     
-    # Question 1: What kind of business are you opening?
-    st.markdown(f'### 1. {get_text("biz_q1", lang)}')
-    b_type = st.radio(
+    b_type_options = [
+        t('opt_cafe', lang),
+        t('opt_restaurant', lang),
+        t('opt_gym', lang),
+        t('opt_retail', lang),
+        t('opt_pharmacy', lang)
+    ]
+    
+    # Question 1
+    st.markdown(f'### {t("biz_q1", lang)}')
+    selected_btype = st.radio(
         "Business Type",
-        ['Cafe', 'Restaurant', 'Gym', 'Retail', 'Pharmacy'],
+        b_type_options,
         index=0,
         horizontal=True,
         label_visibility="collapsed"
@@ -39,60 +47,63 @@ def render_business_locations(lang='English'):
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Question 2: Which area are you considering?
-    st.markdown(f'### 2. {get_text("biz_q2", lang)}')
+    # Question 2
+    st.markdown(f'### {t("biz_q2", lang)}')
     c1, c2 = st.columns(2)
     with c1:
-        preset_name = st.selectbox("Select area", list(location_presets.keys()), index=0)
+        preset_name = st.selectbox(t('lbl_select_area', lang), list(location_presets.keys()), index=0)
         default_lat, default_lon = location_presets[preset_name]
     with c2:
-        radius_km = st.slider("Analysis Radius (km)", min_value=0.5, max_value=5.0, value=2.0, step=0.5)
+        radius_km = st.slider(t('lbl_radius', lang), min_value=0.5, max_value=5.0, value=2.0, step=0.5)
         
-    res = analyze_business_location(default_lat, default_lon, business_type=b_type, radius_km=radius_km)
+    res = analyze_business_location(default_lat, default_lon, business_type=selected_btype, radius_km=radius_km)
     
     comp_count = safe_int(res.get('competitor_count', 0))
     if comp_count > 15:
-        comp_tier = "High"
+        comp_tier = t('tier_high', lang)
     elif comp_count > 5:
-        comp_tier = "Medium"
+        comp_tier = t('tier_medium', lang)
     else:
-        comp_tier = "Low"
+        comp_tier = t('tier_low', lang)
         
-    pop_tier = "High"  # BBMP census indicator
-    cost_tier = "High" if ("Indiranagar" in preset_name or "Koramangala" in preset_name) else "Medium"
+    pop_tier = t('tier_high_density', lang)
+    cost_tier = t('tier_high_rent', lang) if ("Indiranagar" in preset_name or "Koramangala" in preset_name) else t('tier_medium_rent', lang)
     loc_score = safe_int(res.get('location_score', 85))
     
     st.markdown("<hr style='border-color: #E2E8F0; margin: 32px 0;'>", unsafe_allow_html=True)
     
-    # Native Metrics Display
+    # Metrics
     m1, m2, m3, m4 = st.columns(4)
     with m1:
-        st.metric(label=get_text('lbl_loc_score', lang), value=f"{loc_score}/100")
+        st.metric(label=t('lbl_loc_score', lang), value=f"{loc_score}/100")
     with m2:
-        st.metric(label=get_text('lbl_competition', lang), value=f"{comp_tier} ({comp_count} nodes)")
+        st.metric(label=t('lbl_competition', lang), value=f"{comp_tier} ({comp_count})")
     with m3:
-        st.metric(label=get_text('lbl_population', lang), value=f"{pop_tier} Density")
+        st.metric(label=t('lbl_population', lang), value=pop_tier)
     with m4:
-        st.metric(label=get_text('lbl_cost', lang), value=f"{cost_tier} Rent Tier")
+        st.metric(label=t('lbl_cost', lang), value=cost_tier)
         
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Why this area?
-    st.markdown(f'<div class="section-head">{get_text("why_area_head", lang)}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-head">{t("why_area_head", lang)}</div>', unsafe_allow_html=True)
+    
+    why_desc_str = t('why_area_desc', lang, preset_name=preset_name, b_type=selected_btype.lower(), comp_count=comp_count, radius=radius_km)
+    summary_label = t('biz_summary_head', lang)
+    rec_text = res.get('recommendation', '')
     
     st.markdown(f"""
     <div class="rv-card">
         <div style="font-size: 15px; color: #334155; line-height: 1.6;">
-            <b>{preset_name}</b> has strong BBMP population indicators and a dense {b_type.lower()} ecosystem ({comp_count} identified amenity nodes within {radius_km} km). 
-            That means there is an established consumer market, but also stronger competitor presence.
+            {why_desc_str}
             <br><br>
-            <b>Summary:</b> {res.get('recommendation', '')}
+            <b>{summary_label}</b> {rec_text}
         </div>
     </div>
     """, unsafe_allow_html=True)
     
-    # Supporting Competitor Map
-    st.markdown('<div class="section-head">MAP OF NEARBY COMPETITOR NODES</div>', unsafe_allow_html=True)
+    # Competitor Map
+    st.markdown(f'<div class="section-head">{t("section_map_nodes", lang)}</div>', unsafe_allow_html=True)
     
     competitors_df = res.get('nearby_competitors', pd.DataFrame()).copy()
     if not competitors_df.empty:
@@ -117,10 +128,10 @@ def render_business_locations(lang='English'):
         )
         st.plotly_chart(fig_map, use_container_width=True)
     else:
-        st.info("No nearby competitor amenity nodes found within the selected radius.")
+        st.info(t('map_empty', lang))
         
-    st.markdown("""
+    st.markdown(f"""
     <div style="font-size: 12px; color: #64748B; background: #F1F5F9; padding: 12px; border-radius: 8px; margin-top: 16px;">
-        📌 <b>Data Honesty Policy:</b> Population metrics reflect BBMP ward demographic census benchmarks. The system does not claim or predict actual street footfall or store revenue without direct POS sensor data.
+        {t('footfall_disclaimer', lang)}
     </div>
     """, unsafe_allow_html=True)

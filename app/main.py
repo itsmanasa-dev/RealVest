@@ -10,14 +10,14 @@ import streamlit as st
 
 # Page config
 st.set_page_config(
-    page_title="REALVEST — Make smarter property decisions",
+    page_title="REALVEST",
     page_icon="🏢",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
 from app.styles import inject_custom_css
-from app.translations import get_text
+from app.translations import t
 from app.views.dashboard import render_dashboard
 from app.views.property_analyzer import render_property_analyzer
 from app.views.compare_properties import render_compare_properties
@@ -27,7 +27,7 @@ from app.views.market_trends import render_market_trends
 from app.views.ai_advisor import render_ai_advisor
 from src.utils.errors import handle_user_errors
 
-# Inject light proptech fintech styles
+# Inject CSS styles
 inject_custom_css()
 
 # Session State Initialization
@@ -39,14 +39,14 @@ if 'active_nav' not in st.session_state:
 
 lang = st.session_state['language']
 
-# Top Header Navigation Bar
-st.markdown("""
+# Top Header Bar
+st.markdown(f"""
 <div class="nav-container">
     <div class="nav-brand">
         <div class="nav-logo">RV</div>
         <div>
-            <div class="nav-title">REALVEST</div>
-            <div class="nav-tagline">Make smarter property decisions.</div>
+            <div class="nav-title">{t('brand_name', lang)}</div>
+            <div class="nav-tagline">{t('brand_tagline', lang)}</div>
         </div>
     </div>
 </div>
@@ -58,19 +58,19 @@ col_nav, col_lang = st.columns([8, 3])
 with col_nav:
     nav_keys = ['Home', 'Properties', 'Invest', 'Business', 'Market', 'AI Advisor']
     nav_labels = [
-        get_text('nav_home', lang),
-        get_text('nav_properties', lang),
-        get_text('nav_invest', lang),
-        get_text('nav_business', lang),
-        get_text('nav_market', lang),
-        get_text('nav_advisor', lang)
+        t('nav_home', lang),
+        t('nav_properties', lang),
+        t('nav_invest', lang),
+        t('nav_business', lang),
+        t('nav_market', lang),
+        t('nav_advisor', lang)
     ]
     
     current_nav = st.session_state.get('active_nav', 'Home')
     curr_idx = nav_keys.index(current_nav) if current_nav in nav_keys else 0
     
     selected_label = st.radio(
-        "Top Nav",
+        t('nav_top_label', lang),
         nav_labels,
         index=curr_idx,
         horizontal=True,
@@ -87,7 +87,7 @@ with col_nav:
 
 with col_lang:
     selected_lang = st.selectbox(
-        "🌐 Language",
+        t('lang_label', lang),
         ['English', 'Hindi', 'Kannada'],
         index=['English', 'Hindi', 'Kannada'].index(lang),
         label_visibility="collapsed"
@@ -99,7 +99,7 @@ with col_lang:
 st.markdown("<hr style='border-color: #E2E8F0; margin: 16px 0 28px 0;'>", unsafe_allow_html=True)
 
 # Safe Router Call with Error Interceptor
-@handle_user_errors("Something went wrong while loading this page. Please try again.")
+@handle_user_errors(t('error_generic', lang))
 def route_page(nav_item, current_lang):
     if nav_item == 'Home':
         render_dashboard(current_lang)
@@ -119,3 +119,10 @@ def route_page(nav_item, current_lang):
         render_dashboard(current_lang)
 
 route_page(st.session_state.get('active_nav', 'Home'), lang)
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown(f"""
+<div style="font-size: 12px; color: #94A3B8; text-align: center; border-top: 1px solid #E2E8F0; padding-top: 16px;">
+    {t('footer_copy', lang)}
+</div>
+""", unsafe_allow_html=True)
