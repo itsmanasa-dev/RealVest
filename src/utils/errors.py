@@ -1,7 +1,7 @@
 import logging
 import functools
 import streamlit as st
-from app.translations import t
+from src.translations import t
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("RealVest")

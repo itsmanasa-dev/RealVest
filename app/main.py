@@ -102,8 +102,12 @@ with col_nav:
 with col_lang:
     selected_lang = st.selectbox(
         t('lang_label', lang),
-        ['English', 'Hindi', 'Kannada'],
-        index=['English', 'Hindi', 'Kannada'].index(lang),
+        ['Engli
+        
+        
+        
+        
+        nglish', 'Hindi', 'Kannada'].index(lang),
         label_visibility="collapsed"
     )
     if selected_lang != lang:
