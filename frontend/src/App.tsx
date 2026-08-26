@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import type { NavTab, Property } from './types';
 import { mockProperties } from './data/mockProperties';
 
-import { Sidebar } from './components/layout/Sidebar';
 import { Header } from './components/layout/Header';
 import { MobileNav } from './components/layout/MobileNav';
 
@@ -17,10 +16,11 @@ import { SettingsView } from './components/views/SettingsView';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
+  const [previousTab, setPreviousTab] = useState<NavTab>('explore');
   const [selectedProperty, setSelectedProperty] = useState<Property>(mockProperties[0]);
-  const [isDark, setIsDark] = useState<boolean>(true);
+  const [isDark, setIsDark] = useState<boolean>(false); // Start with clean light mode by default as per screenshots, easily toggleable
 
-  // Sync dark class to root document element
+  // Sync dark/light class to root HTML element
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
@@ -36,91 +36,78 @@ export function App() {
   };
 
   const handleSelectProperty = (property: Property) => {
+    setPreviousTab(activeTab);
     setSelectedProperty(property);
     setActiveTab('analysis');
   };
 
-  const categoryLabels: Record<NavTab, string> = {
-    dashboard: 'PORTFOLIO & MARKET OVERVIEW',
-    explore: 'PROPERTY EXPLORER',
-    analysis: 'PROPERTY ANALYSIS & ML DEEP DIVE',
-    compare: 'SIDE-BY-SIDE PROPERTY COMPARISON',
-    simulator: 'DECISION SIMULATOR & WHAT-IF ENGINE',
-    markets: 'BENGALURU MARKET INTELLIGENCE (RBI HPI)',
-    advisor: 'AI DECISION ADVISOR',
-    settings: 'PLATFORM SETTINGS',
+  const handleBack = () => {
+    setActiveTab(previousTab || 'explore');
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--bg-text)] flex">
-      {/* Desktop Persistent Sidebar */}
-      <Sidebar
+    <div className="min-h-screen bg-[#f8fafd] dark:bg-[#031427] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-300">
+      {/* Top Header */}
+      <Header
         activeTab={activeTab}
-        onTabChange={setActiveTab}
         isDark={isDark}
         onToggleTheme={handleToggleTheme}
+        onSearchClick={() => setActiveTab('explore')}
+        onBack={handleBack}
+        showBack={activeTab === 'analysis'}
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <Header
-          categoryLabel={categoryLabels[activeTab]}
-          isDark={isDark}
-          onToggleTheme={handleToggleTheme}
-          onSearchClick={() => setActiveTab('explore')}
-        />
+      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-5 pb-10">
+        {activeTab === 'dashboard' && (
+          <DashboardView
+            properties={mockProperties}
+            onSelectProperty={handleSelectProperty}
+            onNavigate={setActiveTab}
+          />
+        )}
 
-        <main className="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto">
-          {activeTab === 'dashboard' && (
-            <DashboardView
-              properties={mockProperties}
-              onSelectProperty={handleSelectProperty}
-              onNavigate={setActiveTab}
-            />
-          )}
+        {activeTab === 'explore' && (
+          <ExplorerView
+            properties={mockProperties}
+            onSelectProperty={handleSelectProperty}
+          />
+        )}
 
-          {activeTab === 'explore' && (
-            <ExplorerView
-              properties={mockProperties}
-              onSelectProperty={handleSelectProperty}
-            />
-          )}
+        {activeTab === 'analysis' && (
+          <PropertyAnalysisView
+            property={selectedProperty}
+            onBack={handleBack}
+            onNavigate={setActiveTab}
+          />
+        )}
 
-          {activeTab === 'analysis' && (
-            <PropertyAnalysisView
-              property={selectedProperty}
-              onBack={() => setActiveTab('explore')}
-              onNavigate={setActiveTab}
-            />
-          )}
+        {activeTab === 'compare' && (
+          <CompareView
+            properties={mockProperties}
+            onSelectProperty={handleSelectProperty}
+            onNavigate={setActiveTab}
+          />
+        )}
 
-          {activeTab === 'compare' && (
-            <CompareView
-              properties={mockProperties}
-              onSelectProperty={handleSelectProperty}
-              onNavigate={setActiveTab}
-            />
-          )}
+        {activeTab === 'simulator' && <SimulatorView onBack={handleBack} />}
 
-          {activeTab === 'simulator' && <SimulatorView />}
+        {activeTab === 'markets' && <MarketIntelligenceView />}
 
-          {activeTab === 'markets' && <MarketIntelligenceView />}
+        {activeTab === 'advisor' && (
+          <AIAdvisorView
+            properties={mockProperties}
+            onSelectProperty={handleSelectProperty}
+            onNavigate={setActiveTab}
+          />
+        )}
 
-          {activeTab === 'advisor' && (
-            <AIAdvisorView
-              properties={mockProperties}
-              onSelectProperty={handleSelectProperty}
-              onNavigate={setActiveTab}
-            />
-          )}
+        {activeTab === 'settings' && (
+          <SettingsView isDark={isDark} onToggleTheme={handleToggleTheme} />
+        )}
+      </main>
 
-          {activeTab === 'settings' && (
-            <SettingsView isDark={isDark} onToggleTheme={handleToggleTheme} />
-          )}
-        </main>
-      </div>
-
-      {/* Mobile Floating Bottom Dock */}
+      {/* Bottom Navigation Dock matching screenshots */}
       <MobileNav activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );

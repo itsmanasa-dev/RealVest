@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Property, NavTab } from '../../types';
-import { Scale, Trophy, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Scale, Trophy, ArrowRight, Check } from 'lucide-react';
 
 interface CompareViewProps {
   properties: Property[];
@@ -13,7 +13,6 @@ export const CompareView: React.FC<CompareViewProps> = ({
   onSelectProperty,
   onNavigate,
 }) => {
-  // Allow picking 2 or 3 properties
   const [selectedIds, setSelectedIds] = useState<string[]>([
     properties[0]?.id || '',
     properties[1]?.id || '',
@@ -23,7 +22,6 @@ export const CompareView: React.FC<CompareViewProps> = ({
     .map((id) => properties.find((p) => p.id === id))
     .filter(Boolean) as Property[];
 
-  // Determine "Our Pick" automatically based on investment score & yield
   const bestProperty = [...selectedProps].sort((a, b) => b.investmentScore - a.investmentScore)[0];
 
   const handleSelectSlot = (slotIdx: number, propId: string) => {
@@ -46,52 +44,45 @@ export const CompareView: React.FC<CompareViewProps> = ({
   };
 
   return (
-    <div className="space-y-6 pb-12">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+    <div className="space-y-5 pb-20 max-w-2xl mx-auto">
+      {/* Title & Subtitle */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200/80 dark:border-slate-800/80">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-mono text-[11px] font-bold uppercase tracking-wider">
-              SIDE-BY-SIDE EVALUATION
-            </span>
-          </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Compare Properties
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Compare verified properties across price, ML valuation, yield, and investment risk.
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            Side-by-side metric comparison and automated top pick analysis.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          {selectedIds.length < 3 && (
-            <button
-              onClick={handleAddSlot}
-              className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-xs font-bold hover:bg-emerald-500 hover:text-white transition-all cursor-pointer shadow-sm"
-            >
-              + Add 3rd Property
-            </button>
-          )}
-        </div>
+        {selectedIds.length < 3 && (
+          <button
+            onClick={handleAddSlot}
+            className="px-3.5 py-2 rounded-2xl bg-blue-50 dark:bg-slate-800 text-blue-700 dark:text-slate-200 font-mono text-xs font-bold hover:bg-blue-100 transition-colors cursor-pointer self-start sm:self-auto"
+          >
+            + Add 3rd Asset
+          </button>
+        )}
       </div>
 
-      {/* Property Selectors Row */}
-      <div className={`grid grid-cols-1 sm:grid-cols-${selectedIds.length} gap-4`}>
+      {/* Property Selector Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {selectedIds.map((currentId, slotIdx) => (
           <div
             key={slotIdx}
-            className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm space-y-2"
+            className="p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-2"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold uppercase text-slate-400">
+              <span className="text-[10px] font-mono font-bold uppercase text-slate-400">
                 Property {String.fromCharCode(65 + slotIdx)}
               </span>
               {selectedIds.length > 2 && (
                 <button
                   onClick={() => handleRemoveSlot(slotIdx)}
-                  className="text-xs text-rose-500 hover:text-rose-400 font-mono"
+                  className="text-xs text-rose-500 hover:underline font-mono"
                 >
-                  ✕ Remove
+                  Remove
                 </button>
               )}
             </div>
@@ -99,11 +90,11 @@ export const CompareView: React.FC<CompareViewProps> = ({
             <select
               value={currentId}
               onChange={(e) => handleSelectSlot(slotIdx, e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#031427] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#031427] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
             >
               {properties.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {p.code} — {p.title} (₹{p.askingPriceLakhs} L)
+                  {p.title} (${(p.fairValueLakhs / 100).toFixed(1)}M)
                 </option>
               ))}
             </select>
@@ -111,84 +102,68 @@ export const CompareView: React.FC<CompareViewProps> = ({
         ))}
       </div>
 
-      {/* Side-by-Side Comparison Matrix */}
-      <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm">
+      {/* Comparison Table */}
+      <div className="rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm overflow-hidden">
         <table className="w-full text-left text-xs font-mono">
           <thead>
-            <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0c1a2c]">
-              <th className="p-4 text-slate-400 font-bold uppercase tracking-wider">Metrics</th>
-              {selectedProps.map((prop, idx) => (
-                <th key={prop.id} className="p-4 text-slate-900 dark:text-white font-extrabold text-sm">
-                  Property {String.fromCharCode(65 + idx)}: {prop.code}
+            <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+              <th className="p-3.5 text-slate-400 font-bold uppercase">Metrics</th>
+              {selectedProps.map((p, idx) => (
+                <th key={p.id} className="p-3.5 text-slate-900 dark:text-white font-extrabold">
+                  {p.title.split(' ')[0]} ({p.code})
                 </th>
               ))}
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
             <tr>
-              <td className="p-4 text-slate-400 font-bold">Location</td>
+              <td className="p-3.5 text-slate-400 font-semibold">Location</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-4 font-semibold text-slate-800 dark:text-slate-200">
-                  {p.location}, {p.city}
+                <td key={p.id} className="p-3.5 text-slate-800 dark:text-slate-200 font-medium">
+                  {p.location}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="p-4 text-slate-400 font-bold">Configuration</td>
+              <td className="p-3.5 text-slate-400 font-semibold">Category</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-4 text-slate-700 dark:text-slate-300">
-                  {p.bhk} BHK • {p.sqft} sqft
+                <td key={p.id} className="p-3.5 text-slate-800 dark:text-slate-200">
+                  {p.category}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="p-4 text-slate-400 font-bold">Asking Price</td>
+              <td className="p-3.5 text-slate-400 font-semibold">Est. Value</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-4 font-extrabold text-slate-900 dark:text-white text-sm">
-                  ₹{p.askingPriceLakhs} Lakhs
+                <td key={p.id} className="p-3.5 font-extrabold text-blue-600 dark:text-emerald-400 text-sm">
+                  ${(p.fairValueLakhs / 100).toFixed(1)}M
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="p-4 text-slate-400 font-bold">ML Fair Value</td>
+              <td className="p-3.5 text-slate-400 font-semibold">Proj. ROI</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-4 font-extrabold text-blue-500 text-sm">
-                  ₹{p.fairValueLakhs} Lakhs
+                <td key={p.id} className="p-3.5 font-bold text-emerald-600 dark:text-emerald-400">
+                  {p.annualYield}% YoY
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="p-4 text-slate-400 font-bold">Expected Monthly Rent</td>
+              <td className="p-3.5 text-slate-400 font-semibold">Confidence</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-4 font-bold text-emerald-500">
-                  ₹{p.monthlyRent.toLocaleString()}/mo
+                <td key={p.id} className="p-3.5 font-bold text-slate-900 dark:text-white">
+                  {p.confidenceScore}%
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="p-4 text-slate-400 font-bold">Rental Yield (%)</td>
+              <td className="p-3.5 text-slate-400 font-semibold">Verdict</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-4 font-extrabold text-amber-500">
-                  {p.annualYield}%
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td className="p-4 text-slate-400 font-bold">Investment Score</td>
-              {selectedProps.map((p) => (
-                <td key={p.id} className="p-4 font-extrabold text-emerald-500 text-base">
-                  {p.investmentScore} / 100
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td className="p-4 text-slate-400 font-bold">AI Verdict</td>
-              {selectedProps.map((p) => (
-                <td key={p.id} className="p-4">
-                  <span className={`px-2.5 py-1 rounded-full text-white font-extrabold text-[11px] ${
-                    p.recommendation === 'BUY' ? 'bg-emerald-500' : (p.recommendation === 'HOLD' ? 'bg-amber-500' : 'bg-rose-500')
+                <td key={p.id} className="p-3.5">
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold text-white ${
+                    p.recommendation === 'BUY' ? 'bg-emerald-500' : 'bg-amber-500'
                   }`}>
-                    {p.recommendation} ({p.dealStatus})
+                    {p.recommendation}
                   </span>
                 </td>
               ))}
@@ -197,37 +172,35 @@ export const CompareView: React.FC<CompareViewProps> = ({
         </table>
       </div>
 
-      {/* Automated Best Pick Banner */}
+      {/* Best Pick Recommendation Banner */}
       {bestProperty && (
-        <div className="p-6 rounded-2xl border border-emerald-500/40 bg-gradient-to-r from-emerald-950/30 via-slate-900/50 to-slate-900/80 shadow-xl relative overflow-hidden">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
-                <Trophy size={26} />
-              </div>
-              <div>
-                <span className="text-[10px] font-mono font-extrabold text-emerald-400 tracking-widest uppercase">
-                  REALVEST AUTOMATED BEST PICK
-                </span>
-                <h3 className="text-xl font-extrabold text-white mt-0.5">
-                  {bestProperty.title} ({bestProperty.code})
-                </h3>
-                <p className="text-xs text-slate-300 mt-1">
-                  Highest overall investment score ({bestProperty.investmentScore}/100) with a {bestProperty.annualYield}% rental yield in {bestProperty.location}.
-                </p>
-              </div>
+        <div className="p-5 sm:p-6 rounded-3xl bg-blue-600 dark:bg-blue-600 text-white shadow-lg shadow-blue-600/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-white/20 text-white flex items-center justify-center shrink-0">
+              <Trophy size={20} />
             </div>
-
-            <button
-              onClick={() => {
-                onSelectProperty(bestProperty);
-                onNavigate('analysis');
-              }}
-              className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-mono text-xs font-bold transition-all shadow-lg shadow-emerald-500/25 flex items-center gap-2 cursor-pointer shrink-0"
-            >
-              Inspect Details <ArrowRight size={14} />
-            </button>
+            <div>
+              <span className="text-[10px] font-mono uppercase font-bold tracking-widest text-blue-200">
+                REALVEST TOP PICK
+              </span>
+              <h3 className="text-base sm:text-lg font-extrabold text-white mt-0.5">
+                {bestProperty.title}
+              </h3>
+              <p className="text-xs text-blue-100 mt-0.5">
+                Highest projected ROI ({bestProperty.annualYield}%) and {bestProperty.confidenceScore}% confidence score.
+              </p>
+            </div>
           </div>
+
+          <button
+            onClick={() => {
+              onSelectProperty(bestProperty);
+              onNavigate('analysis');
+            }}
+            className="px-4 py-2.5 rounded-xl bg-white text-blue-700 font-bold text-xs hover:bg-blue-50 transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+          >
+            Inspect <ArrowRight size={14} />
+          </button>
         </div>
       )}
     </div>

@@ -1,19 +1,15 @@
 import React from 'react';
 import type { Property, NavTab } from '../../types';
-import { AIConfidenceGauge } from '../common/AIConfidenceGauge';
-import { RiskBadge } from '../common/RiskBadge';
-import { MetricCard } from '../common/MetricCard';
 import {
   ArrowLeft,
-  Bookmark,
-  Sliders,
-  CheckCircle2,
-  AlertTriangle,
   MapPin,
-  TrendingUp,
-  ShieldCheck,
+  CheckCircle2,
+  ShoppingCart,
   Building,
-  Layers,
+  LineChart,
+  Lightbulb,
+  Radar,
+  Sliders,
 } from 'lucide-react';
 
 interface PropertyAnalysisViewProps {
@@ -27,245 +23,174 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
   onBack,
   onNavigate,
 }) => {
+  const radius = 64;
+  const strokeWidth = 9;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (property.confidenceScore / 100) * circumference;
+
   return (
-    <div className="space-y-6 pb-12">
-      {/* Property Header Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
-        <div>
-          <button
-            onClick={onBack}
-            className="flex items-center gap-1.5 text-xs font-mono font-bold text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors mb-2 cursor-pointer"
-          >
-            <ArrowLeft size={14} /> Back to Listings
-          </button>
+    <div className="space-y-5 pb-20 max-w-2xl mx-auto">
+      {/* Property Title & Location Bar */}
+      <div>
+        <button
+          onClick={onBack}
+          className="flex items-center gap-1.5 text-xs font-mono font-bold text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors mb-2 cursor-pointer"
+        >
+          <ArrowLeft size={15} /> Back to Assets
+        </button>
 
-          <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-mono text-[11px] font-bold uppercase tracking-wider">
-              {property.subCategory}
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          {property.title}
+        </h1>
+
+        <div className="flex items-center gap-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <MapPin size={15} className="text-slate-400 shrink-0" />
+          <span>{property.location}, {property.city}</span>
+        </div>
+
+        {/* Category Pill Badges */}
+        <div className="flex items-center gap-2 mt-3">
+          <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60">
+            {property.category}
+          </span>
+          <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60">
+            {property.subCategory}
+          </span>
+        </div>
+      </div>
+
+      {/* Card 1: AI Decision Synthesis (Matching Screenshot 2) */}
+      <div className="p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm flex flex-col items-center text-center space-y-6">
+        <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+          AI Decision Synthesis
+        </h3>
+
+        {/* Circular Radial Gauge */}
+        <div className="relative flex items-center justify-center w-40 h-40">
+          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 160 160">
+            <circle
+              cx="80"
+              cy="80"
+              r={radius}
+              stroke="currentColor"
+              strokeWidth={strokeWidth}
+              className="text-blue-50 dark:text-slate-800"
+              fill="transparent"
+            />
+            <circle
+              cx="80"
+              cy="80"
+              r={radius}
+              stroke="currentColor"
+              strokeWidth={strokeWidth}
+              strokeDasharray={circumference}
+              strokeDashoffset={strokeDashoffset}
+              strokeLinecap="round"
+              className="text-blue-600 dark:text-emerald-400 transition-all duration-1000 ease-out"
+              fill="transparent"
+            />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span className="font-mono text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              {property.confidenceScore}%
             </span>
-            <span className="text-xs font-mono text-slate-400">{property.code}</span>
-          </div>
-
-          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            {property.title}
-          </h1>
-
-          <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 mt-1">
-            <MapPin size={16} className="text-emerald-500" />
-            <span>{property.location}, {property.city}</span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold mt-0.5">
+              CONFIDENCE
+            </span>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-3">
+        {/* Full Width Action Button */}
+        <div className="w-full flex flex-col sm:flex-row gap-2.5">
           <button
-            onClick={() => alert(`Saved ${property.code} to your watchlist.`)}
-            className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] text-slate-700 dark:text-slate-300 font-mono text-xs font-bold hover:border-slate-400 transition-all flex items-center gap-2 cursor-pointer shadow-sm"
+            onClick={() => alert(`Initiating acquisition sequence for ${property.title}.`)}
+            className="flex-1 py-3.5 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            <Bookmark size={16} /> 🔖 SAVE
+            <ShoppingCart size={18} /> INITIATE ACQUISITION
           </button>
           <button
             onClick={() => onNavigate('simulator')}
-            className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-mono text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25"
+            className="py-3.5 px-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-sm hover:bg-slate-100 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            <Sliders size={16} /> 🧪 SIMULATOR
+            <Sliders size={18} /> Simulator
           </button>
         </div>
       </div>
 
-      {/* Hero Photography & Valuation Display */}
-      <div className="relative h-64 md:h-80 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl">
-        <img
-          src={property.imageUrl}
-          alt={property.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#031427] via-[#031427]/40 to-transparent" />
-
-        <div className="absolute bottom-6 left-6 right-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
-              ML ESTIMATED FAIR VALUATION
-            </span>
-            <div className="text-3xl md:text-4xl font-extrabold font-mono text-white tracking-tight">
-              ₹{property.fairValueLakhs} Lakhs
-            </div>
-            <div className="text-xs font-mono text-slate-300 mt-1">
-              Asking Price: <b className="text-white">₹{property.askingPriceLakhs} Lakhs</b> ({property.dealStatus})
-            </div>
+      {/* Row: 2 Equal Metric Cards */}
+      <div className="grid grid-cols-2 gap-4">
+        {/* EST. VALUE */}
+        <div className="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm">
+          <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-400 uppercase">
+            <Building size={14} /> EST. VALUE
           </div>
+          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-slate-900 dark:text-white mt-2">
+            ${(property.fairValueLakhs / 100).toFixed(1)}M
+          </div>
+        </div>
 
-          <div className="flex items-center gap-3">
-            <div className="px-4 py-2 rounded-xl bg-slate-900/80 backdrop-blur-md border border-white/10 text-white font-mono text-xs font-bold flex items-center gap-2">
-              <TrendingUp size={16} className="text-emerald-400" />
-              <span>{property.annualYield}% Annual Yield</span>
-            </div>
-            <div className="px-4 py-2 rounded-xl bg-slate-900/80 backdrop-blur-md border border-white/10 text-white font-mono text-xs font-bold flex items-center gap-2">
-              <Building size={16} className="text-blue-400" />
-              <span>₹{property.monthlyRent.toLocaleString()}/mo Rent</span>
-            </div>
+        {/* PROJ. ROI */}
+        <div className="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm">
+          <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-400 uppercase">
+            <LineChart size={14} /> PROJ. ROI
+          </div>
+          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400 mt-2">
+            {property.annualYield}% <span className="text-xs font-sans text-slate-400 font-normal">YoY</span>
           </div>
         </div>
       </div>
 
-      {/* AI Decision Synthesis Gauge Card */}
-      <AIConfidenceGauge
-        confidenceScore={property.confidenceScore}
-        recommendation={property.recommendation}
-        explainableText={`RealVest Decision Engine assigns a ${property.recommendation} verdict with ${property.confidenceScore}% confidence based on micro-market pricing benchmarks and yield coverage in ${property.location}.`}
-        onInitiateAcquisition={() => alert(`Analysis report generated for ${property.title}.`)}
-      />
-
-      {/* Key Metrics Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard
-          label="Asking Price"
-          value={`₹${property.askingPriceLakhs} L`}
-          subtext={`₹${Math.round((property.askingPriceLakhs * 100000) / property.sqft)} / sqft`}
-        />
-        <MetricCard
-          label="ML Fair Value"
-          value={`₹${property.fairValueLakhs} L`}
-          change={property.dealDiffPct <= 0 ? `${Math.abs(property.dealDiffPct)}% Below Fair Value` : `+${property.dealDiffPct}% Over Fair Value`}
-          changeType={property.dealDiffPct <= 0 ? 'positive' : 'negative'}
-        />
-        <MetricCard
-          label="Estimated Rent"
-          value={`₹${property.monthlyRent.toLocaleString()}`}
-          subtext="Monthly tenant income"
-        />
-        <MetricCard
-          label="Investment Score"
-          value={`${property.investmentScore}/100`}
-          change={property.investmentScore >= 75 ? 'Strong Deal' : 'Fair Deal'}
-          changeType="positive"
-        />
-      </div>
-
-      {/* Explainable Valuation Waterfall Breakdown */}
-      <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-          <div className="flex items-center gap-2">
-            <Layers size={20} className="text-emerald-500" />
-            <h3 className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Explainable Valuation Waterfall Breakdown
-            </h3>
-          </div>
-          <span className="text-xs font-mono text-slate-400">Trained ML Model Attribution</span>
+      {/* Card 2: Decision Rationale (Matching Screenshot 2) */}
+      <div className="p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-4">
+        <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <Lightbulb size={20} className="text-blue-600 dark:text-emerald-400" />
+          <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+            Decision Rationale
+          </h3>
         </div>
 
-        <p className="text-xs text-slate-500 dark:text-slate-400">
-          Quantified individual feature contributions explaining how the ML fair value of <b>₹{property.fairValueLakhs} Lakhs</b> was derived:
-        </p>
+        <div className="space-y-3">
+          {property.reasons.map((item, idx) => (
+            <div key={idx} className="flex items-start gap-3">
+              <CheckCircle2 size={18} className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+              <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+                {item}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
 
-        <div className="space-y-2 pt-2">
-          {property.waterfallFactors.map((factor, idx) => {
-            const isBase = factor.sign === 'base';
-            const isPos = factor.sign === '+';
-            const colorCls = isBase ? 'text-blue-500' : (isPos ? 'text-emerald-500' : 'text-rose-500');
-            const icon = isBase ? '📌' : (isPos ? '▲ +' : '▼ -');
+      {/* Card 3: Risk Assessment (Matching Screenshot 2) */}
+      <div className="p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-4">
+        <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <Radar size={20} className="text-amber-500" />
+          <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+            Risk Assessment
+          </h3>
+        </div>
+
+        <div className="space-y-3.5">
+          {property.riskRadar.breakdown.map((item, idx) => {
+            const isLow = item.level === 'Low';
+            const isMed = item.level === 'Medium';
+            const dotColor = isLow ? 'bg-emerald-500' : (isMed ? 'bg-amber-500' : 'bg-blue-500');
+            const pillStyle = isLow
+              ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20'
+              : (isMed ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20' : 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20');
 
             return (
-              <div
-                key={idx}
-                className="flex items-center justify-between p-3 rounded-xl border border-slate-100 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-900/50"
-              >
-                <div className="flex items-center gap-2 text-sm font-medium text-slate-800 dark:text-slate-200">
-                  <span className={`font-mono font-bold ${colorCls}`}>{icon}</span>
-                  <span>{factor.factor}</span>
+              <div key={idx} className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
+                  <span className={`w-2.5 h-2.5 rounded-full ${dotColor}`} />
+                  <span>{item.category}</span>
                 </div>
-                <div className={`font-mono font-extrabold text-sm ${colorCls}`}>
-                  ₹{Math.abs(factor.contribution_lakhs).toFixed(2)} Lakhs
-                </div>
+                <span className={`px-3 py-0.5 rounded-full text-xs font-mono font-bold border ${pillStyle}`}>
+                  {item.level.toUpperCase()}
+                </span>
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* Decision Rationale Checklist & 5-Dimension Risk Radar */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Supporting Reasons & Signals */}
-        <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm space-y-4">
-          <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-            <CheckCircle2 size={20} className="text-emerald-500" />
-            <h3 className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Supporting Decision Reasons
-            </h3>
-          </div>
-
-          <div className="space-y-3">
-            {property.reasons.map((item, idx) => (
-              <div
-                key={idx}
-                className="flex items-start gap-3 p-3 rounded-xl border border-slate-100 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-900/50"
-              >
-                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
-                  ✓
-                </span>
-                <span className="text-xs md:text-sm text-slate-700 dark:text-slate-200 font-medium">
-                  {item}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {property.risks.length > 0 && (
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-mono font-bold text-rose-500 uppercase">
-                <AlertTriangle size={16} /> Risk Signals
-              </div>
-              {property.risks.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-start gap-2.5 p-2.5 rounded-xl border border-rose-500/20 bg-rose-500/5 text-xs text-rose-400 font-medium"
-                >
-                  <span>⚠</span>
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* 5-Dimension Risk Radar Matrix */}
-        <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-2">
-              <ShieldCheck size={20} className="text-blue-500" />
-              <h3 className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Property Risk Radar
-              </h3>
-            </div>
-            <RiskBadge level={property.riskRadar.overallRisk} label="Overall" />
-          </div>
-
-          <div className="space-y-3">
-            {property.riskRadar.breakdown.map((item, idx) => (
-              <div
-                key={idx}
-                className="p-3 rounded-xl border border-slate-100 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-900/50 space-y-1"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200">
-                    {item.category}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-mono text-slate-400">{item.metric_label}: {item.metric_value}</span>
-                    <span
-                      style={{ backgroundColor: item.color }}
-                      className="px-2 py-0.5 rounded text-[10px] font-mono font-extrabold text-white"
-                    >
-                      {item.level}
-                    </span>
-                  </div>
-                </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  <b>Why:</b> {item.why}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>

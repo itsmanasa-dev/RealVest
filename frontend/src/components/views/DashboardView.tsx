@@ -1,16 +1,13 @@
 import React from 'react';
 import type { Property, NavTab } from '../../types';
-import { RiskBadge } from '../common/RiskBadge';
 import {
   TrendingUp,
   Brain,
   MessageSquare,
-  PlusCircle,
-  Building,
+  Plus,
   ArrowUpRight,
   ChevronRight,
-  ShieldCheck,
-  Zap,
+  Wallet,
 } from 'lucide-react';
 
 interface DashboardViewProps {
@@ -24,115 +21,105 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onSelectProperty,
   onNavigate,
 }) => {
-  // Aggregate real dataset metrics
-  const totalValueLakhs = properties.reduce((acc, p) => acc + p.askingPriceLakhs, 0);
-  const avgYield = (properties.reduce((acc, p) => acc + p.annualYield, 0) / (properties.length || 1)).toFixed(1);
-  const goodDealsCount = properties.filter((p) => p.dealStatus.includes('Undervalued') || p.recommendation === 'BUY').length;
-
   return (
-    <div className="space-y-6 pb-12">
-      {/* Top Stats Grid: Market Dynamics & Portfolio Value */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Market Dynamics Card (2 Cols) */}
-        <div className="lg:col-span-2 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm relative overflow-hidden">
-          <div className="flex items-center justify-between gap-4 mb-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                  BENGALURU HOUSING PRICE INDEX (RBI HPI)
-                </span>
-                <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-mono text-xs font-bold flex items-center gap-1">
-                  <TrendingUp size={14} /> +34.3% 10-Yr
-                </span>
-              </div>
-              <h3 className="text-2xl font-extrabold font-mono text-slate-900 dark:text-white mt-1">
-                113.13 <span className="text-sm font-sans font-normal text-slate-400">INDEX PTS (Base 2013=100)</span>
+    <div className="space-y-6 pb-20 max-w-5xl mx-auto">
+      {/* Top Greeting Section */}
+      <div>
+        <span className="text-[11px] font-mono font-bold tracking-widest text-slate-400 uppercase">
+          PORTFOLIO OVERVIEW
+        </span>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-0.5">
+          Good Morning, Investor.
+        </h1>
+        <div className="flex items-center gap-2 mt-2">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            Live Market Data
+          </span>
+          <span className="text-xs font-mono text-slate-400">
+            Last synced: Just now
+          </span>
+        </div>
+      </div>
+
+      {/* Grid: Market Dynamics + Portfolio Value */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+        {/* Market Dynamics Card (7 Cols) */}
+        <div className="md:col-span-7 p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm flex flex-col justify-between overflow-hidden relative">
+          <div>
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+                Market Dynamics
               </h3>
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold flex items-center gap-1">
+                <TrendingUp size={14} /> +4.2%
+              </span>
             </div>
-            <div className="flex gap-1 font-mono text-xs font-semibold">
-              {['Q1', 'Q2', 'Q3', 'Q4'].map((w, i) => (
-                <span
-                  key={w}
-                  className={`px-2.5 py-1 rounded-lg ${
-                    i === 3
-                      ? 'bg-emerald-500 text-white shadow-sm'
-                      : 'text-slate-400 bg-slate-100 dark:bg-slate-800/60'
-                  }`}
-                >
-                  {w}
-                </span>
-              ))}
-            </div>
+            <p className="text-xs font-mono text-slate-400 mt-0.5">
+              Aggregated Prime Real Estate Index
+            </p>
           </div>
 
-          {/* Smooth SVG Dual-Tone Area Chart */}
-          <div className="h-40 w-full relative">
-            <svg className="w-full h-full overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
+          {/* Smooth Area Wave Chart */}
+          <div className="h-36 w-full relative mt-4">
+            <svg className="w-full h-full overflow-visible" viewBox="0 0 400 100" preserveAspectRatio="none">
               <defs>
-                <linearGradient id="emeraldGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
+                <linearGradient id="waveGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.35" />
                   <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
-
-              {/* Grid Lines */}
-              <line x1="0" y1="30" x2="500" y2="30" stroke="currentColor" strokeDasharray="4 4" className="text-slate-200 dark:text-slate-800" />
-              <line x1="0" y1="70" x2="500" y2="70" stroke="currentColor" strokeDasharray="4 4" className="text-slate-200 dark:text-slate-800" />
-
-              {/* Area Fill */}
               <path
-                d="M 0,90 Q 125,40 250,65 T 500,20 L 500,120 L 0,120 Z"
-                fill="url(#emeraldGradient)"
+                d="M 0,75 Q 70,80 130,55 T 260,65 T 400,20 L 400,100 L 0,100 Z"
+                fill="url(#waveGradient)"
               />
-              {/* Smooth Stroke Curve */}
               <path
-                d="M 0,90 Q 125,40 250,65 T 500,20"
+                d="M 0,75 Q 70,80 130,55 T 260,65 T 400,20"
                 fill="none"
                 stroke="#10b981"
-                strokeWidth="3"
+                strokeWidth="2.5"
                 strokeLinecap="round"
               />
-
-              {/* Timeline Marker Nodes */}
-              <circle cx="0" cy="90" r="4" className="fill-emerald-500" />
-              <circle cx="125" cy="55" r="4" className="fill-emerald-500" />
-              <circle cx="250" cy="65" r="4" className="fill-emerald-500" />
-              <circle cx="375" cy="40" r="4" className="fill-emerald-500" />
-              <circle cx="500" cy="20" r="6" className="fill-emerald-500 stroke-4 stroke-emerald-200 dark:stroke-emerald-950 animate-pulse" />
             </svg>
+          </div>
+
+          <div className="flex justify-between font-mono text-[11px] text-slate-400 font-semibold pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            <span>W1</span>
+            <span>W2</span>
+            <span>W3</span>
+            <span className="text-emerald-500 font-bold">W4</span>
           </div>
         </div>
 
-        {/* Portfolio Value Card (1 Col) */}
-        <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm flex flex-col justify-between">
+        {/* Portfolio Value Card (5 Cols) */}
+        <div className="md:col-span-5 p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                CATALOG VALUE
+                PORTFOLIO VALUE
               </span>
-              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 text-xs font-mono font-bold">
-                {goodDealsCount} Value Deals
-              </span>
+              <Wallet size={18} className="text-slate-400" />
             </div>
-            <h2 className="text-3xl font-extrabold font-mono text-slate-900 dark:text-white tracking-tight">
-              ₹{(totalValueLakhs / 100).toFixed(2)} Cr
-            </h2>
-            <div className="text-xs text-slate-400 font-mono mt-0.5">
-              (₹{totalValueLakhs.toFixed(1)} Lakhs in verified listings)
+
+            <div className="text-3xl sm:text-4xl font-extrabold font-mono text-slate-900 dark:text-white tracking-tight mt-2">
+              $4.2M
+            </div>
+            <div className="text-xs font-mono text-emerald-500 font-semibold mt-1">
+              ↑ +$124,500 [YTD]
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80">
             <div>
-              <div className="text-[11px] font-mono uppercase text-slate-400">Active Listings</div>
-              <div className="text-lg font-bold font-mono text-slate-900 dark:text-white flex items-center gap-1.5 mt-0.5">
-                <Building size={16} className="text-emerald-500" /> {properties.length} Units
+              <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">Active Assets</div>
+              <div className="text-sm sm:text-base font-bold font-mono text-slate-900 dark:text-white mt-0.5">
+                12 Properties
               </div>
             </div>
             <div>
-              <div className="text-[11px] font-mono uppercase text-slate-400">Avg Rental Yield</div>
-              <div className="text-lg font-bold font-mono text-emerald-500 mt-0.5">
-                {avgYield}% YoY
+              <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">Avg Yield</div>
+              <div className="text-sm sm:text-base font-bold font-mono text-emerald-500 mt-0.5">
+                6.8% YoY
               </div>
             </div>
           </div>
@@ -140,119 +127,105 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* AI Advisor Pulse Banner */}
-      <div className="relative p-6 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/20 via-slate-900/40 to-slate-900/80 backdrop-blur-xl shadow-xl overflow-hidden group">
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500 shadow-[0_0_12px_rgba(78,222,163,0.8)]" />
+      <div className="relative p-5 sm:p-6 rounded-3xl border border-blue-500/20 dark:border-emerald-500/30 bg-gradient-to-r from-blue-500/5 dark:from-emerald-950/30 via-slate-50 dark:via-slate-900/50 to-white dark:to-slate-900/80 shadow-sm overflow-hidden">
+        {/* Accent Glowing Rail */}
+        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-600 dark:bg-emerald-400 shadow-[0_0_10px_rgba(78,222,163,0.6)]" />
 
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pl-2">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 shadow-lg shadow-emerald-500/10">
-              <Brain size={26} className="animate-pulse" />
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 pl-2">
+          <div className="flex items-start gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-blue-500/10 dark:bg-emerald-500/20 text-blue-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+              <Brain size={22} className="animate-pulse" />
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[10px] font-mono uppercase font-extrabold tracking-widest px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                  REALVEST AI INTELLIGENCE PULSE
-                </span>
-                <span className="text-xs text-slate-400 font-mono">Verified Bengaluru ML Models</span>
-              </div>
-              <p className="text-sm md:text-base font-medium text-slate-200 leading-relaxed italic max-w-2xl">
-                "Whitefield & Sarjapur Road tech hubs currently offer the highest risk-adjusted rental yields (5.1–5.8%) with pricing benchmarked 6.8% below ML replacement valuations."
+              <span className="text-[10px] font-mono uppercase font-bold tracking-widest text-blue-600 dark:text-emerald-400">
+                AI ADVISOR PULSE
+              </span>
+              <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 mt-0.5 leading-relaxed max-w-xl">
+                "Based on your portfolio, emerging tech hubs in Austin show a 94% match for your risk profile with projected 12.4% ROI."
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 w-full md:w-auto">
+          <div className="flex items-center gap-2.5 w-full md:w-auto shrink-0">
             <button
               onClick={() => onNavigate('advisor')}
-              className="flex-1 md:flex-initial px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-xs shadow-lg shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="flex-1 md:flex-initial px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <MessageSquare size={16} /> 💬 Ask AI Advisor
+              <MessageSquare size={14} /> Ask AI
             </button>
             <button
               onClick={() => onNavigate('simulator')}
-              className="flex-1 md:flex-initial px-5 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="flex-1 md:flex-initial px-4 py-2.5 rounded-xl bg-blue-600 dark:bg-emerald-500 hover:bg-blue-700 dark:hover:bg-emerald-600 text-white font-semibold text-xs transition-all shadow-md shadow-blue-500/20 dark:shadow-emerald-500/20 flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <Zap size={16} /> 🧪 Decision Simulator
+              <Plus size={14} /> New Analysis
             </button>
           </div>
         </div>
       </div>
 
-      {/* Verified Market Properties Carousel / Grid Section */}
+      {/* Recent Property Analysis Section */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Top Verified Market Properties
-            </h3>
-            <p className="text-xs text-slate-400">
-              Evaluated with Scikit-Learn ML price prediction models & 5-dimension risk scoring
-            </p>
-          </div>
+          <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Recent Property Analysis
+          </h3>
           <button
             onClick={() => onNavigate('explore')}
-            className="text-xs font-mono font-bold text-emerald-500 hover:text-emerald-400 flex items-center gap-1 cursor-pointer"
+            className="text-xs font-mono font-bold text-blue-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
           >
-            View All ({properties.length}) <ChevronRight size={14} />
+            VIEW ALL <ChevronRight size={14} />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {properties.slice(0, 3).map((prop) => (
             <div
               key={prop.id}
               onClick={() => onSelectProperty(prop)}
-              className="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] overflow-hidden shadow-sm hover:shadow-xl hover:border-emerald-500/40 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+              className="group rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-500/40 dark:hover:border-emerald-500/40 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex flex-col justify-between"
             >
               {/* Thumbnail Container */}
-              <div className="relative h-44 w-full overflow-hidden bg-slate-900">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-900">
                 <img
                   src={prop.imageUrl}
                   alt={prop.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#102034] via-transparent to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#031427]/80 via-transparent to-transparent" />
 
                 {/* Top Badges */}
                 <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                  <span className="px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-md text-white font-mono text-[11px] font-bold border border-white/10">
+                  <span className="px-2 py-0.5 rounded-md bg-slate-900/80 backdrop-blur-md text-white font-mono text-[10px] font-bold border border-white/10">
                     {prop.code}
                   </span>
-                  <RiskBadge level={prop.riskRadar.overallRisk} label="Risk" />
+                  <span className="px-2 py-0.5 rounded-md bg-blue-600/90 dark:bg-emerald-600/90 text-white font-mono text-[10px] font-bold">
+                    {prop.category.toUpperCase()}
+                  </span>
                 </div>
 
                 {/* Bottom Overlay Title */}
                 <div className="absolute bottom-3 left-3 right-3">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400">
-                    {prop.subCategory}
-                  </span>
-                  <h4 className="text-base font-extrabold text-white tracking-tight leading-snug truncate">
+                  <h4 className="text-sm sm:text-base font-extrabold text-white tracking-tight truncate">
                     {prop.title}
                   </h4>
-                  <p className="text-xs text-slate-300 font-sans truncate">
+                  <p className="text-[11px] text-slate-300 truncate">
                     {prop.location}, {prop.city}
                   </p>
                 </div>
               </div>
 
-              {/* Card Body Numbers */}
-              <div className="p-4 grid grid-cols-2 gap-3 border-t border-slate-100 dark:border-slate-800/80">
+              {/* Card Body */}
+              <div className="p-4 grid grid-cols-2 gap-2 border-t border-slate-100 dark:border-slate-800/80">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-slate-400">Asking Price</span>
-                  <div className="text-base font-extrabold font-mono text-slate-900 dark:text-white">
-                    ₹{prop.askingPriceLakhs} L
-                  </div>
-                  <div className="text-[10px] text-blue-500 font-mono">
-                    Fair: ₹{prop.fairValueLakhs} L
+                  <span className="text-[10px] font-mono uppercase text-slate-400">Est. Price</span>
+                  <div className="text-sm sm:text-base font-extrabold font-mono text-slate-900 dark:text-white">
+                    ${(prop.fairValueLakhs / 100).toFixed(1)}M
                   </div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-slate-400">Rental Yield</span>
-                  <div className="text-base font-extrabold font-mono text-emerald-500 flex items-center gap-1">
+                  <span className="text-[10px] font-mono uppercase text-slate-400">Proj. ROI</span>
+                  <div className="text-sm sm:text-base font-extrabold font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                     {prop.annualYield}% <ArrowUpRight size={14} />
-                  </div>
-                  <div className="text-[10px] text-slate-400 font-mono">
-                    ₹{prop.monthlyRent.toLocaleString()}/mo
                   </div>
                 </div>
               </div>
