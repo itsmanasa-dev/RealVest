@@ -9,6 +9,7 @@ import { MobileNav } from './components/layout/MobileNav';
 import { DashboardView } from './components/views/DashboardView';
 import { ExplorerView } from './components/views/ExplorerView';
 import { PropertyAnalysisView } from './components/views/PropertyAnalysisView';
+import { CompareView } from './components/views/CompareView';
 import { SimulatorView } from './components/views/SimulatorView';
 import { MarketIntelligenceView } from './components/views/MarketIntelligenceView';
 import { AIAdvisorView } from './components/views/AIAdvisorView';
@@ -40,11 +41,12 @@ export function App() {
   };
 
   const categoryLabels: Record<NavTab, string> = {
-    dashboard: 'PORTFOLIO OVERVIEW',
+    dashboard: 'PORTFOLIO & MARKET OVERVIEW',
     explore: 'PROPERTY EXPLORER',
-    analysis: 'PROPERTY ANALYSIS & AI DEEP DIVE',
-    simulator: 'DECISION SIMULATOR',
-    markets: 'MARKET INTELLIGENCE',
+    analysis: 'PROPERTY ANALYSIS & ML DEEP DIVE',
+    compare: 'SIDE-BY-SIDE PROPERTY COMPARISON',
+    simulator: 'DECISION SIMULATOR & WHAT-IF ENGINE',
+    markets: 'BENGALURU MARKET INTELLIGENCE (RBI HPI)',
     advisor: 'AI DECISION ADVISOR',
     settings: 'PLATFORM SETTINGS',
   };
@@ -92,6 +94,14 @@ export function App() {
             />
           )}
 
+          {activeTab === 'compare' && (
+            <CompareView
+              properties={mockProperties}
+              onSelectProperty={handleSelectProperty}
+              onNavigate={setActiveTab}
+            />
+          )}
+
           {activeTab === 'simulator' && <SimulatorView />}
 
           {activeTab === 'markets' && <MarketIntelligenceView />}
@@ -100,6 +110,7 @@ export function App() {
             <AIAdvisorView
               properties={mockProperties}
               onSelectProperty={handleSelectProperty}
+              onNavigate={setActiveTab}
             />
           )}
 

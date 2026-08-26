@@ -1,5 +1,5 @@
 import pytest
-from app.translations import t
+from src.translations import t
 
 def test_english_translations():
     assert t('brand_name', 'English') == 'REALVEST'

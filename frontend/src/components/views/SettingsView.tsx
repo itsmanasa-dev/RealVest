@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sun, Moon, DollarSign, ShieldCheck, Database, Bell } from 'lucide-react';
+import { Sun, Moon, DollarSign, ShieldCheck, Database, Check } from 'lucide-react';
 
 interface SettingsViewProps {
   isDark: boolean;
@@ -10,8 +10,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   isDark,
   onToggleTheme,
 }) => {
-  const [currency, setCurrency] = useState('USD');
-  const [liveSync, setLiveSync] = useState(true);
+  const [currency, setCurrency] = useState('INR');
 
   return (
     <div className="space-y-6 pb-12">
@@ -26,7 +25,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           Platform Settings
         </h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Configure visual archetypes, currency benchmarks, and live market data synchronization.
+          Configure visual archetypes, currency benchmarks, and live market data parameters.
         </p>
       </div>
 
@@ -46,8 +45,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
 
           <div className="pt-2 flex items-center justify-between">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
-              Current Mode: <b className="text-emerald-500">{isDark ? 'Obsidian Dark (#031427)' : 'Institutional Light (#f8f9ff)'}</b>
+            <span className="text-xs md:text-sm font-medium text-slate-700 dark:text-slate-200">
+              Current: <b className="text-emerald-500">{isDark ? 'Electric Obsidian (#031427)' : 'Decision Light (#f8f9ff)'}</b>
             </span>
             <button
               onClick={onToggleTheme}
@@ -73,7 +72,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
 
           <div className="pt-2 flex items-center gap-3">
-            {['USD ($)', 'INR (₹)', 'EUR (€)'].map((c) => {
+            {['INR (₹)', 'USD ($)', 'EUR (€)'].map((c) => {
               const code = c.split(' ')[0];
               const isActive = currency === code;
               return (
@@ -83,7 +82,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-md'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                   }`}
                 >
                   {c}

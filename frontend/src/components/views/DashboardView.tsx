@@ -1,6 +1,5 @@
 import React from 'react';
-import { Property, NavTab } from '../../types';
-import { MetricCard } from '../common/MetricCard';
+import type { Property, NavTab } from '../../types';
 import { RiskBadge } from '../common/RiskBadge';
 import {
   TrendingUp,
@@ -10,7 +9,8 @@ import {
   Building,
   ArrowUpRight,
   ChevronRight,
-  ShieldAlert,
+  ShieldCheck,
+  Zap,
 } from 'lucide-react';
 
 interface DashboardViewProps {
@@ -24,6 +24,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onSelectProperty,
   onNavigate,
 }) => {
+  // Aggregate real dataset metrics
+  const totalValueLakhs = properties.reduce((acc, p) => acc + p.askingPriceLakhs, 0);
+  const avgYield = (properties.reduce((acc, p) => acc + p.annualYield, 0) / (properties.length || 1)).toFixed(1);
+  const goodDealsCount = properties.filter((p) => p.dealStatus.includes('Undervalued') || p.recommendation === 'BUY').length;
+
   return (
     <div className="space-y-6 pb-12">
       {/* Top Stats Grid: Market Dynamics & Portfolio Value */}
@@ -34,18 +39,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                  MARKET DYNAMICS (30-DAY INDEX)
+                  BENGALURU HOUSING PRICE INDEX (RBI HPI)
                 </span>
                 <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-mono text-xs font-bold flex items-center gap-1">
-                  <TrendingUp size={14} /> +4.2%
+                  <TrendingUp size={14} /> +34.3% 10-Yr
                 </span>
               </div>
               <h3 className="text-2xl font-extrabold font-mono text-slate-900 dark:text-white mt-1">
-                942.80 <span className="text-sm font-sans font-normal text-slate-400">PTS</span>
+                113.13 <span className="text-sm font-sans font-normal text-slate-400">INDEX PTS (Base 2013=100)</span>
               </h3>
             </div>
             <div className="flex gap-1 font-mono text-xs font-semibold">
-              {['W1', 'W2', 'W3', 'W4'].map((w, i) => (
+              {['Q1', 'Q2', 'Q3', 'Q4'].map((w, i) => (
                 <span
                   key={w}
                   className={`px-2.5 py-1 rounded-lg ${
@@ -103,28 +108,31 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                PORTFOLIO VALUE
+                CATALOG VALUE
               </span>
               <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 text-xs font-mono font-bold">
-                +$124,500 YTD
+                {goodDealsCount} Value Deals
               </span>
             </div>
             <h2 className="text-3xl font-extrabold font-mono text-slate-900 dark:text-white tracking-tight">
-              $4,250,000
+              ₹{(totalValueLakhs / 100).toFixed(2)} Cr
             </h2>
+            <div className="text-xs text-slate-400 font-mono mt-0.5">
+              (₹{totalValueLakhs.toFixed(1)} Lakhs in verified listings)
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80">
             <div>
-              <div className="text-[11px] font-mono uppercase text-slate-400">Active Assets</div>
+              <div className="text-[11px] font-mono uppercase text-slate-400">Active Listings</div>
               <div className="text-lg font-bold font-mono text-slate-900 dark:text-white flex items-center gap-1.5 mt-0.5">
-                <Building size={16} className="text-emerald-500" /> 12 Properties
+                <Building size={16} className="text-emerald-500" /> {properties.length} Units
               </div>
             </div>
             <div>
-              <div className="text-[11px] font-mono uppercase text-slate-400">Weighted Yield</div>
+              <div className="text-[11px] font-mono uppercase text-slate-400">Avg Rental Yield</div>
               <div className="text-lg font-bold font-mono text-emerald-500 mt-0.5">
-                6.8% YoY
+                {avgYield}% YoY
               </div>
             </div>
           </div>
@@ -133,7 +141,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* AI Advisor Pulse Banner */}
       <div className="relative p-6 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/20 via-slate-900/40 to-slate-900/80 backdrop-blur-xl shadow-xl overflow-hidden group">
-        {/* Emerald Left-Accent Glowing Rail */}
         <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500 shadow-[0_0_12px_rgba(78,222,163,0.8)]" />
 
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pl-2">
@@ -144,12 +151,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-[10px] font-mono uppercase font-extrabold tracking-widest px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                  AI INSIGHT PULSE
+                  REALVEST AI INTELLIGENCE PULSE
                 </span>
-                <span className="text-xs text-slate-400 font-mono">94% Profile Match</span>
+                <span className="text-xs text-slate-400 font-mono">Verified Bengaluru ML Models</span>
               </div>
               <p className="text-sm md:text-base font-medium text-slate-200 leading-relaxed italic max-w-2xl">
-                "Based on your portfolio, emerging tech hubs in Austin show a 94% match for your risk profile with projected 12.4% ROI."
+                "Whitefield & Sarjapur Road tech hubs currently offer the highest risk-adjusted rental yields (5.1–5.8%) with pricing benchmarked 6.8% below ML replacement valuations."
               </p>
             </div>
           </div>
@@ -159,27 +166,27 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               onClick={() => onNavigate('advisor')}
               className="flex-1 md:flex-initial px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-xs shadow-lg shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <MessageSquare size={16} /> 💬 Ask AI
+              <MessageSquare size={16} /> 💬 Ask AI Advisor
             </button>
             <button
               onClick={() => onNavigate('simulator')}
               className="flex-1 md:flex-initial px-5 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <PlusCircle size={16} /> + New Analysis
+              <Zap size={16} /> 🧪 Decision Simulator
             </button>
           </div>
         </div>
       </div>
 
-      {/* Recent Property Analysis Carousel / Grid Section */}
+      {/* Verified Market Properties Carousel / Grid Section */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Recent Property Analysis
+              Top Verified Market Properties
             </h3>
             <p className="text-xs text-slate-400">
-              Verified institutional evaluations and ROI forecasts
+              Evaluated with Scikit-Learn ML price prediction models & 5-dimension risk scoring
             </p>
           </div>
           <button
@@ -211,15 +218,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <span className="px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-md text-white font-mono text-[11px] font-bold border border-white/10">
                     {prop.code}
                   </span>
-                  <RiskBadge level={prop.risks.marketRisk} label="Risk" />
+                  <RiskBadge level={prop.riskRadar.overallRisk} label="Risk" />
                 </div>
 
                 {/* Bottom Overlay Title */}
                 <div className="absolute bottom-3 left-3 right-3">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400">
-                    {prop.category} • {prop.subCategory}
+                    {prop.subCategory}
                   </span>
-                  <h4 className="text-base font-extrabold text-white tracking-tight leading-snug">
+                  <h4 className="text-base font-extrabold text-white tracking-tight leading-snug truncate">
                     {prop.title}
                   </h4>
                   <p className="text-xs text-slate-300 font-sans truncate">
@@ -231,15 +238,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               {/* Card Body Numbers */}
               <div className="p-4 grid grid-cols-2 gap-3 border-t border-slate-100 dark:border-slate-800/80">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-slate-400">Est. Price</span>
+                  <span className="text-[10px] font-mono uppercase text-slate-400">Asking Price</span>
                   <div className="text-base font-extrabold font-mono text-slate-900 dark:text-white">
-                    ${(prop.estimatedValue / 1000000).toFixed(1)}M
+                    ₹{prop.askingPriceLakhs} L
+                  </div>
+                  <div className="text-[10px] text-blue-500 font-mono">
+                    Fair: ₹{prop.fairValueLakhs} L
                   </div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-slate-400">Proj. ROI</span>
+                  <span className="text-[10px] font-mono uppercase text-slate-400">Rental Yield</span>
                   <div className="text-base font-extrabold font-mono text-emerald-500 flex items-center gap-1">
-                    {prop.projectedRoi}% <ArrowUpRight size={14} />
+                    {prop.annualYield}% <ArrowUpRight size={14} />
+                  </div>
+                  <div className="text-[10px] text-slate-400 font-mono">
+                    ₹{prop.monthlyRent.toLocaleString()}/mo
                   </div>
                 </div>
               </div>

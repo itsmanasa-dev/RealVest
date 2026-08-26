@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { Property, NavTab } from '../../types';
 import { Bot, Send, ArrowUpRight, Sparkles } from 'lucide-react';
+import { queryAdvisor } from '../../services/analyticsService';
 
 interface AIAdvisorViewProps {
   properties: Property[];
@@ -18,14 +19,14 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
   >([
     {
       sender: 'ai',
-      text: 'Good day, Investor. I am RealVest AI Advisor. Ask me anything about property valuations, risk parameters, or yield expectations across your target markets.',
+      text: 'Good day! I am RealVest AI Decision Advisor. Ask me anything about property valuations, rental yields, or specific Bengaluru micro-markets. All answers are strictly grounded in RealVest trained ML models and real dataset records.',
     },
   ]);
 
   const suggestedPrompts = [
-    'Why is Austin ATX-442 a high confidence buy?',
-    'Show properties under $40M with cap rate > 6.5%',
-    'What is the price risk for Miami multi-family assets?',
+    'Why is Whitefield a good buy for a 2 BHK under 80 lakhs?',
+    'Show properties in Sarjapur Road with rental yield > 5%',
+    'Is 2 BHK in Electronic City under 60 lakhs a good valuation?',
   ];
 
   const handleSend = (textToSend?: string) => {
@@ -35,18 +36,14 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
     // Add User Message
     const updated = [...messages, { sender: 'user' as const, text: query }];
 
-    // Simple Data Matching AI Engine logic
-    const matched = properties.find(
-      (p) =>
-        query.toLowerCase().includes(p.city.toLowerCase()) ||
-        query.toLowerCase().includes(p.code.toLowerCase()) ||
-        query.toLowerCase().includes(p.title.toLowerCase())
-    ) || properties[0];
+    // Real Dataset ML Query Engine
+    const { answer, matchedProperties } = queryAdvisor(query, properties);
+    const matched = matchedProperties[0];
 
     // Add AI Response
     updated.push({
       sender: 'ai',
-      text: `Based on RealVest ML models for ${matched.title} (${matched.code}): Estimated Fair Value is $${(matched.estimatedValue / 1000000).toFixed(1)}M with projected ${matched.projectedRoi}% ROI. Recommendation: ${matched.recommendation} (${matched.confidenceScore}% Confidence).`,
+      text: answer,
       matchedProperty: matched,
     });
 
@@ -60,14 +57,14 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
       <div className="pb-4 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2 mb-1">
           <span className="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-mono text-[11px] font-bold uppercase tracking-wider">
-            NATURAL LANGUAGE INTELLIGENCE
+            DATASET-GROUNDED NLP ENGINE
           </span>
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           AI Decision Advisor
         </h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Ask questions in natural language. Answers are strictly grounded in RealVest backend valuation models.
+          Ask questions in natural language. Answers are strictly grounded in RealVest Bengaluru dataset valuations.
         </p>
       </div>
 
@@ -106,7 +103,7 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
 
             <div className={`max-w-xl space-y-3 ${msg.sender === 'user' ? 'text-right' : ''}`}>
               <div
-                className={`inline-block p-4 rounded-2xl text-sm leading-relaxed ${
+                className={`inline-block p-4 rounded-2xl text-xs md:text-sm leading-relaxed whitespace-pre-line text-left ${
                   msg.sender === 'user'
                     ? 'bg-blue-600 text-white font-medium'
                     : 'bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700/50'
@@ -123,13 +120,13 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
                 >
                   <div>
                     <div className="text-[10px] font-mono font-bold uppercase text-emerald-500">
-                      {msg.matchedProperty.code} • {msg.matchedProperty.recommendation} ({msg.matchedProperty.confidenceScore}%)
+                      {msg.matchedProperty.code} • {msg.matchedProperty.recommendation} ({msg.matchedProperty.dealStatus})
                     </div>
                     <div className="text-sm font-extrabold text-slate-900 dark:text-white">
                       {msg.matchedProperty.title}
                     </div>
                     <div className="text-xs text-slate-400">
-                      ${(msg.matchedProperty.estimatedValue / 1000000).toFixed(1)}M • {msg.matchedProperty.projectedRoi}% ROI
+                      ₹{msg.matchedProperty.askingPriceLakhs} L • {msg.matchedProperty.annualYield}% Annual Yield • Score: {msg.matchedProperty.investmentScore}/100
                     </div>
                   </div>
                   <button className="px-3 py-1.5 rounded-lg bg-emerald-500 text-white font-mono text-xs font-bold flex items-center gap-1 shadow-md">
@@ -149,7 +146,7 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
           value={inputQuery}
           onChange={(e) => setInputQuery(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          placeholder="Ask AI Advisor about properties, valuations, or local market risks..."
+          placeholder="Ask AI Advisor about Bengaluru properties, valuations, rental yields, or micro-market risks..."
           className="flex-1 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-emerald-500 transition-colors"
         />
         <button

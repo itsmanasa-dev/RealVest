@@ -10,45 +10,81 @@
 
 1. **Property Explorer**: Browse verified market listings across Bengaluru micro-markets with ML fair valuations and rental yields.
 2. **Property Analysis & Explainable Valuation**: Quantitative factor contributions (+ Baseline, + Size, + Micro-market demand, + Configuration, + Readiness) explaining how the ML fair value was derived.
-3. **Risk Radar**: Multi-category risk breakdown (**Price Risk**, **Rental Risk**, **Market Risk**, **Location Risk**, **Data Confidence**) showing **LOW / MEDIUM / HIGH** levels with empirical data explanations.
+3. **Risk Radar**: Multi-category risk breakdown (**Market Risk**, **Price Volatility**, **Rent Stability**, **Micro-Market Liquidity**, **Data Confidence**) showing **LOW / MEDIUM / HIGH** levels with empirical data explanations.
 4. **Decision Engine**: Clear, non-black-box recommendation (**BUY / HOLD / AVOID**) with Confidence %, bulleted supporting reasons, and risk signals.
 5. **What-If Decision Simulator**: Financial cash-flow modeling (Home Loan EMI, Net Cash Flow, Total ROI %, Projected Property Value) comparing **BASE CASE vs USER SCENARIO**.
 6. **Decision Flip Boundary Analysis**: Calculates exact sensitivity thresholds answering *"What would need to change for this recommendation to flip?"* (e.g. price ceiling, minimum rent, interest rate threshold).
-7. **Side-by-Side Property Comparison**: Matrix comparison of multiple properties with ML "Our Pick" recommendation.
-8. **Market Intelligence**: Historical NHB Residex Housing Price Index trajectory and QoQ / YoY growth movements.
+7. **Side-by-Side Property Comparison**: Matrix comparison of multiple properties with automated ML "Our Pick" recommendation.
+8. **Market Intelligence**: Historical RBI Housing Price Index (HPI) trajectory and QoQ / YoY growth movements.
 9. **Data-Grounded AI Advisor**: Natural language Q&A assistant strictly bound to RealVest's backend models and dataset metrics.
-10. **Multilingual UI**: Native language switching across **English**, **Hindi (हिंदी)**, and **Kannada (ಕನ್ನಡ)**.
+10. **Modern Stitch UI & Themes**: Responsive desktop sidebar, mobile floating dock, and seamless switching between Electric Obsidian Dark (`#031427`) and Decision Light (`#f8f9ff`).
 
 ---
 
 ## Architecture & Technology Stack
 
-- **Frontend**: Streamlit with modern Gen-Z custom CSS design system (`app/styles.py`).
-- **Backend & Analytics**: Python 3.13 (`src/analytics/`), including Decision Engine, Risk Radar, Decision Simulator, and Decision Flip.
-- **Machine Learning**: Scikit-Learn `HistGradientBoostingRegressor` for sales price & rental price estimation with target leakage safeguards.
-- **Datasets**: Bengaluru House Prices (13k+ listings), MagicBricks Rentals (~4.5k listings), OpenStreetMap Amenity Nodes (3,512 nodes), and NHB Residex Index tables.
+```
+RealVest/
+│
+├── frontend/                     # THE SINGLE FRONTEND (React 19 + TypeScript + Vite + Tailwind v4)
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── common/           # AIConfidenceGauge, MetricCard, RiskBadge
+│   │   │   ├── layout/           # Sidebar, Header, MobileNav
+│   │   │   └── views/            # DashboardView, ExplorerView, PropertyAnalysisView,
+│   │   │                         # CompareView, SimulatorView, MarketIntelligenceView,
+│   │   │                         # AIAdvisorView, SettingsView
+│   │   ├── data/                 # Real pre-computed Bengaluru property catalog & HPI records
+│   │   ├── services/             # Analytics, ML inference wrappers & calculation engines
+│   │   ├── styles/               # index.css, App.css
+│   │   └── types/                # index.ts
+│   └── package.json
+│
+├── src/                          # BACKEND SERVICES, ANALYTICS, ML & DATA PIPELINE
+│   ├── ai/                       # Natural language query parsing & recommendation engine
+│   ├── analytics/                # Pure analytical calculation modules (Decision Engine, Simulator, Flip)
+│   ├── data/                     # Data loaders & pipeline utilities
+│   ├── location/                 # Geographic & competitor feasibility
+│   ├── models/                   # ML training, inference & explainability
+│   ├── preprocessing/            # Raw CSV to clean dataset transformations
+│   ├── translations/             # Multilingual dictionary (en, hi, kn)
+│   └── utils/                    # Common utilities, error handling, validation
+│
+├── models/                       # Trained Scikit-Learn .pkl artifacts
+├── Datasets/                     # Raw source datasets
+├── processed_data/               # Cleaned parquet datasets
+├── tests/                        # Full automated test suite (pytest)
+├── docs/                         # Documentation
+├── README.md
+└── requirements.txt
+```
 
 ---
 
 ## Quick Start & Execution
 
 ### Prerequisites
+- Node.js 18+ & npm
 - Python 3.10+
 
-### Step 1: Install Dependencies
+### Step 1: Install Python Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 2: Run Unit Tests
+### Step 2: Run Backend Tests
 ```bash
-python -m pytest tests/
+pytest
 ```
 
 ### Step 3: Launch Web Application
 ```bash
-streamlit run app/main.py
+cd frontend
+npm install
+npm run dev
 ```
+
+The application will be accessible at `http://localhost:5173`.
 
 ---
 

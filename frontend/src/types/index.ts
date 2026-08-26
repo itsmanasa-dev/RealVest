@@ -2,12 +2,35 @@ export type NavTab =
   | 'dashboard' 
   | 'explore' 
   | 'analysis' 
+  | 'compare'
   | 'simulator' 
   | 'markets' 
   | 'advisor' 
   | 'settings';
 
-export type AssetCategory = 'All Assets' | 'Commercial' | 'Residential' | 'Industrial';
+export type AssetCategory = 'All Assets' | 'Residential' | 'Commercial' | 'Villa / Penthouse';
+
+export interface WaterfallFactor {
+  factor: string;
+  contribution_lakhs: number;
+  sign: '+' | '-' | 'base';
+}
+
+export interface RiskRadarItem {
+  category: string;
+  level: 'Low' | 'Medium' | 'High';
+  color: string;
+  why: string;
+  metric_label: string;
+  metric_value: string;
+}
+
+export interface RiskRadar {
+  overallRisk: 'Low' | 'Medium' | 'High';
+  riskScore: number;
+  overallColor: string;
+  breakdown: RiskRadarItem[];
+}
 
 export interface Property {
   id: string;
@@ -15,48 +38,63 @@ export interface Property {
   title: string;
   location: string;
   city: string;
-  category: 'Commercial' | 'Residential' | 'Industrial';
+  category: 'Commercial' | 'Residential' | 'Villa / Penthouse';
   subCategory: string;
-  estimatedValue: number; // in USD or INR
-  askingPrice: number;
-  projectedRoi: number; // % YoY
-  capRate: number; // %
-  occupancyRate: number; // %
-  matchPercentage: number;
-  imageUrl: string;
+  bhk: number;
+  bathrooms: number;
+  sqft: number;
+  askingPriceLakhs: number;
+  fairValueLakhs: number;
+  monthlyRent: number;
+  annualYield: number; // in %
+  investmentScore: number; // 0-100
   recommendation: 'BUY' | 'HOLD' | 'AVOID';
   confidenceScore: number; // %
-  rationale: string[];
-  risks: {
-    marketRisk: 'LOW' | 'MEDIUM' | 'HIGH';
-    priceVolatility: 'LOW' | 'MEDIUM' | 'HIGH';
-    dataFidelity: 'LOW' | 'MEDIUM' | 'HIGH';
-  };
-  metrics: {
-    sqft: number;
-    pricePerSqft: number;
-    monthlyRent: number;
-    annualYield: number;
-  };
+  dealStatus: string;
+  dealDiffPct: number;
+  matchPercentage: number;
+  imageUrl: string;
+  reasons: string[];
+  risks: string[];
+  riskRadar: RiskRadar;
+  waterfallFactors: WaterfallFactor[];
+  explanations: string[];
 }
 
 export interface SimulationParams {
-  purchasePrice: number;
+  purchasePriceLakhs: number;
   interestRate: number; // %
-  targetYield: number; // %
+  monthlyRent: number; // INR
   holdingPeriod: number; // Years
   downPaymentPct: number; // %
+  vacancyRatePct?: number;
+  appreciationRatePct?: number;
+  location?: string;
 }
 
 export interface SimulationResult {
-  baseRoi: number;
-  dynamicRoi: number;
-  baseCashFlow: number;
-  dynamicCashFlow: number;
-  baseAppreciation: number;
-  dynamicAppreciation: number;
-  aiSignal: string;
-  recommendation: 'BUY' | 'HOLD' | 'AVOID';
+  monthlyEmi: number;
+  netMonthlyCashFlow: number;
+  netAnnualCashFlow: number;
+  rentalYieldPct: number;
+  projectedFutureValLakhs: number;
+  totalProfitInr: number;
+  totalRoiPct: number;
+  annualizedRoiPct: number;
+  decision: 'BUY' | 'HOLD' | 'AVOID';
+}
+
+export interface DecisionFlipResult {
+  currentDecision: 'BUY' | 'HOLD' | 'AVOID';
+  priceFlipText: string;
+  rentFlipText: string;
+  rateFlipText: string;
+  flipThresholds: {
+    targetFairPriceLakhs: number;
+    priceGapLakhs: number;
+    requiredMinRentInr: number;
+    maxViableInterestRate: number;
+  };
 }
 
 export interface MarketHotZone {
@@ -66,5 +104,20 @@ export interface MarketHotZone {
   demandIndex: number; // 0-100
   growth30d: number; // %
   avgYield: number; // %
+  avgPricePerSqft: number;
   coordinates: { x: number; y: number }; // Relative map % position
+}
+
+export interface HPIRecord {
+  Quarter: string;
+  'HPI@Assessment Prices': number;
+  'QoQ_Change_%'?: number | null;
+  'YoY_Change_%'?: number | null;
+}
+
+export interface MarketData {
+  latestHpi: number;
+  totalGrowthPct: number;
+  latestYoyPct: number;
+  series: HPIRecord[];
 }

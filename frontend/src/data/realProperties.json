@@ -1,0 +1,2205 @@
+[
+  {
+    "id": "blr-1",
+    "code": "BLR-100",
+    "title": "2 BHK Luxury Residence in Whitefield",
+    "location": "Whitefield",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK \u2022 Super built-up  Area",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1170,
+    "askingPriceLakhs": 38.0,
+    "fairValueLakhs": 57.15,
+    "monthlyRent": 69546,
+    "annualYield": 21.96,
+    "investmentScore": 95,
+    "recommendation": "BUY",
+    "confidenceScore": 79,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -33.5,
+    "matchPercentage": 99,
+    "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Property is priced 33.5% below ML-estimated fair value of \u20b957.15 Lakhs.",
+      "Attractive rental yield (21.96%) exceeds city average baseline.",
+      "Located in established micro-market 'Whitefield' with steady demand."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b957.15 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-33.5%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 21.96% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "21.96%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Whitefield' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,170 sqft)",
+        "contribution_lakhs": 10.2,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Whitefield')",
+        "contribution_lakhs": -2.44,
+        "sign": "-"
+      },
+      {
+        "factor": "Configuration (2 BHK, 2 Bath)",
+        "contribution_lakhs": -2.46,
+        "sign": "-"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,170 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'Whitefield' carries strong demand weight based on historical transaction density.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-2",
+    "code": "BLR-101",
+    "title": "3 BHK Luxury Residence in Whitefield",
+    "location": "Whitefield",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "bhk": 3,
+    "bathrooms": 2,
+    "sqft": 1800,
+    "askingPriceLakhs": 70.0,
+    "fairValueLakhs": 111.62,
+    "monthlyRent": 64824,
+    "annualYield": 11.11,
+    "investmentScore": 95,
+    "recommendation": "BUY",
+    "confidenceScore": 92,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -37.3,
+    "matchPercentage": 99,
+    "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Property is priced 37.3% below ML-estimated fair value of \u20b9111.62 Lakhs.",
+      "Attractive rental yield (11.11%) exceeds city average baseline.",
+      "Located in established micro-market 'Whitefield' with steady demand."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b9111.62 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-37.3%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 11.11% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "11.11%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Whitefield' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,800 sqft)",
+        "contribution_lakhs": 65.54,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Whitefield')",
+        "contribution_lakhs": -2.44,
+        "sign": "-"
+      },
+      {
+        "factor": "Configuration (3 BHK, 2 Bath)",
+        "contribution_lakhs": -1.63,
+        "sign": "-"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,800 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'Whitefield' carries strong demand weight based on historical transaction density.",
+      "Family-sized 3 BHK configuration increases appeal for long-term buyers.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-3",
+    "code": "BLR-102",
+    "title": "2 BHK Luxury Residence in Electronic City",
+    "location": "Electronic City",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK \u2022 Super built-up  Area",
+    "bhk": 2,
+    "bathrooms": 1,
+    "sqft": 660,
+    "askingPriceLakhs": 23.1,
+    "fairValueLakhs": 25.67,
+    "monthlyRent": 12716,
+    "annualYield": 6.61,
+    "investmentScore": 92,
+    "recommendation": "BUY",
+    "confidenceScore": 75,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -10.0,
+    "matchPercentage": 97,
+    "imageUrl": "https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Property is priced 10.0% below ML-estimated fair value of \u20b925.67 Lakhs.",
+      "Attractive rental yield (6.61%) exceeds city average baseline.",
+      "Located in established micro-market 'Electronic City' with steady demand."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b925.67 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-10.0%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 6.61% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "6.61%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Electronic City' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (660 sqft)",
+        "contribution_lakhs": -15.05,
+        "sign": "-"
+      },
+      {
+        "factor": "Micro-Market Factor ('Electronic City')",
+        "contribution_lakhs": -11.25,
+        "sign": "-"
+      },
+      {
+        "factor": "Configuration (2 BHK, 1 Bath)",
+        "contribution_lakhs": -2.59,
+        "sign": "-"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Compact size (660 sqft) keeps the entry valuation accessible.",
+      "Micro-market 'Electronic City' carries strong demand weight based on historical transaction density.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-4",
+    "code": "BLR-103",
+    "title": "3 BHK Luxury Residence in Electronic City",
+    "location": "Electronic City",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "bhk": 3,
+    "bathrooms": 2,
+    "sqft": 1025,
+    "askingPriceLakhs": 47.0,
+    "fairValueLakhs": 43.25,
+    "monthlyRent": 25841,
+    "annualYield": 6.6,
+    "investmentScore": 76,
+    "recommendation": "HOLD",
+    "confidenceScore": 75,
+    "dealStatus": "Potentially Overpriced",
+    "dealDiffPct": 8.7,
+    "matchPercentage": 82,
+    "imageUrl": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Fair valuation but mixed yield metrics require strategic price negotiation.",
+      "Micro-market transaction liquidity remains steady based on historical records."
+    ],
+    "risks": [
+      "Asking price carries a 8.7% premium over benchmark fair value."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 86.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Asking price is slightly above fair value (8.7% premium). Modest negotiation room.",
+          "metric_label": "Price Premium",
+          "metric_value": "+8.7%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 6.60% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "6.60%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Electronic City' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,025 sqft)",
+        "contribution_lakhs": 0.25,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Electronic City')",
+        "contribution_lakhs": -11.25,
+        "sign": "-"
+      },
+      {
+        "factor": "Configuration (3 BHK, 2 Bath)",
+        "contribution_lakhs": -0.74,
+        "sign": "-"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,025 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'Electronic City' carries strong demand weight based on historical transaction density.",
+      "Family-sized 3 BHK configuration increases appeal for long-term buyers.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-5",
+    "code": "BLR-104",
+    "title": "3 BHK Luxury Residence in HSR Layout",
+    "location": "HSR Layout",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "bhk": 3,
+    "bathrooms": 3,
+    "sqft": 1400,
+    "askingPriceLakhs": 56.0,
+    "fairValueLakhs": 68.15,
+    "monthlyRent": 66821,
+    "annualYield": 14.32,
+    "investmentScore": 95,
+    "recommendation": "BUY",
+    "confidenceScore": 83,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -17.8,
+    "matchPercentage": 99,
+    "imageUrl": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Property is priced 17.8% below ML-estimated fair value of \u20b968.15 Lakhs.",
+      "Attractive rental yield (14.32%) exceeds city average baseline.",
+      "Located in established micro-market 'HSR Layout' with steady demand."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b968.15 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-17.8%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 14.32% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "14.32%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'HSR Layout' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,400 sqft)",
+        "contribution_lakhs": 29.89,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('HSR Layout')",
+        "contribution_lakhs": -0.96,
+        "sign": "-"
+      },
+      {
+        "factor": "Configuration (3 BHK, 3 Bath)",
+        "contribution_lakhs": 16.96,
+        "sign": "+"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,400 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'HSR Layout' carries strong demand weight based on historical transaction density.",
+      "Family-sized 3 BHK configuration increases appeal for long-term buyers.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-6",
+    "code": "BLR-105",
+    "title": "2 BHK Luxury Residence in HSR Layout",
+    "location": "HSR Layout",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK \u2022 Super built-up  Area",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1372,
+    "askingPriceLakhs": 68.0,
+    "fairValueLakhs": 76.48,
+    "monthlyRent": 50889,
+    "annualYield": 8.98,
+    "investmentScore": 93,
+    "recommendation": "BUY",
+    "confidenceScore": 85,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -11.1,
+    "matchPercentage": 98,
+    "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Property is priced 11.1% below ML-estimated fair value of \u20b976.48 Lakhs.",
+      "Attractive rental yield (8.98%) exceeds city average baseline.",
+      "Located in established micro-market 'HSR Layout' with steady demand."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b976.48 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-11.1%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 8.98% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "8.98%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'HSR Layout' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,372 sqft)",
+        "contribution_lakhs": 29.75,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('HSR Layout')",
+        "contribution_lakhs": -0.96,
+        "sign": "-"
+      },
+      {
+        "factor": "Configuration (2 BHK, 2 Bath)",
+        "contribution_lakhs": -2.46,
+        "sign": "-"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,372 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'HSR Layout' carries strong demand weight based on historical transaction density.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-7",
+    "code": "BLR-106",
+    "title": "3 BHK Luxury Residence in Marathahalli",
+    "location": "Marathahalli",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "bhk": 3,
+    "bathrooms": 3,
+    "sqft": 1310,
+    "askingPriceLakhs": 63.25,
+    "fairValueLakhs": 68.26,
+    "monthlyRent": 61365,
+    "annualYield": 11.64,
+    "investmentScore": 89,
+    "recommendation": "BUY",
+    "confidenceScore": 83,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -7.3,
+    "matchPercentage": 95,
+    "imageUrl": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Property is priced 7.3% below ML-estimated fair value of \u20b968.26 Lakhs.",
+      "Attractive rental yield (11.64%) exceeds city average baseline.",
+      "Located in established micro-market 'Marathahalli' with steady demand."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b968.26 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-7.3%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 11.64% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "11.64%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Marathahalli' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,310 sqft)",
+        "contribution_lakhs": 24.74,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Marathahalli')",
+        "contribution_lakhs": 1.78,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (3 BHK, 3 Bath)",
+        "contribution_lakhs": 18.19,
+        "sign": "+"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,310 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'Marathahalli' carries strong demand weight based on historical transaction density.",
+      "Family-sized 3 BHK configuration increases appeal for long-term buyers.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-8",
+    "code": "BLR-107",
+    "title": "2 BHK Luxury Residence in Marathahalli",
+    "location": "Marathahalli",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK \u2022 Super built-up  Area",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1220,
+    "askingPriceLakhs": 57.0,
+    "fairValueLakhs": 62.5,
+    "monthlyRent": 34983,
+    "annualYield": 7.36,
+    "investmentScore": 91,
+    "recommendation": "BUY",
+    "confidenceScore": 81,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -8.8,
+    "matchPercentage": 96,
+    "imageUrl": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Property is priced 8.8% below ML-estimated fair value of \u20b962.50 Lakhs.",
+      "Attractive rental yield (7.36%) exceeds city average baseline.",
+      "Located in established micro-market 'Marathahalli' with steady demand."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b962.50 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-8.8%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 7.36% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "7.36%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Marathahalli' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,220 sqft)",
+        "contribution_lakhs": 13.19,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Marathahalli')",
+        "contribution_lakhs": 1.78,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (2 BHK, 2 Bath)",
+        "contribution_lakhs": -2.46,
+        "sign": "-"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,220 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'Marathahalli' carries strong demand weight based on historical transaction density.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-9",
+    "code": "BLR-108",
+    "title": "3 BHK Luxury Residence in Bellandur",
+    "location": "Bellandur",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "bhk": 3,
+    "bathrooms": 3,
+    "sqft": 1767,
+    "askingPriceLakhs": 103.0,
+    "fairValueLakhs": 113.74,
+    "monthlyRent": 65066,
+    "annualYield": 7.58,
+    "investmentScore": 91,
+    "recommendation": "BUY",
+    "confidenceScore": 92,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -9.4,
+    "matchPercentage": 97,
+    "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Property is priced 9.4% below ML-estimated fair value of \u20b9113.74 Lakhs.",
+      "Attractive rental yield (7.58%) exceeds city average baseline.",
+      "Located in established micro-market 'Bellandur' with steady demand."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b9113.74 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-9.4%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 7.58% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "7.58%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Bellandur' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,767 sqft)",
+        "contribution_lakhs": 65.54,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Bellandur')",
+        "contribution_lakhs": 1.17,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (3 BHK, 3 Bath)",
+        "contribution_lakhs": 18.19,
+        "sign": "+"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,767 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'Bellandur' carries strong demand weight based on historical transaction density.",
+      "Family-sized 3 BHK configuration increases appeal for long-term buyers.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-10",
+    "code": "BLR-109",
+    "title": "4 BHK Luxury Residence in Bellandur",
+    "location": "Bellandur",
+    "city": "Bengaluru",
+    "category": "Commercial",
+    "subCategory": "4 BHK \u2022 Plot  Area",
+    "bhk": 4,
+    "bathrooms": 5,
+    "sqft": 1200,
+    "askingPriceLakhs": 325.0,
+    "fairValueLakhs": 173.6,
+    "monthlyRent": 56239,
+    "annualYield": 2.08,
+    "investmentScore": 47,
+    "recommendation": "AVOID",
+    "confidenceScore": 92,
+    "dealStatus": "Potentially Overpriced",
+    "dealDiffPct": 87.2,
+    "matchPercentage": 75,
+    "imageUrl": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Better risk-adjusted investment alternatives available in neighboring localities.",
+      "Micro-market transaction liquidity remains steady based on historical records."
+    ],
+    "risks": [
+      "Property is overpriced by 87.2% relative to ML fair value estimate.",
+      "Low rental yield (2.08%) fails to provide adequate cash-flow coverage."
+    ],
+    "riskRadar": {
+      "overallRisk": "MODERATE RISK",
+      "riskScore": 65.0,
+      "overallColor": "#F59E0B",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "HIGH",
+          "color": "#EF4444",
+          "why": "Asking price is 87.2% above estimated ML fair value (\u20b9173.60 L). Premium valuation risk.",
+          "metric_label": "Price Premium",
+          "metric_value": "+87.2%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "HIGH",
+          "color": "#EF4444",
+          "why": "Rental yield of 2.08% is below Bengaluru urban benchmark (3.5\u20134.5%). Low cash-flow protection.",
+          "metric_label": "Rental Yield",
+          "metric_value": "2.08%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Bellandur' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,200 sqft)",
+        "contribution_lakhs": 13.19,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Bellandur')",
+        "contribution_lakhs": 1.17,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (4 BHK, 5 Bath)",
+        "contribution_lakhs": 95.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,200 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'Bellandur' carries strong demand weight based on historical transaction density.",
+      "Higher bathroom count (5 bath for 4 BHK) adds a premium factor.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-11",
+    "code": "BLR-110",
+    "title": "3 BHK Luxury Residence in Hebbal",
+    "location": "Hebbal",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "bhk": 3,
+    "bathrooms": 2,
+    "sqft": 1760,
+    "askingPriceLakhs": 123.0,
+    "fairValueLakhs": 121.53,
+    "monthlyRent": 57814,
+    "annualYield": 5.64,
+    "investmentScore": 82,
+    "recommendation": "HOLD",
+    "confidenceScore": 92,
+    "dealStatus": "Fairly Priced",
+    "dealDiffPct": 1.2,
+    "matchPercentage": 88,
+    "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Asking price (\u20b9123.00 L) is fairly aligned with ML estimated valuation (\u20b9121.53 L).",
+      "Stable rental return (5.64%) provides predictable cash flow."
+    ],
+    "risks": [
+      "Modest asking price premium (1.2%) leaves narrow immediate upside."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b9121.53 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "+1.2%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 5.64% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "5.64%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Hebbal' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,760 sqft)",
+        "contribution_lakhs": 65.54,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Hebbal')",
+        "contribution_lakhs": 2.87,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (3 BHK, 2 Bath)",
+        "contribution_lakhs": -1.63,
+        "sign": "-"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,760 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'Hebbal' carries strong demand weight based on historical transaction density.",
+      "Family-sized 3 BHK configuration increases appeal for long-term buyers.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-12",
+    "code": "BLR-111",
+    "title": "4 BHK Luxury Residence in Hebbal",
+    "location": "Hebbal",
+    "city": "Bengaluru",
+    "category": "Commercial",
+    "subCategory": "4 BHK \u2022 Super built-up  Area",
+    "bhk": 4,
+    "bathrooms": 4,
+    "sqft": 5611,
+    "askingPriceLakhs": 477.0,
+    "fairValueLakhs": 504.5,
+    "monthlyRent": 192594,
+    "annualYield": 4.85,
+    "investmentScore": 83,
+    "recommendation": "BUY",
+    "confidenceScore": 92,
+    "dealStatus": "Fairly Priced",
+    "dealDiffPct": -5.5,
+    "matchPercentage": 89,
+    "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Property is priced 5.5% below ML-estimated fair value of \u20b9504.50 Lakhs.",
+      "Attractive rental yield (4.85%) exceeds city average baseline.",
+      "Located in established micro-market 'Hebbal' with steady demand."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b9504.50 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-5.5%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 4.85% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "4.85%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Hebbal' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (5,612 sqft)",
+        "contribution_lakhs": 177.81,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Hebbal')",
+        "contribution_lakhs": 2.87,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (4 BHK, 4 Bath)",
+        "contribution_lakhs": 21.58,
+        "sign": "+"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Spacious layout (5,612 sqft) strongly elevates the total property valuation.",
+      "Micro-market 'Hebbal' carries strong demand weight based on historical transaction density.",
+      "Family-sized 4 BHK configuration increases appeal for long-term buyers.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-13",
+    "code": "BLR-112",
+    "title": "4 BHK Luxury Residence in Thanisandra",
+    "location": "Thanisandra",
+    "city": "Bengaluru",
+    "category": "Commercial",
+    "subCategory": "4 BHK \u2022 Plot  Area",
+    "bhk": 4,
+    "bathrooms": 5,
+    "sqft": 2800,
+    "askingPriceLakhs": 380.0,
+    "fairValueLakhs": 272.26,
+    "monthlyRent": 118734,
+    "annualYield": 3.75,
+    "investmentScore": 58,
+    "recommendation": "AVOID",
+    "confidenceScore": 92,
+    "dealStatus": "Potentially Overpriced",
+    "dealDiffPct": 39.6,
+    "matchPercentage": 75,
+    "imageUrl": "https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Better risk-adjusted investment alternatives available in neighboring localities.",
+      "Micro-market transaction liquidity remains steady based on historical records."
+    ],
+    "risks": [
+      "Property is overpriced by 39.6% relative to ML fair value estimate."
+    ],
+    "riskRadar": {
+      "overallRisk": "MODERATE RISK",
+      "riskScore": 72.0,
+      "overallColor": "#F59E0B",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "HIGH",
+          "color": "#EF4444",
+          "why": "Asking price is 39.6% above estimated ML fair value (\u20b9272.26 L). Premium valuation risk.",
+          "metric_label": "Price Premium",
+          "metric_value": "+39.6%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Rental yield of 3.75% is healthy and inline with city averages.",
+          "metric_label": "Rental Yield",
+          "metric_value": "3.75%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Thanisandra' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (2,800 sqft)",
+        "contribution_lakhs": 145.86,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Thanisandra')",
+        "contribution_lakhs": 1.1,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (4 BHK, 5 Bath)",
+        "contribution_lakhs": 95.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Spacious layout (2,800 sqft) strongly elevates the total property valuation.",
+      "Micro-market 'Thanisandra' carries strong demand weight based on historical transaction density.",
+      "Higher bathroom count (5 bath for 4 BHK) adds a premium factor.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-14",
+    "code": "BLR-113",
+    "title": "1 BHK Luxury Residence in Thanisandra",
+    "location": "Thanisandra",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "1 BHK \u2022 Super built-up  Area",
+    "bhk": 1,
+    "bathrooms": 1,
+    "sqft": 510,
+    "askingPriceLakhs": 25.25,
+    "fairValueLakhs": 24.97,
+    "monthlyRent": 24702,
+    "annualYield": 11.74,
+    "investmentScore": 82,
+    "recommendation": "HOLD",
+    "confidenceScore": 75,
+    "dealStatus": "Fairly Priced",
+    "dealDiffPct": 1.1,
+    "matchPercentage": 88,
+    "imageUrl": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Asking price (\u20b925.25 L) is fairly aligned with ML estimated valuation (\u20b924.97 L).",
+      "Stable rental return (11.74%) provides predictable cash flow."
+    ],
+    "risks": [
+      "Modest asking price premium (1.1%) leaves narrow immediate upside."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b924.97 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "+1.1%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 11.74% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "11.74%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Thanisandra' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (510 sqft)",
+        "contribution_lakhs": -23.08,
+        "sign": "-"
+      },
+      {
+        "factor": "Micro-Market Factor ('Thanisandra')",
+        "contribution_lakhs": 1.1,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (1 BHK, 1 Bath)",
+        "contribution_lakhs": -7.23,
+        "sign": "-"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Compact size (510 sqft) keeps the entry valuation accessible.",
+      "Micro-market 'Thanisandra' carries strong demand weight based on historical transaction density.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-15",
+    "code": "BLR-114",
+    "title": "1 BHK Luxury Residence in Bannerghatta Road",
+    "location": "Bannerghatta Road",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "1 BHK \u2022 Built-up  Area",
+    "bhk": 1,
+    "bathrooms": 1,
+    "sqft": 500,
+    "askingPriceLakhs": 18.5,
+    "fairValueLakhs": 24.55,
+    "monthlyRent": 15002,
+    "annualYield": 9.73,
+    "investmentScore": 95,
+    "recommendation": "BUY",
+    "confidenceScore": 75,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -24.6,
+    "matchPercentage": 99,
+    "imageUrl": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Property is priced 24.6% below ML-estimated fair value of \u20b924.55 Lakhs.",
+      "Attractive rental yield (9.73%) exceeds city average baseline.",
+      "Located in established micro-market 'Bannerghatta Road' with steady demand."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b924.55 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-24.6%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 9.73% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "9.73%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Bannerghatta Road' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (500 sqft)",
+        "contribution_lakhs": -24.21,
+        "sign": "-"
+      },
+      {
+        "factor": "Micro-Market Factor ('Bannerghatta Road')",
+        "contribution_lakhs": 0.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (1 BHK, 1 Bath)",
+        "contribution_lakhs": 5.14,
+        "sign": "+"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Compact size (500 sqft) keeps the entry valuation accessible.",
+      "Micro-market 'Bannerghatta Road' carries strong demand weight based on historical transaction density.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-16",
+    "code": "BLR-115",
+    "title": "2 BHK Luxury Residence in Bannerghatta Road",
+    "location": "Bannerghatta Road",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK \u2022 Super built-up  Area",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1050,
+    "askingPriceLakhs": 65.0,
+    "fairValueLakhs": 49.52,
+    "monthlyRent": 29714,
+    "annualYield": 5.49,
+    "investmentScore": 70,
+    "recommendation": "AVOID",
+    "confidenceScore": 75,
+    "dealStatus": "Potentially Overpriced",
+    "dealDiffPct": 31.3,
+    "matchPercentage": 77,
+    "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Better risk-adjusted investment alternatives available in neighboring localities.",
+      "Micro-market transaction liquidity remains steady based on historical records."
+    ],
+    "risks": [
+      "Property is overpriced by 31.3% relative to ML fair value estimate."
+    ],
+    "riskRadar": {
+      "overallRisk": "MODERATE RISK",
+      "riskScore": 79.0,
+      "overallColor": "#F59E0B",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "HIGH",
+          "color": "#EF4444",
+          "why": "Asking price is 31.3% above estimated ML fair value (\u20b949.52 L). Premium valuation risk.",
+          "metric_label": "Price Premium",
+          "metric_value": "+31.3%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 5.49% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "5.49%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Bannerghatta Road' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,050 sqft)",
+        "contribution_lakhs": 0.96,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Bannerghatta Road')",
+        "contribution_lakhs": 0.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (2 BHK, 2 Bath)",
+        "contribution_lakhs": -2.46,
+        "sign": "-"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,050 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'Bannerghatta Road' carries strong demand weight based on historical transaction density.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-17",
+    "code": "BLR-116",
+    "title": "4 BHK Luxury Residence in Yelahanka",
+    "location": "Yelahanka",
+    "city": "Bengaluru",
+    "category": "Commercial",
+    "subCategory": "4 BHK \u2022 Super built-up  Area",
+    "bhk": 4,
+    "bathrooms": 4,
+    "sqft": 2475,
+    "askingPriceLakhs": 186.0,
+    "fairValueLakhs": 153.18,
+    "monthlyRent": 129519,
+    "annualYield": 8.36,
+    "investmentScore": 71,
+    "recommendation": "AVOID",
+    "confidenceScore": 92,
+    "dealStatus": "Potentially Overpriced",
+    "dealDiffPct": 21.4,
+    "matchPercentage": 77,
+    "imageUrl": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Better risk-adjusted investment alternatives available in neighboring localities.",
+      "Micro-market transaction liquidity remains steady based on historical records."
+    ],
+    "risks": [
+      "Property is overpriced by 21.4% relative to ML fair value estimate."
+    ],
+    "riskRadar": {
+      "overallRisk": "MODERATE RISK",
+      "riskScore": 79.0,
+      "overallColor": "#F59E0B",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "HIGH",
+          "color": "#EF4444",
+          "why": "Asking price is 21.4% above estimated ML fair value (\u20b9153.18 L). Premium valuation risk.",
+          "metric_label": "Price Premium",
+          "metric_value": "+21.4%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 8.36% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "8.36%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Yelahanka' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (2,475 sqft)",
+        "contribution_lakhs": 90.77,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Yelahanka')",
+        "contribution_lakhs": -6.77,
+        "sign": "-"
+      },
+      {
+        "factor": "Configuration (4 BHK, 4 Bath)",
+        "contribution_lakhs": 21.58,
+        "sign": "+"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Spacious layout (2,475 sqft) strongly elevates the total property valuation.",
+      "Micro-market 'Yelahanka' carries strong demand weight based on historical transaction density.",
+      "Family-sized 4 BHK configuration increases appeal for long-term buyers.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-18",
+    "code": "BLR-117",
+    "title": "1 BHK Luxury Residence in Yelahanka",
+    "location": "Yelahanka",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "1 BHK \u2022 Plot  Area",
+    "bhk": 1,
+    "bathrooms": 1,
+    "sqft": 660,
+    "askingPriceLakhs": 48.0,
+    "fairValueLakhs": 48.37,
+    "monthlyRent": 21145,
+    "annualYield": 5.29,
+    "investmentScore": 82,
+    "recommendation": "HOLD",
+    "confidenceScore": 75,
+    "dealStatus": "Fairly Priced",
+    "dealDiffPct": -0.8,
+    "matchPercentage": 88,
+    "imageUrl": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Asking price (\u20b948.00 L) is fairly aligned with ML estimated valuation (\u20b948.37 L).",
+      "Stable rental return (5.29%) provides predictable cash flow."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 93.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b948.37 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-0.8%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "High rental yield of 5.29% provides strong cash-flow downside buffer.",
+          "metric_label": "Rental Yield",
+          "metric_value": "5.29%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Yelahanka' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (660 sqft)",
+        "contribution_lakhs": -15.05,
+        "sign": "-"
+      },
+      {
+        "factor": "Micro-Market Factor ('Yelahanka')",
+        "contribution_lakhs": -6.77,
+        "sign": "-"
+      },
+      {
+        "factor": "Configuration (1 BHK, 1 Bath)",
+        "contribution_lakhs": -4.48,
+        "sign": "-"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Compact size (660 sqft) keeps the entry valuation accessible.",
+      "Micro-market 'Yelahanka' carries strong demand weight based on historical transaction density.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-19",
+    "code": "BLR-118",
+    "title": "4 BHK Luxury Residence in Rajaji Nagar",
+    "location": "Rajaji Nagar",
+    "city": "Bengaluru",
+    "category": "Commercial",
+    "subCategory": "4 BHK \u2022 Super built-up  Area",
+    "bhk": 4,
+    "bathrooms": 4,
+    "sqft": 3300,
+    "askingPriceLakhs": 600.0,
+    "fairValueLakhs": 496.37,
+    "monthlyRent": 161778,
+    "annualYield": 3.24,
+    "investmentScore": 55,
+    "recommendation": "AVOID",
+    "confidenceScore": 92,
+    "dealStatus": "Potentially Overpriced",
+    "dealDiffPct": 20.9,
+    "matchPercentage": 75,
+    "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Better risk-adjusted investment alternatives available in neighboring localities.",
+      "Micro-market transaction liquidity remains steady based on historical records."
+    ],
+    "risks": [
+      "Property is overpriced by 20.9% relative to ML fair value estimate."
+    ],
+    "riskRadar": {
+      "overallRisk": "MODERATE RISK",
+      "riskScore": 72.0,
+      "overallColor": "#F59E0B",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "HIGH",
+          "color": "#EF4444",
+          "why": "Asking price is 20.9% above estimated ML fair value (\u20b9496.37 L). Premium valuation risk.",
+          "metric_label": "Price Premium",
+          "metric_value": "+20.9%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Rental yield of 3.24% is healthy and inline with city averages.",
+          "metric_label": "Rental Yield",
+          "metric_value": "3.24%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Rajaji Nagar' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (3,300 sqft)",
+        "contribution_lakhs": 144.2,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Rajaji Nagar')",
+        "contribution_lakhs": 31.2,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (4 BHK, 4 Bath)",
+        "contribution_lakhs": 24.78,
+        "sign": "+"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Spacious layout (3,300 sqft) strongly elevates the total property valuation.",
+      "Micro-market 'Rajaji Nagar' carries strong demand weight based on historical transaction density.",
+      "Family-sized 4 BHK configuration increases appeal for long-term buyers.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-20",
+    "code": "BLR-119",
+    "title": "3 BHK Luxury Residence in Rajaji Nagar",
+    "location": "Rajaji Nagar",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "3 BHK \u2022 Built-up  Area",
+    "bhk": 3,
+    "bathrooms": 3,
+    "sqft": 1640,
+    "askingPriceLakhs": 229.0,
+    "fairValueLakhs": 271.97,
+    "monthlyRent": 54400,
+    "annualYield": 2.85,
+    "investmentScore": 77,
+    "recommendation": "HOLD",
+    "confidenceScore": 92,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -15.8,
+    "matchPercentage": 83,
+    "imageUrl": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Fair valuation but mixed yield metrics require strategic price negotiation.",
+      "Micro-market transaction liquidity remains steady based on historical records."
+    ],
+    "risks": [
+      "Interest rate changes could impact net leveraged monthly returns."
+    ],
+    "riskRadar": {
+      "overallRisk": "MODERATE RISK",
+      "riskScore": 79.0,
+      "overallColor": "#F59E0B",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b9271.97 L).",
+          "metric_label": "Price Premium",
+          "metric_value": "-15.8%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "HIGH",
+          "color": "#EF4444",
+          "why": "Rental yield of 2.85% is below Bengaluru urban benchmark (3.5\u20134.5%). Low cash-flow protection.",
+          "metric_label": "Rental Yield",
+          "metric_value": "2.85%"
+        },
+        {
+          "category": "Market Risk",
+          "level": "MEDIUM",
+          "color": "#F59E0B",
+          "why": "Moderate YoY HPI index growth (1.9%) indicates stable, non-speculative price appreciation.",
+          "metric_label": "HPI Growth YoY",
+          "metric_value": "+1.9%"
+        },
+        {
+          "category": "Location Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Micro-market 'Rajaji Nagar' has proven historical transaction liquidity and established infrastructure.",
+          "metric_label": "Micro-Market Tier",
+          "metric_value": "Established"
+        },
+        {
+          "category": "Data Confidence",
+          "level": "HIGH CONFIDENCE",
+          "color": "#10B981",
+          "why": "Valuation backed by strong local transaction sample density (25+ records).",
+          "metric_label": "Sample Count",
+          "metric_value": "25 listings"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Baseline City Standard (1,000 sqft)",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Property Footprint (1,640 sqft)",
+        "contribution_lakhs": 54.38,
+        "sign": "+"
+      },
+      {
+        "factor": "Micro-Market Factor ('Rajaji Nagar')",
+        "contribution_lakhs": 31.2,
+        "sign": "+"
+      },
+      {
+        "factor": "Configuration (3 BHK, 3 Bath)",
+        "contribution_lakhs": 18.66,
+        "sign": "+"
+      },
+      {
+        "factor": "Ready To Move Occupancy",
+        "contribution_lakhs": 2.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Standard area (1,640 sqft) aligns well with prevailing market square-footage rates.",
+      "Micro-market 'Rajaji Nagar' carries strong demand weight based on historical transaction density.",
+      "Family-sized 3 BHK configuration increases appeal for long-term buyers.",
+      "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  }
+]
