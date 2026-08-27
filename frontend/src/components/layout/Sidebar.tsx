@@ -13,6 +13,7 @@ import {
   Moon,
   Building2,
   Globe,
+  BookmarkCheck,
 } from 'lucide-react';
 import { useTranslation } from '../../context/LanguageContext';
 
@@ -36,6 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'explore', label: t.nav_explore, icon: Compass },
     { id: 'analysis', label: t.nav_analysis, icon: LineChart },
     { id: 'compare', label: t.nav_compare, icon: Scale },
+    { id: 'saved-comparisons', label: 'Saved Scenarios', icon: BookmarkCheck },
     { id: 'simulator', label: t.nav_simulator, icon: Sliders },
     { id: 'markets', label: t.nav_markets, icon: TrendingUp },
     { id: 'advisor', label: t.nav_advisor, icon: Brain },

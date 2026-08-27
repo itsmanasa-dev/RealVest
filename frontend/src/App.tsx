@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { NavTab, Property } from './types';
 import { mockProperties } from './data/mockProperties';
 import { LanguageProvider } from './context/LanguageContext';
+import { propertyApi } from './services/api/propertyApi';
 
 import { Header } from './components/layout/Header';
 import { MobileNav } from './components/layout/MobileNav';
@@ -10,6 +11,7 @@ import { DashboardView } from './components/views/DashboardView';
 import { ExplorerView } from './components/views/ExplorerView';
 import { PropertyAnalysisView } from './components/views/PropertyAnalysisView';
 import { CompareView } from './components/views/CompareView';
+import { SavedComparisonsView } from './components/views/SavedComparisonsView';
 import { SimulatorView } from './components/views/SimulatorView';
 import { MarketIntelligenceView } from './components/views/MarketIntelligenceView';
 import { AIAdvisorView } from './components/views/AIAdvisorView';
@@ -20,11 +22,28 @@ import { Sidebar } from './components/layout/Sidebar';
 function AppContent() {
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
   const [previousTab, setPreviousTab] = useState<NavTab>('explore');
+  const [properties, setProperties] = useState<Property[]>(mockProperties);
   const [selectedProperty, setSelectedProperty] = useState<Property>(mockProperties[0]);
   const [isDark, setIsDark] = useState<boolean>(() => {
     const savedTheme = localStorage.getItem('realvest_theme');
     return savedTheme === 'dark';
   });
+
+  // Fetch live properties from FastAPI / MySQL backend
+  useEffect(() => {
+    async function fetchLiveProperties() {
+      try {
+        const liveData = await propertyApi.getProperties();
+        if (liveData && liveData.length > 0) {
+          setProperties(liveData);
+          setSelectedProperty(liveData[0]);
+        }
+      } catch (err) {
+        console.warn('Backend connection fallback: Using real dataset cached properties.');
+      }
+    }
+    fetchLiveProperties();
+  }, []);
 
   // Sync dark/light class to root HTML element and localStorage
   useEffect(() => {
@@ -88,7 +107,7 @@ function AppContent() {
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-24 lg:pb-12">
           {activeTab === 'dashboard' && (
             <DashboardView
-              properties={mockProperties}
+              properties={properties}
               onSelectProperty={handleSelectProperty}
               onNavigate={handleTabChange}
             />
@@ -96,7 +115,7 @@ function AppContent() {
 
           {activeTab === 'explore' && (
             <ExplorerView
-              properties={mockProperties}
+              properties={properties}
               onSelectProperty={handleSelectProperty}
             />
           )}
@@ -111,9 +130,16 @@ function AppContent() {
 
           {activeTab === 'compare' && (
             <CompareView
-              properties={mockProperties}
+              properties={properties}
               onSelectProperty={handleSelectProperty}
               onNavigate={handleTabChange}
+            />
+          )}
+
+          {activeTab === 'saved-comparisons' && (
+            <SavedComparisonsView
+              onNavigate={handleTabChange}
+              onSelectProperty={handleSelectProperty}
             />
           )}
 
@@ -121,14 +147,14 @@ function AppContent() {
 
           {activeTab === 'markets' && (
             <MarketIntelligenceView
-              properties={mockProperties}
+              properties={properties}
               onSelectProperty={handleSelectProperty}
             />
           )}
 
           {activeTab === 'advisor' && (
             <AIAdvisorView
-              properties={mockProperties}
+              properties={properties}
               onSelectProperty={handleSelectProperty}
               onNavigate={handleTabChange}
             />
@@ -147,7 +173,6 @@ function AppContent() {
     </div>
   );
 }
-
 
 export function App() {
   return (

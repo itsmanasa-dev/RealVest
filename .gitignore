@@ -45,6 +45,9 @@ yarn-error.log*
 .env
 .env.*
 !.env.example
+*.db
+*.sqlite
+*.sqlite3
 .streamlit/secrets.toml
 
 # IDE & OS

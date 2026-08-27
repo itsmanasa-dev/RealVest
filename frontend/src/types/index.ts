@@ -3,6 +3,7 @@ export type NavTab =
   | 'explore' 
   | 'analysis' 
   | 'compare'
+  | 'saved-comparisons'
   | 'simulator' 
   | 'markets' 
   | 'advisor' 
