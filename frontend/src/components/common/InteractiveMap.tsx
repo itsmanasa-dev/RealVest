@@ -88,7 +88,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
   };
 
   return (
-    <div className="relative h-80 sm:h-96 w-full rounded-2xl border border-slate-200 dark:border-[#273449] bg-slate-900 overflow-hidden select-none">
+    <div className="relative h-80 sm:h-96 w-full rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-900 overflow-hidden select-none">
       {/* Bengaluru City Topology SVG Layer */}
       <div
         className="absolute inset-0 transition-transform duration-300 ease-out"
@@ -129,21 +129,21 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
             >
               <div className="relative flex items-center justify-center">
                 {isSelected && (
-                  <span className="animate-ping absolute inline-flex h-10 w-10 rounded-full bg-blue-400 opacity-60" />
+                  <span className="animate-ping absolute inline-flex h-9 w-9 rounded-full bg-blue-400 opacity-60" />
                 )}
                 <div
-                  className={`relative w-8 h-8 rounded-full border-2 flex items-center justify-center shadow-lg transition-all transform group-hover:scale-110 ${
+                  className={`relative w-7 h-7 rounded-full border-2 flex items-center justify-center shadow-md transition-all transform group-hover:scale-105 ${
                     isSelected
-                      ? 'bg-blue-600 border-white text-white scale-110 shadow-blue-500/50'
+                      ? 'bg-blue-600 border-white text-white scale-105 shadow-blue-500/50'
                       : 'bg-[#111827] border-blue-400/80 text-blue-400 hover:border-blue-300 hover:text-white'
                   }`}
                 >
-                  <MapPin size={15} />
+                  <MapPin size={14} />
                 </div>
 
                 {/* Hover / Active Badge */}
                 <div
-                  className={`absolute top-9 left-1/2 transform -translate-x-1/2 px-2 py-0.5 rounded-md font-mono text-[10px] font-bold whitespace-nowrap shadow-md transition-opacity pointer-events-none ${
+                  className={`absolute top-8 left-1/2 transform -translate-x-1/2 px-2 py-0.5 rounded font-mono text-[10px] font-medium whitespace-nowrap shadow-md transition-opacity pointer-events-none ${
                     isSelected
                       ? 'bg-blue-600 text-white opacity-100'
                       : 'bg-slate-900/90 text-slate-300 opacity-0 group-hover:opacity-100'
@@ -176,13 +176,13 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                   <span className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-emerald-400 opacity-75" />
                 )}
                 <div
-                  className={`relative px-2 py-1 rounded-xl border flex items-center gap-1 shadow-md transition-all transform group-hover:scale-110 ${
+                  className={`relative px-2 py-0.5 rounded-lg border flex items-center gap-1 shadow-sm transition-all transform group-hover:scale-105 ${
                     isPropSelected
-                      ? 'bg-emerald-500 border-white text-white font-mono text-[10px] font-extrabold scale-110 shadow-emerald-500/50'
-                      : 'bg-[#111827]/90 border-emerald-400/70 text-emerald-400 font-mono text-[9px] font-bold hover:bg-emerald-600 hover:text-white'
+                      ? 'bg-emerald-500 border-white text-white font-mono text-[10px] font-semibold scale-105 shadow-emerald-500/50'
+                      : 'bg-[#111827]/90 border-emerald-400/70 text-emerald-400 font-mono text-[9px] font-medium hover:bg-emerald-600 hover:text-white'
                   }`}
                 >
-                  <Building2 size={12} />
+                  <Building2 size={11} />
                   <span>{prop.code}</span>
                 </div>
               </div>
@@ -201,7 +201,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
           >
             <div className="relative flex items-center justify-center">
               <span className="animate-ping absolute inline-flex h-6 w-6 rounded-full bg-blue-500 opacity-75" />
-              <div className="w-4 h-4 rounded-full bg-blue-600 border-2 border-white shadow-lg flex items-center justify-center text-[8px] text-white">
+              <div className="w-3.5 h-3.5 rounded-full bg-blue-600 border-2 border-white shadow-lg flex items-center justify-center text-[7px] text-white">
                 ●
               </div>
             </div>
@@ -210,105 +210,105 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
       </div>
 
       {/* Map Floating Controls Top-Right (Zoom In, Zoom Out, Center, Locate Me) */}
-      <div className="absolute top-3 right-3 z-30 flex flex-col gap-2">
-        <div className="flex flex-col rounded-2xl bg-[#111827]/90 backdrop-blur-md border border-[#273449] shadow-lg overflow-hidden text-slate-200">
+      <div className="absolute top-3 right-3 z-30 flex flex-col gap-1.5">
+        <div className="flex flex-col rounded-lg bg-[#111827]/90 backdrop-blur-md border border-[#273449] shadow-lg overflow-hidden text-slate-200">
           <button
             onClick={handleZoomIn}
-            className="p-2 hover:bg-slate-800 transition-colors border-b border-[#273449] cursor-pointer"
+            className="p-1.5 hover:bg-slate-800 transition-colors border-b border-[#273449] cursor-pointer"
             title="Zoom In"
           >
-            <Plus size={15} />
+            <Plus size={14} />
           </button>
           <button
             onClick={handleZoomOut}
-            className="p-2 hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 hover:bg-slate-800 transition-colors cursor-pointer"
             title="Zoom Out"
           >
-            <Minus size={15} />
+            <Minus size={14} />
           </button>
         </div>
 
         <button
           onClick={handleLocateMe}
           disabled={isLocating}
-          className={`p-2 rounded-2xl bg-[#111827]/90 backdrop-blur-md border border-[#273449] shadow-lg transition-colors cursor-pointer flex items-center justify-center ${
+          className={`p-1.5 rounded-lg bg-[#111827]/90 backdrop-blur-md border border-[#273449] shadow-lg transition-colors cursor-pointer flex items-center justify-center ${
             isLocating ? 'text-blue-400 animate-pulse' : 'text-blue-400 hover:text-white hover:bg-slate-800'
           }`}
           title={t.locate_me}
         >
-          <Navigation size={15} />
+          <Navigation size={14} />
         </button>
 
         <button
           onClick={handleReset}
-          className="p-2 rounded-2xl bg-[#111827]/90 backdrop-blur-md border border-[#273449] shadow-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer flex items-center justify-center"
+          className="p-1.5 rounded-lg bg-[#111827]/90 backdrop-blur-md border border-[#273449] shadow-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer flex items-center justify-center"
           title="Center Bengaluru"
         >
-          <RotateCcw size={15} />
+          <RotateCcw size={14} />
         </button>
       </div>
 
       {/* Geolocation Status Toast Overlay */}
       {locationStatus && (
-        <div className="absolute top-3 left-3 z-30 px-3 py-1.5 rounded-xl bg-[#111827]/90 backdrop-blur-md border border-blue-500/40 text-blue-300 text-[11px] font-mono shadow-lg flex items-center gap-1.5 animate-fadeIn">
+        <div className="absolute top-3 left-3 z-30 px-2.5 py-1 rounded-lg bg-[#111827]/90 backdrop-blur-md border border-blue-500/40 text-blue-300 text-[10px] font-mono shadow-lg flex items-center gap-1.5">
           <span>{locationStatus}</span>
         </div>
       )}
 
       {/* Selected Property Modal / Card Overlay */}
       {selectedPropMarker ? (
-        <div className="absolute bottom-3 left-3 right-3 sm:right-auto z-30 p-4 rounded-2xl bg-[#111827]/95 backdrop-blur-md border border-[#273449] shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 min-w-[280px] sm:min-w-[340px]">
+        <div className="absolute bottom-3 left-3 right-3 sm:right-auto z-30 p-3.5 rounded-xl bg-[#111827]/95 backdrop-blur-md border border-[#273449] shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 min-w-[280px] sm:min-w-[340px]">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded bg-blue-600/30 text-blue-400 font-mono text-[10px] font-bold border border-blue-500/30">
+              <span className="px-2 py-0.5 rounded bg-blue-600/30 text-blue-400 font-mono text-[10px] font-semibold border border-blue-500/30">
                 {selectedPropMarker.code}
               </span>
-              <span className={`px-2 py-0.5 rounded text-white font-mono text-[10px] font-bold ${
+              <span className={`px-2 py-0.5 rounded text-white font-mono text-[10px] font-semibold ${
                 selectedPropMarker.recommendation === 'BUY' ? 'bg-emerald-600' : 'bg-amber-600'
               }`}>
                 {selectedPropMarker.recommendation}
               </span>
             </div>
-            <h4 className="text-sm font-extrabold text-white mt-1">
+            <h4 className="text-xs sm:text-sm font-semibold text-white mt-1">
               {selectedPropMarker.title}
             </h4>
             <div className="text-[11px] font-mono text-slate-300 mt-0.5 flex items-center gap-2">
               <span>Asking: {formatInrLakhs(selectedPropMarker.askingPriceLakhs)}</span>
               <span>•</span>
-              <span className="text-blue-400">ML Value: {formatInrLakhs(selectedPropMarker.fairValueLakhs)}</span>
+              <span className="text-blue-400">ML: {formatInrLakhs(selectedPropMarker.fairValueLakhs)}</span>
             </div>
           </div>
 
           {onSelectProperty && (
             <button
               onClick={() => onSelectProperty(selectedPropMarker)}
-              className="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs font-bold flex items-center justify-center gap-1 shadow-md cursor-pointer shrink-0"
+              className="w-full sm:w-auto px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1 shadow-sm cursor-pointer shrink-0"
             >
               <span>{t.inspect_btn}</span>
-              <ArrowUpRight size={14} />
+              <ArrowUpRight size={13} />
             </button>
           )}
         </div>
       ) : (
         /* Default Bottom Information Card Overlay (Selected Zone) */
-        <div className="absolute bottom-3 left-3 right-3 sm:right-auto z-20 p-3.5 rounded-2xl bg-[#111827]/95 backdrop-blur-md border border-[#273449] shadow-xl flex items-center justify-between sm:justify-start gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
-              <MapPin size={18} />
+        <div className="absolute bottom-3 left-3 right-3 sm:right-auto z-20 p-3 rounded-xl bg-[#111827]/95 backdrop-blur-md border border-[#273449] shadow-xl flex items-center justify-between sm:justify-start gap-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+              <MapPin size={16} />
             </div>
             <div>
-              <div className="text-xs sm:text-sm font-extrabold text-white">
+              <div className="text-xs sm:text-sm font-semibold text-white">
                 {selectedZone.name}
               </div>
-              <div className="text-[11px] font-mono text-blue-400 font-semibold flex items-center gap-1">
-                <TrendingUp size={12} /> {formatPercent(selectedZone.growth30d, true)} 30d Velocity • ₹{selectedZone.avgPricePerSqft.toLocaleString('en-IN')}/sqft
+              <div className="text-[11px] font-mono text-blue-400 font-medium flex items-center gap-1">
+                <TrendingUp size={11} /> {formatPercent(selectedZone.growth30d, true)} 30d Velocity • ₹{selectedZone.avgPricePerSqft.toLocaleString('en-IN')}/sqft
               </div>
             </div>
           </div>
 
-          <div className="hidden sm:block pl-4 border-l border-[#273449] text-right">
+          <div className="hidden sm:block pl-3 border-l border-[#273449] text-right">
             <div className="text-[10px] font-mono uppercase text-slate-400">Demand Index</div>
-            <div className="text-sm font-extrabold font-mono text-white">
+            <div className="text-xs sm:text-sm font-semibold font-mono text-white">
               {selectedZone.demandIndex}/100
             </div>
           </div>
@@ -317,4 +317,5 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
     </div>
   );
 };
+
 

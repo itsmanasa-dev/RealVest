@@ -15,6 +15,8 @@ import { MarketIntelligenceView } from './components/views/MarketIntelligenceVie
 import { AIAdvisorView } from './components/views/AIAdvisorView';
 import { SettingsView } from './components/views/SettingsView';
 
+import { Sidebar } from './components/layout/Sidebar';
+
 function AppContent() {
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
   const [previousTab, setPreviousTab] = useState<NavTab>('explore');
@@ -61,77 +63,91 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B1120] text-[#0F172A] dark:text-[#F8FAFC] flex flex-col font-sans transition-colors duration-300">
-      {/* Top Header */}
-      <Header
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B1120] text-[#0F172A] dark:text-[#F8FAFC] flex font-sans transition-colors duration-200">
+      {/* Desktop Sidebar (Persistent on lg screens) */}
+      <Sidebar
         activeTab={activeTab}
+        onTabChange={handleTabChange}
         isDark={isDark}
         onToggleTheme={handleToggleTheme}
-        onSearchClick={() => handleTabChange('explore')}
-        onBack={handleBack}
-        showBack={activeTab === 'analysis'}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-5 pb-10">
-        {activeTab === 'dashboard' && (
-          <DashboardView
-            properties={mockProperties}
-            onSelectProperty={handleSelectProperty}
-            onNavigate={handleTabChange}
-          />
-        )}
+      {/* Main App Canvas */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top Header */}
+        <Header
+          activeTab={activeTab}
+          isDark={isDark}
+          onToggleTheme={handleToggleTheme}
+          onSearchClick={() => handleTabChange('explore')}
+          onBack={handleBack}
+          showBack={activeTab === 'analysis'}
+        />
 
-        {activeTab === 'explore' && (
-          <ExplorerView
-            properties={mockProperties}
-            onSelectProperty={handleSelectProperty}
-          />
-        )}
+        {/* Unified Main Content Container */}
+        <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-24 lg:pb-12">
+          {activeTab === 'dashboard' && (
+            <DashboardView
+              properties={mockProperties}
+              onSelectProperty={handleSelectProperty}
+              onNavigate={handleTabChange}
+            />
+          )}
 
-        {activeTab === 'analysis' && (
-          <PropertyAnalysisView
-            property={selectedProperty}
-            onBack={handleBack}
-            onNavigate={handleTabChange}
-          />
-        )}
+          {activeTab === 'explore' && (
+            <ExplorerView
+              properties={mockProperties}
+              onSelectProperty={handleSelectProperty}
+            />
+          )}
 
-        {activeTab === 'compare' && (
-          <CompareView
-            properties={mockProperties}
-            onSelectProperty={handleSelectProperty}
-            onNavigate={handleTabChange}
-          />
-        )}
+          {activeTab === 'analysis' && (
+            <PropertyAnalysisView
+              property={selectedProperty}
+              onBack={handleBack}
+              onNavigate={handleTabChange}
+            />
+          )}
 
-        {activeTab === 'simulator' && <SimulatorView onBack={handleBack} />}
+          {activeTab === 'compare' && (
+            <CompareView
+              properties={mockProperties}
+              onSelectProperty={handleSelectProperty}
+              onNavigate={handleTabChange}
+            />
+          )}
 
-        {activeTab === 'markets' && (
-          <MarketIntelligenceView
-            properties={mockProperties}
-            onSelectProperty={handleSelectProperty}
-          />
-        )}
+          {activeTab === 'simulator' && <SimulatorView onBack={handleBack} />}
 
-        {activeTab === 'advisor' && (
-          <AIAdvisorView
-            properties={mockProperties}
-            onSelectProperty={handleSelectProperty}
-            onNavigate={handleTabChange}
-          />
-        )}
+          {activeTab === 'markets' && (
+            <MarketIntelligenceView
+              properties={mockProperties}
+              onSelectProperty={handleSelectProperty}
+            />
+          )}
 
-        {activeTab === 'settings' && (
-          <SettingsView isDark={isDark} onToggleTheme={handleToggleTheme} />
-        )}
-      </main>
+          {activeTab === 'advisor' && (
+            <AIAdvisorView
+              properties={mockProperties}
+              onSelectProperty={handleSelectProperty}
+              onNavigate={handleTabChange}
+            />
+          )}
 
-      {/* Bottom Navigation Dock */}
-      <MobileNav activeTab={activeTab} onTabChange={handleTabChange} />
+          {activeTab === 'settings' && (
+            <SettingsView isDark={isDark} onToggleTheme={handleToggleTheme} />
+          )}
+        </main>
+      </div>
+
+      {/* Mobile Bottom Navigation Dock (Visible on < lg screens) */}
+      <div className="lg:hidden">
+        <MobileNav activeTab={activeTab} onTabChange={handleTabChange} />
+      </div>
     </div>
   );
 }
+
 
 export function App() {
   return (

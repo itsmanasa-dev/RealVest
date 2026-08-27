@@ -47,14 +47,14 @@ export const CompareView: React.FC<CompareViewProps> = ({
   };
 
   return (
-    <div className="space-y-5 pb-20 max-w-2xl mx-auto">
+    <div className="space-y-6 pb-12 w-full">
       {/* Title & Subtitle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200 dark:border-[#273449]">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
             {t.compare_title}
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             {t.compare_subtitle}
           </p>
         </div>
@@ -62,7 +62,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
         {selectedIds.length < 3 && (
           <button
             onClick={handleAddSlot}
-            className="px-3.5 py-2 rounded-2xl bg-blue-50 dark:bg-[#172033] text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-[#273449] font-mono text-xs font-bold hover:bg-blue-100 dark:hover:bg-[#1e2c47] transition-colors cursor-pointer self-start sm:self-auto"
+            className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-[#172033] text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-[#273449] font-mono text-xs font-medium hover:bg-blue-100 dark:hover:bg-[#1e2c47] transition-colors cursor-pointer self-start sm:self-auto"
           >
             {t.add_asset}
           </button>
@@ -70,20 +70,20 @@ export const CompareView: React.FC<CompareViewProps> = ({
       </div>
 
       {/* Property Selector Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {selectedIds.map((currentId, slotIdx) => (
           <div
             key={slotIdx}
-            className="p-4 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-2"
+            className="p-3.5 rounded-xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-1.5"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold uppercase text-slate-400">
+              <span className="text-[10px] font-mono font-medium uppercase text-slate-400">
                 {t.property_slot} {String.fromCharCode(65 + slotIdx)}
               </span>
               {selectedIds.length > 2 && (
                 <button
                   onClick={() => handleRemoveSlot(slotIdx)}
-                  className="text-xs text-rose-500 hover:underline font-mono cursor-pointer"
+                  className="text-[11px] text-rose-500 hover:underline font-mono cursor-pointer"
                 >
                   Remove
                 </button>
@@ -93,7 +93,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
             <select
               value={currentId}
               onChange={(e) => handleSelectSlot(slotIdx, e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
+              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-medium focus:outline-none"
             >
               {properties.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -106,13 +106,13 @@ export const CompareView: React.FC<CompareViewProps> = ({
       </div>
 
       {/* Comparison Table */}
-      <div className="rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm overflow-x-auto">
         <table className="w-full text-left text-xs font-mono">
           <thead>
             <tr className="border-b border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033]">
-              <th className="p-3.5 text-slate-400 font-bold uppercase">{t.metric_col}</th>
+              <th className="p-3 text-slate-500 dark:text-slate-400 font-medium uppercase">{t.metric_col}</th>
               {selectedProps.map((p) => (
-                <th key={p.id} className="p-3.5 text-slate-900 dark:text-white font-extrabold">
+                <th key={p.id} className="p-3 text-slate-900 dark:text-white font-semibold">
                   {p.location} ({p.code})
                 </th>
               ))}
@@ -120,51 +120,51 @@ export const CompareView: React.FC<CompareViewProps> = ({
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-[#273449]">
             <tr>
-              <td className="p-3.5 text-slate-400 font-semibold">{t.asking_price}</td>
+              <td className="p-3 text-slate-500 dark:text-slate-400 font-medium">{t.asking_price}</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-3.5 font-bold text-slate-900 dark:text-white">
+                <td key={p.id} className="p-3 font-semibold text-slate-900 dark:text-white">
                   {formatInrLakhs(p.askingPriceLakhs)}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="p-3.5 text-slate-400 font-semibold">{t.est_value}</td>
+              <td className="p-3 text-slate-500 dark:text-slate-400 font-medium">{t.est_value}</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-3.5 font-extrabold text-blue-600 dark:text-blue-400 text-sm">
+                <td key={p.id} className="p-3 font-semibold text-blue-600 dark:text-blue-400">
                   {formatInrLakhs(p.fairValueLakhs)}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="p-3.5 text-slate-400 font-semibold">{t.monthly_rent}</td>
+              <td className="p-3 text-slate-500 dark:text-slate-400 font-medium">{t.monthly_rent}</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-3.5 font-medium text-slate-800 dark:text-slate-200">
+                <td key={p.id} className="p-3 text-slate-800 dark:text-slate-200">
                   {formatInrRent(p.monthlyRent)}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="p-3.5 text-slate-400 font-semibold">{t.proj_roi}</td>
+              <td className="p-3 text-slate-500 dark:text-slate-400 font-medium">{t.proj_roi}</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-3.5 font-bold text-emerald-600 dark:text-emerald-400">
+                <td key={p.id} className="p-3 font-semibold text-emerald-600 dark:text-emerald-400">
                   {p.annualYield}% YoY
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="p-3.5 text-slate-400 font-semibold">{t.confidence}</td>
+              <td className="p-3 text-slate-500 dark:text-slate-400 font-medium">{t.confidence}</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-3.5 font-bold text-slate-900 dark:text-white">
+                <td key={p.id} className="p-3 font-semibold text-slate-900 dark:text-white">
                   {p.confidenceScore}%
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="p-3.5 text-slate-400 font-semibold">{t.verdict}</td>
+              <td className="p-3 text-slate-500 dark:text-slate-400 font-medium">{t.verdict}</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-3.5">
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold text-white ${
-                    p.recommendation === 'BUY' ? 'bg-emerald-500' : 'bg-amber-500'
+                <td key={p.id} className="p-3">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-semibold text-white ${
+                    p.recommendation === 'BUY' ? 'bg-emerald-600' : 'bg-amber-600'
                   }`}>
                     {p.recommendation}
                   </span>
@@ -177,19 +177,19 @@ export const CompareView: React.FC<CompareViewProps> = ({
 
       {/* Best Pick Recommendation Banner */}
       {bestProperty && (
-        <div className="p-5 sm:p-6 rounded-3xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-2xl bg-white/20 text-white flex items-center justify-center shrink-0">
-              <Trophy size={20} />
+        <div className="p-4 sm:p-5 rounded-xl border border-blue-200 dark:border-blue-800/80 bg-blue-50/50 dark:bg-[#172033] shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+              <Trophy size={18} />
             </div>
             <div>
-              <span className="text-[10px] font-mono uppercase font-bold tracking-widest text-blue-200">
+              <span className="text-[10px] font-mono uppercase font-semibold tracking-wider text-blue-600 dark:text-blue-400">
                 {t.realvest_top_pick}
               </span>
-              <h3 className="text-base sm:text-lg font-extrabold text-white mt-0.5">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white mt-0.5">
                 {bestProperty.title}
               </h3>
-              <p className="text-xs text-blue-100 mt-0.5">
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
                 {t.highest_roi_desc} ({bestProperty.annualYield}% yield, {bestProperty.confidenceScore}% confidence).
               </p>
             </div>
@@ -200,13 +200,14 @@ export const CompareView: React.FC<CompareViewProps> = ({
               onSelectProperty(bestProperty);
               onNavigate('analysis');
             }}
-            className="px-4 py-2.5 rounded-xl bg-white text-blue-700 font-bold text-xs hover:bg-blue-50 transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+            className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 shadow-sm"
           >
-            {t.inspect_btn} <ArrowRight size={14} />
+            {t.inspect_btn} <ArrowRight size={13} />
           </button>
         </div>
       )}
     </div>
   );
 };
+
 

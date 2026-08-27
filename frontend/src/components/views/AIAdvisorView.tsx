@@ -69,27 +69,27 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
   };
 
   return (
-    <div className="space-y-5 pb-20 max-w-2xl mx-auto">
+    <div className="space-y-6 pb-12 w-full max-w-4xl mx-auto">
       {/* Title & Subtitle */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+      <div className="pb-3 border-b border-slate-200 dark:border-[#273449]">
+        <h1 className="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
           {t.advisor_title}
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
           {t.advisor_subtitle}
         </p>
       </div>
 
       {/* Suggested Prompts */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
-        <span className="text-xs font-mono font-bold text-slate-400 shrink-0 flex items-center gap-1">
-          <Sparkles size={14} className="text-blue-600 dark:text-blue-400" /> {t.suggested_prompts}
+        <span className="text-xs font-mono font-medium text-slate-400 shrink-0 flex items-center gap-1">
+          <Sparkles size={13} className="text-blue-600 dark:text-blue-400" /> {t.suggested_prompts}
         </span>
         {suggestedPrompts.map((prompt, idx) => (
           <button
             key={idx}
             onClick={() => handleSend(prompt)}
-            className="px-3.5 py-1.5 rounded-2xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] text-xs text-slate-700 dark:text-slate-300 font-medium hover:border-blue-500 dark:hover:border-blue-400 transition-colors shrink-0 cursor-pointer shadow-sm"
+            className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] text-xs text-slate-700 dark:text-slate-300 font-medium hover:border-blue-500 dark:hover:border-blue-400 transition-colors shrink-0 cursor-pointer shadow-sm"
           >
             {prompt}
           </button>
@@ -97,25 +97,25 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
       </div>
 
       {/* Chat Messages Container */}
-      <div className="p-5 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4 min-h-[360px] max-h-[480px] overflow-y-auto">
+      <div className="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4 min-h-[380px] max-h-[500px] overflow-y-auto">
         {messages.map((msg, idx) => (
           <div
             key={idx}
             className={`flex items-start gap-3 ${msg.sender === 'user' ? 'flex-row-reverse' : ''}`}
           >
             <div
-              className={`w-9 h-9 rounded-2xl flex items-center justify-center text-xs font-bold shrink-0 shadow-sm ${
+              className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-semibold shrink-0 shadow-sm ${
                 msg.sender === 'user'
                   ? 'bg-blue-600 text-white'
                   : 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-[#273449]'
               }`}
             >
-              {msg.sender === 'user' ? 'YOU' : <Bot size={18} />}
+              {msg.sender === 'user' ? 'YOU' : <Bot size={16} />}
             </div>
 
-            <div className={`max-w-md space-y-2.5 ${msg.sender === 'user' ? 'text-right' : ''}`}>
+            <div className={`max-w-xl space-y-2.5 ${msg.sender === 'user' ? 'text-right' : ''}`}>
               <div
-                className={`inline-block p-4 rounded-3xl text-xs sm:text-sm leading-relaxed whitespace-pre-line text-left ${
+                className={`inline-block p-3.5 rounded-xl text-xs sm:text-sm leading-relaxed whitespace-pre-line text-left ${
                   msg.sender === 'user'
                     ? 'bg-blue-600 text-white font-medium shadow-sm'
                     : 'bg-slate-50 dark:bg-[#172033] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-[#273449]'
@@ -128,21 +128,21 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
               {msg.matchedProperty && msg.sender === 'ai' && (
                 <div
                   onClick={() => onSelectProperty(msg.matchedProperty!)}
-                  className="p-3.5 rounded-2xl border border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-[#172033] hover:bg-blue-50 dark:hover:bg-[#1e2c47] transition-colors cursor-pointer text-left flex items-center justify-between gap-3"
+                  className="p-3 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-[#172033] hover:bg-blue-50 dark:hover:bg-[#1e2c47] transition-colors cursor-pointer text-left flex items-center justify-between gap-3 shadow-sm"
                 >
                   <div>
-                    <div className="text-[10px] font-mono font-bold uppercase text-blue-600 dark:text-blue-400">
+                    <div className="text-[10px] font-mono font-medium uppercase text-blue-600 dark:text-blue-400">
                       {msg.matchedProperty.code} • {msg.matchedProperty.recommendation} ({msg.matchedProperty.confidenceScore}% {t.confidence})
                     </div>
-                    <div className="text-sm font-extrabold text-slate-900 dark:text-white mt-0.5">
+                    <div className="text-sm font-semibold text-slate-900 dark:text-white mt-0.5">
                       {msg.matchedProperty.title}
                     </div>
                     <div className="text-xs text-slate-500 dark:text-slate-400">
                       {formatInrLakhs(msg.matchedProperty.fairValueLakhs)} • {msg.matchedProperty.annualYield}% ROI
                     </div>
                   </div>
-                  <button className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs font-bold flex items-center gap-1 shadow-sm shrink-0">
-                    {t.inspect_btn} <ArrowUpRight size={13} />
+                  <button className="px-2.5 py-1.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs font-medium flex items-center gap-1 shadow-sm shrink-0">
+                    {t.inspect_btn} <ArrowUpRight size={12} />
                   </button>
                 </div>
               )}
@@ -152,7 +152,7 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
 
         {isTyping && (
           <div className="flex items-center gap-2 text-slate-400 text-xs font-mono">
-            <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping" />
             Analyzing Bengaluru housing price models...
           </div>
         )}
@@ -166,16 +166,17 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
           onChange={(e) => setInputQuery(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           placeholder={t.ask_advisor_placeholder}
-          className="flex-1 px-4 py-3 rounded-2xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 dark:focus:ring-blue-500/40 transition-all shadow-sm"
+          className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] text-slate-900 dark:text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all shadow-sm"
         />
         <button
           onClick={() => handleSend()}
-          className="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-md shadow-blue-500/20 flex items-center gap-1.5 cursor-pointer shrink-0"
+          className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs transition-colors shadow-sm flex items-center gap-1.5 cursor-pointer shrink-0"
         >
-          <Send size={15} /> {t.send_btn}
+          <Send size={14} /> {t.send_btn}
         </button>
       </div>
     </div>
   );
 };
+
 

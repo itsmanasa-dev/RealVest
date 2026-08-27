@@ -59,18 +59,25 @@ export function simulateInvestment(params: SimulationParams): SimulationResult {
     decision = 'AVOID';
   }
 
+  const projected2025ValLakhs = parseFloat((purchaseLakhs * (1.0 + (appreciationRate / 100.0))).toFixed(2));
+  const projected2026ValLakhs = parseFloat((purchaseLakhs * Math.pow(1.0 + (appreciationRate / 100.0), 2)).toFixed(2));
+
+
   return {
     monthlyEmi,
     netMonthlyCashFlow,
     netAnnualCashFlow,
     rentalYieldPct,
     projectedFutureValLakhs,
+    projected2025ValLakhs,
+    projected2026ValLakhs,
     totalProfitInr,
     totalRoiPct,
     annualizedRoiPct,
     decision,
   };
 }
+
 
 /**
  * Calculates sensitivity decision flip boundaries
