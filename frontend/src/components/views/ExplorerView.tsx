@@ -47,7 +47,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-200 dark:border-[#273449]">
         <div>
           <h1 className="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
-            {t.explore_title}
+            {t.nav_explore}
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400">
             {filteredProperties.length} verified listings across active Bengaluru corridors
