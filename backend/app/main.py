@@ -1,3 +1,16 @@
+import os
+import sys
+
+# Robust sys.path injection for Render / production deployment
+CURRENT_FILE = os.path.abspath(__file__)
+APP_DIR = os.path.dirname(CURRENT_FILE)
+BACKEND_DIR = os.path.dirname(APP_DIR)
+ROOT_DIR = os.path.dirname(BACKEND_DIR)
+
+for p in [ROOT_DIR, BACKEND_DIR]:
+    if p and p not in sys.path:
+        sys.path.insert(0, p)
+
 import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
@@ -21,15 +34,16 @@ async def lifespan(app: FastAPI):
     # Initialize database tables
     if engine is not None:
         logger.info("Initializing RealVest database tables...")
-        Base.metadata.create_all(bind=engine)
-        
-        # Seed initial real properties if needed
-        db = SessionLocal()
         try:
-            property_service.ensure_seeded(db)
-        finally:
-            db.close()
-        logger.info("RealVest backend initialized successfully.")
+            Base.metadata.create_all(bind=engine)
+            db = SessionLocal()
+            try:
+                property_service.ensure_seeded(db)
+            finally:
+                db.close()
+            logger.info("RealVest backend initialized successfully.")
+        except Exception as e:
+            logger.error("Database initialization error during lifespan: %s", str(e))
     else:
         logger.warning("Database engine is not ready during lifespan.")
     yield
