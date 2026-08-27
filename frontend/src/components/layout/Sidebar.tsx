@@ -19,6 +19,7 @@ interface SidebarProps {
   onTabChange: (tab: NavTab) => void;
   isDark: boolean;
   onToggleTheme: () => void;
+  onReplayIntro?: () => void;
 }
 
 const PRIMARY: { id: NavTab; label: string; icon: React.ElementType }[] = [
@@ -33,8 +34,8 @@ const SECONDARY: { id: NavTab; label: string; icon: React.ElementType }[] = [
   { id: 'saved-comparisons', label: '', icon: BookmarkCheck },
 ];
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
-  const { t } = useTranslation();
+export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onReplayIntro }) => {
+  const { language, t } = useTranslation();
 
   const primary = PRIMARY.map((p) => ({
     ...p,
@@ -47,9 +48,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
 
   const secondary = SECONDARY.map((s) => ({
     ...s,
-    label: s.id === 'saved-comparisons' ? 'Saved Scenarios' : t.nav_simulator,
+    label: s.id === 'saved-comparisons' 
+      ? (language === 'kn' ? 'ಉಳಿಸಿದ ಸನ್ನಿವೇಶಗಳು' : language === 'hi' ? 'सहेजे गए परिदृश्य' : 'Saved Scenarios')
+      : t.nav_simulator,
   }));
-
 
   const NavButton: React.FC<{ item: typeof primary[0] }> = ({ item }) => {
     const Icon = item.icon;
@@ -84,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
             RealVest
           </span>
           <span className="block text-[10px] font-medium uppercase tracking-widest text-ink-3">
-            Investment Advisor
+            {language === 'kn' ? 'ಹೂಡಿಕೆ ಸಲಹೆಗಾರ' : language === 'hi' ? 'निवेश सलाहकार' : 'Investment Advisor'}
           </span>
         </div>
       </div>
@@ -93,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
         <div>
           <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-ink-3">
-            Invest
+            {language === 'kn' ? 'ಹೂಡಿಕೆ' : language === 'hi' ? 'निवेश' : 'Invest'}
           </p>
           <div className="space-y-0.5">
             {primary.map((item) => (
@@ -104,7 +106,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
 
         <div>
           <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-ink-3">
-            Workspace
+            {language === 'kn' ? 'ಕಾರ್ಯಕ್ಷೇತ್ರ' : language === 'hi' ? 'कार्यक्षेत्र' : 'Workspace'}
           </p>
           <div className="space-y-0.5">
             {secondary.map((item) => (
@@ -121,9 +123,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pos opacity-60" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-pos" />
           </span>
-          <span className="text-[11px] font-medium text-ink-2">Live Bengaluru data</span>
+          <span className="text-[11px] font-medium text-ink-2 truncate">{t.system_live_data}</span>
         </div>
+        {onReplayIntro && (
+          <button
+            onClick={onReplayIntro}
+            className="mt-2 w-full px-3 py-2 text-[11px] font-medium text-ink-3 hover:text-brand transition-colors text-left cursor-pointer"
+          >
+            Replay intro →
+          </button>
+        )}
       </div>
     </aside>
   );
 };
+

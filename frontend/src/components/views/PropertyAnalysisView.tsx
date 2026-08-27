@@ -44,7 +44,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
   onBack,
   onNavigate,
 }) => {
-  const { t } = useTranslation();
+  const { language, t } = useTranslation();
   const [activeSubTab, setActiveSubTab] = useState<'analysis' | 'compare'>('analysis');
   const [saved, setSaved] = useState(false);
 
@@ -236,10 +236,10 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
 
   const metricRows: { label: string; render: (p: Property) => React.ReactNode }[] = [
     { label: t.asking_price, render: (p) => <span className="font-semibold text-ink">{formatInrLakhs(p.askingPriceLakhs)}</span> },
-    { label: 'Estimated value', render: (p) => <span className="font-semibold text-brand">{formatInrLakhs(p.fairValueLakhs)}</span> },
+    { label: t.est_value, render: (p) => <span className="font-semibold text-brand">{formatInrLakhs(p.fairValueLakhs)}</span> },
     { label: t.monthly_rent, render: (p) => <span className="text-ink-2">{formatInrRent(p.monthlyRent)}</span> },
     { label: t.proj_roi, render: (p) => <span className="font-semibold text-pos">{p.annualYield}%</span> },
-    { label: 'Investment score', render: (p) => (
+    { label: language === 'kn' ? 'ಹೂಡಿಕೆ ಸ್ಕೋರ್' : language === 'hi' ? 'निवेश स्कोर' : 'Investment score', render: (p) => (
         <div className="flex items-center gap-1.5">
           <span className="font-semibold text-ink">{p.investmentScore}/100</span>
           <div className="w-10 h-1.5 rounded-full bg-surface-strong overflow-hidden">
@@ -247,7 +247,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
           </div>
         </div>
       ) },
-    { label: 'Risk', render: (p) => <Badge tone={riskTone(p.riskRadar?.overallRisk || 'Low')}>{p.riskRadar?.overallRisk || 'Low'}</Badge> },
+    { label: t.risk_assessment, render: (p) => <Badge tone={riskTone(p.riskRadar?.overallRisk || 'Low')}>{p.riskRadar?.overallRisk || 'Low'}</Badge> },
     { label: t.verdict, render: (p) => <Badge tone={recommendationTone(p.recommendation)}>{p.recommendation}</Badge> },
   ];
 
@@ -270,7 +270,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
               )}
             >
               <Layers size={13} />
-              <span>Asset Analysis</span>
+              <span>{language === 'kn' ? 'ಆಸ್ತಿ ವಿಶ್ಲೇಷಣೆ' : language === 'hi' ? 'संपत्ति विश्लेषण' : 'Asset Analysis'}</span>
             </button>
             <button
               onClick={() => setActiveSubTab('compare')}
@@ -280,7 +280,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
               )}
             >
               <Scale size={13} />
-              <span>Compare Properties</span>
+              <span>{t.compare_title}</span>
             </button>
           </div>
         </div>
@@ -302,20 +302,21 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
           <div className="flex items-center gap-2 shrink-0">
             <Button variant="secondary" onClick={() => setSaved(!saved)}>
               <Heart size={15} className={saved ? 'text-neg fill-neg' : ''} />
-              {saved ? 'Saved' : 'Save'}
+              {saved ? (language === 'kn' ? 'ಉಳಿಸಲಾಗಿದೆ' : language === 'hi' ? 'सहेजा गया' : 'Saved') : (language === 'kn' ? 'ಉಳಿಸಿ' : language === 'hi' ? 'सहेजें' : 'Save')}
             </Button>
             <Button
               variant={activeSubTab === 'compare' ? 'primary' : 'secondary'}
               onClick={() => setActiveSubTab(activeSubTab === 'compare' ? 'analysis' : 'compare')}
             >
-              <Scale size={15} /> {activeSubTab === 'compare' ? 'Back to Analysis' : 'Compare'}
+              <Scale size={15} /> {activeSubTab === 'compare' ? (language === 'kn' ? 'ವಿಶ್ಲೇಷಣೆಗೆ ಹಿಂತಿರುಗಿ' : language === 'hi' ? 'वापस विश्लेषण' : 'Back to Analysis') : t.nav_compare}
             </Button>
             <Button onClick={() => onNavigate('simulator')}>
-              <Sliders size={15} /> Simulate
+              <Sliders size={15} /> {t.nav_simulator}
             </Button>
           </div>
         </div>
       </div>
+
 
       {/* ==================================================== */}
       {/* MODE 1: SINGLE PROPERTY ANALYSIS VIEW */}

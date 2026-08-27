@@ -44,16 +44,32 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
   onClose,
   onOpen,
 }) => {
-  const { language } = useTranslation();
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 'welcome',
-      sender: 'advisor',
-      text: "Hello! I am your **RealVest AI Investment Advisor**. Ask me about Bengaluru localities, valuations, rental yields, risks, or scenario planning.",
-      sources: ["RealVest Bengaluru Intelligence"],
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    },
-  ]);
+  const { language, t } = useTranslation();
+
+  const getInitialGreeting = () => {
+    if (language === 'kn') {
+      return "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ **ರಿಯಲ್‌ವೆಸ್ಟ್ ಎಐ ಹೂಡಿಕೆ ಸಲಹೆಗಾರ**. ಬೆಂಗಳೂರಿನ ಆಸ್ತಿಗಳ ಬೆಲೆ, ಬಾಡಿಗೆ ಇಳುವರಿ, ಅಪಾಯಗಳು ಅಥವಾ ಹೂಡಿಕೆ ಅವಕಾಶಗಳ ಬಗ್ಗೆ ನನ್ನನ್ನು ಕೇಳಿ.";
+    }
+    if (language === 'hi') {
+      return "नमस्ते! मैं आपका **रियलवेस्ट एआई निवेश सलाहकार** हूँ। बेंगलुरु की संपत्तियों, मूल्यांकन, किराये की आय, जोखिम या निवेश अवसरों के बारे में पूछें।";
+    }
+    return "Hello! I am your **RealVest AI Investment Advisor**. Ask me about Bengaluru localities, valuations, rental yields, risks, or scenario planning.";
+  };
+
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    setMessages([
+      {
+        id: 'welcome',
+        sender: 'advisor',
+        text: getInitialGreeting(),
+        sources: [language === 'kn' ? "ರಿಯಲ್‌ವೆಸ್ಟ್ ಬೆಂಗಳೂರು ಇಂಟೆಲಿಜೆನ್ಸ್" : language === 'hi' ? "रियलवेस्ट बेंगलुरु इंटेलिजेंस" : "RealVest Bengaluru Intelligence"],
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      },
+    ]);
+  }, [language]);
+
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -71,8 +87,51 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
     }
   }, [messages, isLoading, isOpen]);
 
-  // Contextual suggested questions based on current workspace
+  // Contextual suggested questions based on current workspace and language
   const getSuggestedQuestions = () => {
+    if (language === 'kn') {
+      if (activeTab === 'analysis' && selectedProperty) {
+        return [
+          `ಈ ಆಸ್ತಿಯನ್ನು ಏಕೆ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ?`,
+          "ಕೇಳಲಾದ ಬೆಲೆ ನ್ಯಾಯಯುತವಾಗಿದೆಯೇ?",
+          "ಪ್ರಮುಖ ಅಪಾಯದ ಅಂಶಗಳು ಯಾವುವು?",
+          "ನಿರೀಕ್ಷಿತ ಬಾಡಿಗೆ ಇಳುವರಿ ಎಷ್ಟು?",
+        ];
+      }
+      if (activeTab === 'markets') {
+        return [
+          "ಬೆಂಗಳೂರಿನಲ್ಲಿ ಅತಿ ಹೆಚ್ಚು ಬೆಳವಣಿಗೆಯಾಗುತ್ತಿರುವ ಪ್ರದೇಶ ಯಾವುದು?",
+          "ವೈಟ್‌ಫೀಲ್ಡ್ ಬಾಡಿಗೆ ಆದಾಯಕ್ಕೆ ಉತ್ತಮವೇ?",
+          "2025-2026 HPI ಮುನ್ಸೂಚನೆ ವಿವರಿಸಿ.",
+        ];
+      }
+      return [
+        "₹50 ಲಕ್ಷ ಬಜೆಟ್‌ಗೆ ಎಲ್ಲಿ ಹೂಡಿಕೆ ಮಾಡಬೇಕು?",
+        "ವೈಟ್‌ಫೀಲ್ಡ್ ಬಾಡಿಗೆಗೆ ಸೂಕ್ತವೇ?",
+        "ಖರೀದಿಸಬೇಕೆ ಅಥವಾ ಬಾಡಿಗೆಗೆ ಇರಬೇಕೆ?",
+      ];
+    }
+    if (language === 'hi') {
+      if (activeTab === 'analysis' && selectedProperty) {
+        return [
+          `इस संपत्ति की सिफारिश क्यों की गई?`,
+          "क्या मांगी गई कीमत उचित है?",
+          "सबसे बड़े जोखिम कारक क्या हैं?",
+        ];
+      }
+      if (activeTab === 'markets') {
+        return [
+          "बेंगलुरु में सबसे तेज विकास किस क्षेत्र में है?",
+          "क्या व्हाइटफील्ड किराये के लिए अच्छा है?",
+          "2025-2026 HPI पूर्वानुमान समझाएं।",
+        ];
+      }
+      return [
+        "₹50 लाख के बजट में कहाँ निवेश करें?",
+        "क्या व्हाइटफील्ड किराये के लिए अच्छा है?",
+        "खरीदें या किराये पर रहें?",
+      ];
+    }
     if (activeTab === 'analysis' && selectedProperty) {
       return [
         `Why was ${selectedProperty.title} recommended?`,
@@ -86,7 +145,6 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
         "Which Bengaluru corridor has the strongest capital growth?",
         "Is Whitefield good for rental income?",
         "Explain the 2025-2026 Bengaluru HPI forecast.",
-        "Compare Electronic City vs Sarjapur Road.",
       ];
     }
     if (activeTab === 'simulator') {
@@ -110,6 +168,7 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
       "What are the biggest real estate risks in Bengaluru?",
     ];
   };
+
 
   const handleSendMessage = async (textToSend?: string) => {
     const query = textToSend || inputText.trim();
@@ -387,7 +446,7 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask about Bengaluru properties, yield, or risks…"
+                placeholder={t.ask_advisor_placeholder}
                 className="flex-1 px-2.5 py-1.5 text-xs text-ink bg-transparent focus:outline-none placeholder:text-ink-3"
                 disabled={isLoading}
               />
@@ -396,9 +455,10 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
                 disabled={!inputText.trim() || isLoading}
                 className="px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-strong disabled:opacity-40 text-white font-semibold text-xs transition-colors flex items-center gap-1 cursor-pointer"
               >
-                <span>Send</span>
+                <span>{t.send_btn}</span>
                 <Send size={12} />
               </button>
+
             </div>
           </div>
         </div>

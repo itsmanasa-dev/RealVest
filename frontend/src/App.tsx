@@ -15,6 +15,9 @@ import { SavedComparisonsView } from './components/views/SavedComparisonsView';
 import { SimulatorView } from './components/views/SimulatorView';
 import { MarketIntelligenceView } from './components/views/MarketIntelligenceView';
 import { GlobalAdvisorDrawer } from './components/common/GlobalAdvisorDrawer';
+import { IntroExperience } from './components/intro/IntroExperience';
+
+const INTRO_SEEN_KEY = 'realvest_intro_seen';
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
@@ -22,6 +25,9 @@ function AppContent() {
   const [properties, setProperties] = useState<Property[]>(mockProperties);
   const [selectedProperty, setSelectedProperty] = useState<Property>(mockProperties[0]);
   const [isAdvisorOpen, setIsAdvisorOpen] = useState<boolean>(false);
+  const [showIntro, setShowIntro] = useState<boolean>(() => {
+    return localStorage.getItem(INTRO_SEEN_KEY) !== 'true';
+  });
   const [isDark, setIsDark] = useState<boolean>(() => {
     const savedTheme = localStorage.getItem('realvest_theme');
     return savedTheme === 'dark';
@@ -79,14 +85,35 @@ function AppContent() {
     }
   };
 
+  const handleIntroComplete = () => {
+    localStorage.setItem(INTRO_SEEN_KEY, 'true');
+    setShowIntro(false);
+    window.scrollTo({ top: 0 });
+  };
+
+  const handleReplayIntro = () => {
+    localStorage.removeItem(INTRO_SEEN_KEY);
+    setActiveTab('dashboard');
+    setShowIntro(true);
+  };
+
   return (
     <div className="min-h-screen bg-canvas text-ink flex font-sans">
+      {showIntro && (
+        <IntroExperience
+          isDark={isDark}
+          properties={properties}
+          onComplete={handleIntroComplete}
+        />
+      )}
+
       {/* Desktop Sidebar (persistent on lg screens) */}
       <Sidebar
         activeTab={activeTab}
         onTabChange={handleTabChange}
         isDark={isDark}
         onToggleTheme={handleToggleTheme}
+        onReplayIntro={handleReplayIntro}
       />
 
       {/* Main App Canvas */}
@@ -95,11 +122,11 @@ function AppContent() {
           activeTab={activeTab}
           isDark={isDark}
           onToggleTheme={handleToggleTheme}
-          onSearchClick={() => handleTabChange('explore')}
           onBack={handleBack}
           showBack={activeTab === 'analysis'}
           onOpenAdvisor={() => setIsAdvisorOpen(true)}
         />
+
 
         {/* Unified Main Content Container */}
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-24 lg:pb-12">

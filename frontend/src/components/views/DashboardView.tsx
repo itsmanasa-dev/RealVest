@@ -46,35 +46,35 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   return (
     <div className="space-y-6 pb-4">
       <SectionHeader
-        eyebrow="Overview"
-        title={`Namaste, Investor.`}
-        subtitle={`${properties.length} verified Bengaluru opportunities monitored right now.`}
+        eyebrow={t.portfolio_overview}
+        title={t.greeting_investor}
+        subtitle={`${properties.length} ${t.active_assets} · Bengaluru`}
       />
 
       {/* Portfolio / investment overview */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <Stat
-          label="Portfolio Value"
+          label={t.portfolio_value}
           value="₹4.32 Cr"
-          hint={<span className="flex items-center gap-1 text-pos font-medium"><TrendingUp size={13} /> +14.2% overall</span>}
+          hint={<span className="flex items-center gap-1 text-pos font-medium"><TrendingUp size={13} /> +14.2%</span>}
           icon={Wallet}
           iconTone="brand"
         />
         <Stat
-          label="Active Opportunities"
+          label={t.active_assets}
           value={properties.length}
-          hint="Monitored assets"
+          hint={t.system_live_data}
           icon={Compass}
         />
         <Stat
-          label="Avg Rental Yield"
+          label={t.avg_yield}
           value={formatPercent(avgYield)}
-          hint="Across monitored assets"
+          hint="Bengaluru median"
           icon={TrendingUp}
           iconTone="pos"
         />
         <Stat
-          label="Best Value Gap"
+          label={t.est_value}
           value={bestDeal ? formatInrLakhs(bestDeal.fairValueLakhs - bestDeal.askingPriceLakhs) : '—'}
           hint={bestDeal ? `${bestDeal.title}` : undefined}
           icon={Scale}
@@ -89,10 +89,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <Brain size={22} />
           </span>
           <div className="min-w-0">
-            <Badge tone="brand" className="mb-1.5">Advisor Insight</Badge>
+            <Badge tone="brand" className="mb-1.5">{t.ai_pulse_title}</Badge>
             <p className="text-sm text-ink-2 leading-relaxed">
-              Bengaluru IT corridors (Whitefield & Outer Ring Road) show strong rental demand
-              with ~7.4% average yield and +14.2% capital upside potential this year.
+              {t.ai_pulse_desc}
             </p>
           </div>
         </div>
@@ -109,10 +108,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Quick actions */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: 'Explore Properties', desc: `${properties.length} active listings`, action: () => onNavigate('explore'), icon: Compass },
-          { label: 'Asset Analysis', desc: 'Valuation & comparison', action: () => onNavigate('analysis'), icon: Scale },
-          { label: 'Simulate', desc: 'EMI & cash flow', action: () => onNavigate('simulator'), icon: Sliders },
-          { label: 'AI Advisor', desc: 'Contextual assistant', action: onOpenAdvisor ? onOpenAdvisor : () => onNavigate('analysis'), icon: Brain },
+          { label: t.nav_explore, desc: `${properties.length} ${t.active_assets}`, action: () => onNavigate('explore'), icon: Compass },
+          { label: t.nav_analysis, desc: t.decision_rationale, action: () => onNavigate('analysis'), icon: Scale },
+          { label: t.nav_simulator, desc: t.simulator_subtitle, action: () => onNavigate('simulator'), icon: Sliders },
+          { label: t.nav_advisor, desc: t.advisor_subtitle, action: onOpenAdvisor ? onOpenAdvisor : () => onNavigate('analysis'), icon: Brain },
         ].map((a, idx) => {
           const Icon = a.icon;
           return (
@@ -124,32 +123,31 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <span className="w-9 h-9 rounded-lg bg-brand-soft text-brand flex items-center justify-center group-hover:bg-brand group-hover:text-white transition-colors">
                 <Icon size={18} />
               </span>
-              <span>
-                <span className="block text-sm font-semibold text-ink">{a.label}</span>
-                <span className="block text-xs text-ink-3 mt-0.5">{a.desc}</span>
+              <span className="min-w-0">
+                <span className="block text-sm font-semibold text-ink truncate">{a.label}</span>
+                <span className="block text-xs text-ink-3 mt-0.5 truncate">{a.desc}</span>
               </span>
             </button>
           );
         })}
       </div>
 
-
       {/* Recommended opportunities */}
       <div>
         <div className="flex items-center justify-between mb-3">
           <div>
             <h2 className="text-base font-semibold text-ink tracking-tight">
-              Recommended opportunities
+              {t.recent_analysis}
             </h2>
             <p className="text-xs text-ink-3 mt-0.5">
-              Highest risk-adjusted return across monitored assets
+              {t.highest_roi_desc}
             </p>
           </div>
           <button
             onClick={() => onNavigate('explore')}
             className="text-sm font-medium text-brand hover:underline flex items-center gap-1 cursor-pointer"
           >
-            View all <ArrowRight size={14} />
+            {t.view_all} <ArrowRight size={14} />
           </button>
         </div>
 
@@ -159,11 +157,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               key={prop.id}
               property={prop}
               onSelect={onSelectProperty}
-              badge={{ label: idx === 0 ? 'Top pick' : idx === 1 ? 'Strong' : 'Featured', tone: idx === 0 ? 'brand' : 'neutral' }}
+              badge={{ label: idx === 0 ? t.realvest_top_pick : idx === 1 ? t.match_badge : 'Featured', tone: idx === 0 ? 'brand' : 'neutral' }}
             />
           ))}
         </div>
       </div>
     </div>
   );
+
 };

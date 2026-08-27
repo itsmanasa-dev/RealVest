@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Sun, Moon, ArrowLeft, Globe, Home, Check, Brain } from 'lucide-react';
+import { Sun, Moon, ArrowLeft, Globe, Home, Check, Brain } from 'lucide-react';
 import type { NavTab } from '../../types';
 import { useTranslation } from '../../context/LanguageContext';
 import type { Language } from '../../i18n/translations';
@@ -9,7 +9,6 @@ interface HeaderProps {
   activeTab: NavTab;
   isDark: boolean;
   onToggleTheme: () => void;
-  onSearchClick?: () => void;
   onBack?: () => void;
   showBack?: boolean;
   onOpenAdvisor?: () => void;
@@ -25,11 +24,11 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
   isDark,
   onToggleTheme,
-  onSearchClick,
   onBack,
   showBack,
   onOpenAdvisor,
 }) => {
+
   const { language, setLanguage, t } = useTranslation();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -78,65 +77,32 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="hidden md:block min-w-0">
             <span className="text-sm font-semibold text-ink tracking-tight">{pageTitle}</span>
           </div>
-
-          {/* Desktop search */}
-          {!showBack && (
-            <button
-              onClick={onSearchClick}
-              className="ml-2 hidden md:flex items-center gap-2.5 px-4 py-2 rounded-md bg-surface border border-line text-ink-3 text-sm w-64 lg:w-80 text-left hover:border-line-strong hover:text-ink-2 transition-colors"
-            >
-              <Search size={15} className="shrink-0" />
-              <span className="truncate">{t.search_placeholder}</span>
-            </button>
-          )}
         </div>
 
         {/* Right actions */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          {/* Mobile search icon */}
-          {!showBack && (
-            <button
-              onClick={onSearchClick}
-              className="md:hidden w-9 h-9 rounded-md bg-surface border border-line text-ink-2 flex items-center justify-center cursor-pointer"
-              aria-label="Search"
-            >
-              <Search size={16} />
-            </button>
-          )}
-
-          {/* Language switcher */}
-          <div className="relative" ref={menuRef}>
-            <button
-              onClick={() => setOpen(!open)}
-              className="w-9 h-9 rounded-md bg-surface border border-line text-ink-2 hover:text-ink flex items-center justify-center cursor-pointer"
-              aria-label="Change language"
-              aria-expanded={open}
-            >
-              <Globe size={16} />
-            </button>
-            {open && (
-              <div className="absolute right-0 mt-1.5 w-44 rv-card p-1.5 shadow-pop z-50 rv-fade-in">
-                {LANGUAGES.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => {
-                      setLanguage(lang.code);
-                      setOpen(false);
-                    }}
-                    className={clsx(
-                      'w-full flex items-center justify-between px-3 py-2 rounded-md text-sm cursor-pointer',
-                      language === lang.code
-                        ? 'bg-brand-soft text-brand font-semibold'
-                        : 'text-ink-2 hover:bg-surface-soft'
-                    )}
-                  >
-                    <span>{lang.label}</span>
-                    {language === lang.code && <Check size={14} />}
-                  </button>
-                ))}
-              </div>
-            )}
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Quick Language Segmented Switcher (EN | HI | KN) */}
+          <div className="flex items-center p-0.5 rounded-lg bg-surface border border-line shadow-xs">
+            {LANGUAGES.map((lang) => {
+              const isSelected = language === lang.code;
+              return (
+                <button
+                  key={lang.code}
+                  onClick={() => setLanguage(lang.code)}
+                  className={clsx(
+                    'px-2.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer select-none',
+                    isSelected
+                      ? 'bg-brand text-white shadow-xs'
+                      : 'text-ink-3 hover:text-ink hover:bg-surface-soft'
+                  )}
+                  title={`Switch to ${lang.label}`}
+                >
+                  {lang.code.toUpperCase()}
+                </button>
+              );
+            })}
           </div>
+
 
           {/* Theme toggle */}
           <button
