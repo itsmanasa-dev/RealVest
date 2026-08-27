@@ -193,7 +193,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
 
       const reasoning = backendComparison?.reasoning || [
         `Top pick '${bestProperty?.title}' delivered ${bestProperty?.annualYield}% annual yield.`,
-        `ML fair value benchmark of ₹${bestProperty?.fairValueLakhs} L with ${bestProperty?.confidenceScore}% confidence.`,
+        `Estimated fair value of ₹${bestProperty?.fairValueLakhs} L with ${bestProperty?.confidenceScore}% confidence.`,
         `Directly aligns with ${goal} goal under a ${holdingPeriod} holding period.`,
       ];
 
@@ -207,10 +207,10 @@ export const CompareView: React.FC<CompareViewProps> = ({
         reasoning,
       });
 
-      setSaveSuccessMsg('Comparison successfully saved to MySQL database!');
+      setSaveSuccessMsg('Comparison saved successfully.');
       setTimeout(() => setSaveSuccessMsg(null), 5000);
     } catch (err: any) {
-      setErrorMessage(`Failed to save comparison: ${err.message}`);
+      setErrorMessage('Couldn\'t save this comparison. Please try again.');
       setTimeout(() => setErrorMessage(null), 4000);
     } finally {
       setIsSaving(false);
@@ -224,7 +224,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-mono text-[10px] font-bold border border-emerald-500/30">
-              FASTAPI + MYSQL CONNECTED
+              LIVE ANALYSIS
             </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
@@ -423,7 +423,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
               2. Side-by-Side Investment Metrics Comparison
             </h3>
           </div>
-          <span className="text-xs font-mono text-slate-400">FastAPI ML Evaluation</span>
+          <span className="text-xs font-mono text-slate-400">Investment Analysis</span>
         </div>
 
         <div className="overflow-x-auto">
@@ -448,7 +448,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
                 ))}
               </tr>
               <tr>
-                <td className="p-3.5 text-slate-500 dark:text-slate-400 font-medium">ML Fair Value</td>
+                <td className="p-3.5 text-slate-500 dark:text-slate-400 font-medium">Estimated Value</td>
                 {selectedProps.map((p) => (
                   <td key={p.id} className="p-3.5 font-extrabold text-emerald-600 dark:text-emerald-400">
                     {formatInrLakhs(p.fairValueLakhs)}
@@ -527,7 +527,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
                 {bestProperty.title}
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-300">
-                Top risk-adjusted return ({bestProperty.annualYield}% rental yield, ₹{bestProperty.fairValueLakhs} L ML fair value).
+                Top risk-adjusted return ({bestProperty.annualYield}% rental yield, estimated value ₹{bestProperty.fairValueLakhs} L).
               </p>
             </div>
           </div>
@@ -539,7 +539,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
               className="flex-1 md:flex-none px-4 py-2.5 rounded-2xl bg-white dark:bg-[#172033] border border-slate-200 dark:border-[#273449] text-slate-800 dark:text-slate-200 font-extrabold text-xs hover:border-emerald-500 transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
             >
               <Bookmark size={14} className="text-emerald-500" />
-              <span>{isSaving ? 'Saving to MySQL...' : 'SAVE COMPARISON'}</span>
+              <span>{isSaving ? 'Saving...' : 'Save Comparison'}</span>
             </button>
 
             <button

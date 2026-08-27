@@ -219,10 +219,10 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
               <div className="flex items-center gap-1.5">
                 <Building size={15} className="text-blue-600 dark:text-blue-400" />
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
-                  ML Value Drivers (Factor Decomposition)
+                  Value Drivers
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">Additive Linearized Shapley</span>
+              <span className="text-[10px] font-mono text-slate-400">Factor Analysis</span>
             </div>
 
             <div className="space-y-2 text-xs font-mono">
@@ -243,7 +243,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
                 <span className="text-emerald-600 dark:text-emerald-400 font-medium">+₹{readyDeltaLakhs} L</span>
               </div>
               <div className="pt-2 border-t border-slate-100 dark:border-[#273449] flex items-center justify-between text-xs font-semibold">
-                <span className="text-slate-900 dark:text-white">ML Model Fair Value</span>
+                <span className="text-slate-900 dark:text-white">Estimated Fair Value</span>
                 <span className="text-blue-600 dark:text-blue-400">₹{property.fairValueLakhs.toFixed(1)} Lakhs</span>
               </div>
             </div>

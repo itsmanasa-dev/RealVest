@@ -192,9 +192,9 @@ export function queryAdvisor(query: string, allProperties: Property[] = mockProp
   const top = filtered.sort((a, b) => b.investmentScore - a.investmentScore).slice(0, 3);
   const best = top[0];
 
-  const answer = `Based on RealVest ML models and Bengaluru dataset records:\n\n` +
+  const answer = `Based on RealVest property valuation and Bengaluru market analysis:\n\n` +
     `• **Top Match**: ${best.title} (${best.code})\n` +
-    `• **Valuation Deal**: Asking ₹${best.askingPriceLakhs.toFixed(1)} L vs ML Fair Value of ₹${best.fairValueLakhs.toFixed(1)} L (${best.dealStatus})\n` +
+    `• **Valuation Deal**: Asking ₹${best.askingPriceLakhs.toFixed(1)} L vs Estimated Value of ₹${best.fairValueLakhs.toFixed(1)} L (${best.dealStatus})\n` +
     `• **Rental Cash Flow**: ₹${best.monthlyRent.toLocaleString()}/mo with a ${best.annualYield}% annual yield\n` +
     `• **Verdict**: ${best.recommendation} (${best.confidenceScore}% Confidence) — Investment Score: ${best.investmentScore}/100\n` +
     `• **Key Driver**: ${best.reasons[0] || 'Strong micro-market transaction liquidity.'}`;

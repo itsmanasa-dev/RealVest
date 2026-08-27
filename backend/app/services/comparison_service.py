@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
 from sqlalchemy.orm import Session
 from backend.app.models.comparison import ComparisonModel
@@ -164,7 +164,7 @@ class ComparisonService:
         model = ComparisonModel(
             id=cmp_id,
             title=title,
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(timezone.utc),
             criteria=req.criteria,
             selected_property_ids=req.selected_property_ids,
             comparison_results=req.comparison_results,

@@ -156,7 +156,7 @@ export const decisionEngineService = {
       const reasons = [
         `Optimal budget fit: Asking ₹${p.askingPriceLakhs} L against your ₹${budgetLakhs} L allocation.`,
         p.dealDiffPct < 0
-          ? `ML Fair Value of ₹${p.fairValueLakhs} L offers an immediate ${Math.abs(p.dealDiffPct)}% valuation discount buffer.`
+          ? `Estimated Value of ₹${p.fairValueLakhs} L offers an immediate ${Math.abs(p.dealDiffPct)}% valuation discount buffer.`
           : `High transaction volume in ${p.location} provides sustained liquidity.`,
         `Projected annual rental yield of ${p.annualYield}% exceeds the 3.8% Bengaluru metropolitan median.`,
         `Aligns with your ${goal} objective over a ${horizon} investment horizon.`,

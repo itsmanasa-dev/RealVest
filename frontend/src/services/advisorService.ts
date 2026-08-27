@@ -73,16 +73,16 @@ export const advisorService = {
         `• **निर्णय**: ${best.recommendation} (${best.confidenceScore}% विश्वास स्कोर) — स्कोर: ${best.investmentScore}/100\n` +
         `• **मुख्य चालक**: ${best.reasons[0] || 'मजबूत माइक्रो-मार्केट लिक्विडिटी।'}`;
     } else if (language === 'kn') {
-      answer = `ಬೆಂಗಳೂರು ರಿಯಲ್ ಎಸ್ಟೇಟ್ ಡೇಟಾ ಮತ್ತು ಎಂಎಲ್ ಮಾದರಿಗಳ ಆಧಾರದ ಮೇಲೆ:\n\n` +
+      answer = `ಬೆಂಗಳೂರು ರಿಯಲ್ ಎಸ್ಟೇಟ್ ಡೇಟಾ ಮತ್ತು ವಿಶ್ಲೇಷಣೆಯ ಆಧಾರದ ಮೇಲೆ:\n\n` +
         `• **ಅತ್ಯುತ್ತಮ ಹೊಂದಾಣಿಕೆ**: ${best.title} (${best.code})\n` +
-        `• **ಬೆಲೆ ವಿಶ್ಲೇಷಣೆ**: ಕೇಳಲಾದ ಬೆಲೆ ₹${best.askingPriceLakhs.toFixed(1)} ಲಕ್ಷ vs ನ್ಯಾಯಯುತ ಬೆಲೆ ₹${best.fairValueLakhs.toFixed(1)} ಲಕ್ಷ (${best.dealStatus})\n` +
+        `• **ಬೆಲೆ ವಿಶ್ಲೇಷಣೆ**: ಕೇಳಲಾದ ಬೆಲೆ ₹${best.askingPriceLakhs.toFixed(1)} ಲಕ್ಷ vs ಅಂದಾಜು ನ್ಯಾಯಯುತ ಬೆಲೆ ₹${best.fairValueLakhs.toFixed(1)} ಲಕ್ಷ (${best.dealStatus})\n` +
         `• **ಬಾಡಿಗೆ ಆದಾಯ**: ₹${best.monthlyRent.toLocaleString('en-IN')}/ತಿಂಗಳು (${best.annualYield}% ವಾರ್ಷಿಕ ಇಳುವರಿ)\n` +
         `• **ತೀರ್ಪು**: ${best.recommendation} (${best.confidenceScore}% ವಿಶ್ವಾಸಾರ್ಹತೆ) — ಹೂಡಿಕೆ ಸ್ಕೋರ್: ${best.investmentScore}/100\n` +
         `• **ಮುಖ್ಯ ಅಂಶ**: ${best.reasons[0] || 'ಬಲವಾದ ಮಾರುಕಟ್ಟೆ ಬೇಡಿಕೆ ಮತ್ತು ಮೂಲಸೌಕರ್ಯ.'}`;
     } else {
-      answer = `Based on RealVest ML valuation models and Bengaluru dataset records:\n\n` +
+      answer = `Based on RealVest property valuation and Bengaluru market analysis:\n\n` +
         `• **Top Match**: ${best.title} (${best.code})\n` +
-        `• **Valuation Deal**: Asking ₹${best.askingPriceLakhs.toFixed(1)} L vs ML Fair Value of ₹${best.fairValueLakhs.toFixed(1)} L (${best.dealStatus})\n` +
+        `• **Valuation Deal**: Asking ₹${best.askingPriceLakhs.toFixed(1)} L vs Estimated Value of ₹${best.fairValueLakhs.toFixed(1)} L (${best.dealStatus})\n` +
         `• **Rental Cash Flow**: ₹${best.monthlyRent.toLocaleString('en-IN')}/mo with a ${best.annualYield}% annual yield\n` +
         `• **Verdict**: ${best.recommendation} (${best.confidenceScore}% Confidence) — Investment Score: ${best.investmentScore}/100\n` +
         `• **Key Driver**: ${best.reasons[0] || 'Strong micro-market transaction liquidity.'}`;

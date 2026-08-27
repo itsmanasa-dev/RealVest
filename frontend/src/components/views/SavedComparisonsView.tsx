@@ -46,7 +46,7 @@ export const SavedComparisonsView: React.FC<SavedComparisonsViewProps> = ({
       setComparisons(list || []);
     } catch (err: any) {
       console.warn('Could not fetch saved comparisons from backend:', err.message);
-      setErrorMsg('RealVest backend is connecting. Retrying database fetch...');
+      setErrorMsg('Couldn\'t load your saved comparisons. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +61,7 @@ export const SavedComparisonsView: React.FC<SavedComparisonsViewProps> = ({
       const detail = await comparisonApi.getSavedComparison(id);
       setSelectedDetail(detail);
     } catch (err: any) {
-      setErrorMsg(`Could not load comparison detail: ${err.message}`);
+      setErrorMsg('Couldn\'t open this comparison. Please try again.');
     }
   };
 
@@ -75,7 +75,7 @@ export const SavedComparisonsView: React.FC<SavedComparisonsViewProps> = ({
         setSelectedDetail(null);
       }
     } catch (err: any) {
-      alert(`Delete failed: ${err.message}`);
+      setErrorMsg('Couldn\'t delete this comparison. Please try again.');
     } finally {
       setIsDeleting(null);
     }
@@ -88,14 +88,14 @@ export const SavedComparisonsView: React.FC<SavedComparisonsViewProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-mono text-[10px] font-bold border border-emerald-500/30">
-              MYSQL PERSISTENCE
+              SAVED
             </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
             Saved Property Comparisons
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Persistent comparison scenarios saved to your RealVest MySQL database
+            Your saved investment comparisons
           </p>
         </div>
 
@@ -203,7 +203,7 @@ export const SavedComparisonsView: React.FC<SavedComparisonsViewProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {isLoading ? (
             <div className="col-span-full p-12 text-center text-xs font-mono text-slate-400">
-              Loading saved comparisons from MySQL...
+              Loading saved comparisons...
             </div>
           ) : comparisons.length === 0 ? (
             <div className="col-span-full p-12 text-center rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] space-y-3">
@@ -212,7 +212,7 @@ export const SavedComparisonsView: React.FC<SavedComparisonsViewProps> = ({
                 No Saved Comparisons Yet
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-                Compare properties in the Compare tab and click "Save Comparison" to persist your scenarios in MySQL.
+               Compare properties in the Compare tab and click "Save Comparison" to save your investment scenarios.
               </p>
               <button
                 onClick={() => onNavigate('compare')}
