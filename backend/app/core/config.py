@@ -20,9 +20,10 @@ class Settings:
         "mysql+pymysql://root:password@localhost:3306/realvest"
     )
     
-    # Official xAI Grok API Configuration
-    XAI_API_KEY: str = os.getenv("XAI_API_KEY", "")
-    GROK_MODEL: str = os.getenv("GROK_MODEL", "grok-4.6")
+    # Official Google Gemini API Configuration
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.7-flash")
+
 
     
     # Configurable CORS Origins for Vercel and local development
