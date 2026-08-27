@@ -3,30 +3,68 @@ import {
   Sliders,
   RotateCcw,
   Lightbulb,
-  Save,
-  ArrowRight,
-  TrendingUp,
   Wallet,
   Calendar,
-  DollarSign,
-  Building,
+  TrendingUp,
   CheckCircle2,
   AlertTriangle,
   Info,
-  ShieldCheck,
 } from 'lucide-react';
 import { useTranslation } from '../../context/LanguageContext';
-import { formatInrLakhs, formatInrRent } from '../../utils/currency';
+import { formatInrLakhs } from '../../utils/currency';
 import { simulatorService } from '../../services/simulatorService';
+import { SectionHeader } from '../ui/SectionHeader';
+import { Button } from '../ui/Button';
+import { Card } from '../ui/Card';
+import { Badge, recommendationTone } from '../ui/Badge';
+import { Stat } from '../ui/Stat';
+import { clsx } from 'clsx';
 
 interface SimulatorViewProps {
   onBack?: () => void;
 }
 
+function SliderField({
+  label,
+  valueLabel,
+  min,
+  max,
+  step,
+  value,
+  onChange,
+}: {
+  label: string;
+  valueLabel: React.ReactNode;
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  onChange: (v: number) => void;
+}) {
+  const pct = ((value - min) / (max - min)) * 100;
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between items-center text-sm">
+        <span className="font-medium text-ink-2">{label}</span>
+        <span className="font-semibold text-ink">{valueLabel}</span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        style={{ ['--range' as string]: `${pct}%` }}
+        aria-label={label}
+      />
+    </div>
+  );
+}
+
 export const SimulatorView: React.FC<SimulatorViewProps> = () => {
   const { t } = useTranslation();
 
-  // Scenario Variables in INR
   const [purchasePriceLakhs, setPurchasePriceLakhs] = useState<number>(75);
   const [downPaymentPct, setDownPaymentPct] = useState<number>(20);
   const [interestRate, setInterestRate] = useState<number>(8.5);
@@ -34,13 +72,11 @@ export const SimulatorView: React.FC<SimulatorViewProps> = () => {
   const [holdingPeriod, setHoldingPeriod] = useState<number>(5);
   const [saveToast, setSaveToast] = useState<string | null>(null);
 
-  // Computed Values
   const purchaseInr = purchasePriceLakhs * 100000;
   const downPaymentInr = purchaseInr * (downPaymentPct / 100);
   const loanAmountInr = purchaseInr - downPaymentInr;
-  const estStampDutyRegInr = purchaseInr * 0.066; // 6.6% Karnataka Stamp Duty + Registration
+  const estStampDutyRegInr = purchaseInr * 0.066;
   const totalUpfrontNeededInr = downPaymentInr + estStampDutyRegInr;
-
   const monthlyRent = Math.round((purchaseInr * (targetYield / 100)) / 12);
 
   const result = simulatorService.calculateScenario({
@@ -78,400 +114,217 @@ export const SimulatorView: React.FC<SimulatorViewProps> = () => {
     setTimeout(() => setSaveToast(null), 4000);
   };
 
+  const presets = [
+    { label: '₹45L Starter', price: 45, down: 20, rate: 8.5, y: 6.0 },
+    { label: '₹75L Standard', price: 75, down: 20, rate: 8.5, y: 5.5 },
+    { label: '₹1.3Cr Premium', price: 130, down: 25, rate: 8.5, y: 5.0 },
+    { label: '₹2.5Cr Luxury', price: 250, down: 30, rate: 8.5, y: 4.5 },
+  ];
+
+  const growthPoints = [
+    { label: 'Now', value: purchasePriceLakhs, highlight: false },
+    { label: '1 yr', value: result.projected2025ValLakhs, highlight: false },
+    { label: '2 yr', value: result.projected2026ValLakhs, highlight: false },
+    { label: `${holdingPeriod} yr`, value: result.projectedFutureValLakhs, highlight: true },
+  ];
+  const maxVal = Math.max(...growthPoints.map((p) => p.value));
+
   return (
-    <div className="space-y-6 pb-12 w-full max-w-6xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-[#273449]">
-        <div>
+    <div className="space-y-6 pb-4">
+      <SectionHeader
+        eyebrow="Simulator"
+        title="Investment & cash flow simulator"
+        subtitle="Adjust the sliders to project EMI, rental income, upfront costs and returns."
+        action={
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-mono text-[10px] font-bold border border-emerald-500/30">
-              FINANCIAL SIMULATOR
-            </span>
+            <Button variant="secondary" onClick={handleReset}><RotateCcw size={15} /> Reset</Button>
+            <Button onClick={handleSave}>Save Scenario</Button>
           </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
-            Investment & Cash Flow Simulator
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Adjust the sliders below to see your monthly EMI, rental income, upfront costs, and 5-year profit in plain numbers.
-          </p>
-        </div>
+        }
+      />
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          <button
-            onClick={handleReset}
-            className="px-3.5 py-2 rounded-2xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#172033] text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
-          >
-            <RotateCcw size={13} /> Reset
-          </button>
-          <button
-            onClick={handleSave}
-            className="px-4 py-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm shadow-emerald-600/20 cursor-pointer"
-          >
-            <Save size={13} /> Save Scenario
-          </button>
-        </div>
-      </div>
-
-      {/* Toast Alert */}
       {saveToast && (
-        <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-medium flex items-center gap-2 animate-fadeIn">
-          <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
-          <span>{saveToast}</span>
+        <div className="p-3 rounded-lg bg-pos-soft text-pos text-sm flex items-center gap-2 rv-fade-in">
+          <CheckCircle2 size={16} className="shrink-0" /> {saveToast}
         </div>
       )}
 
-      {/* Quick Preset Buttons */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-        <span className="text-[11px] font-mono text-slate-400 uppercase shrink-0">Quick Presets:</span>
-        <button
-          onClick={() => handlePreset(45, 20, 8.5, 6.0)}
-          className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border ${
-            purchasePriceLakhs === 45
-              ? 'bg-emerald-600 text-white border-emerald-600'
-              : 'bg-white dark:bg-[#111827] border-slate-200 dark:border-[#273449] text-slate-700 dark:text-slate-300 hover:border-emerald-500'
-          }`}
-        >
-          ₹45L Starter 1/2 BHK
-        </button>
-        <button
-          onClick={() => handlePreset(75, 20, 8.5, 5.5)}
-          className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border ${
-            purchasePriceLakhs === 75
-              ? 'bg-emerald-600 text-white border-emerald-600'
-              : 'bg-white dark:bg-[#111827] border-slate-200 dark:border-[#273449] text-slate-700 dark:text-slate-300 hover:border-emerald-500'
-          }`}
-        >
-          ₹75L Standard 2 BHK
-        </button>
-        <button
-          onClick={() => handlePreset(130, 25, 8.5, 5.0)}
-          className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border ${
-            purchasePriceLakhs === 130
-              ? 'bg-emerald-600 text-white border-emerald-600'
-              : 'bg-white dark:bg-[#111827] border-slate-200 dark:border-[#273449] text-slate-700 dark:text-slate-300 hover:border-emerald-500'
-          }`}
-        >
-          ₹1.3 Cr Premium 3 BHK
-        </button>
-        <button
-          onClick={() => handlePreset(250, 30, 8.5, 4.5)}
-          className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border ${
-            purchasePriceLakhs === 250
-              ? 'bg-emerald-600 text-white border-emerald-600'
-              : 'bg-white dark:bg-[#111827] border-slate-200 dark:border-[#273449] text-slate-700 dark:text-slate-300 hover:border-emerald-500'
-          }`}
-        >
-          ₹2.5 Cr Luxury Villa
-        </button>
+      {/* Presets */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+        <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-3 shrink-0">Presets</span>
+        {presets.map((p) => {
+          const active = purchasePriceLakhs === p.price;
+          return (
+            <button
+              key={p.label}
+              onClick={() => handlePreset(p.price, p.down, p.rate, p.y)}
+              className={clsx(
+                'px-3.5 py-1.5 rounded-full text-xs font-medium border whitespace-nowrap cursor-pointer transition-colors',
+                active ? 'bg-brand text-white border-brand' : 'bg-surface border-line text-ink-2 hover:border-line-strong'
+              )}
+            >
+              {p.label}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Main 2-Column Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Easy Inputs (5 Cols) */}
-        <div className="lg:col-span-5 space-y-4">
-          <div className="p-5 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#273449]">
-              <div className="flex items-center gap-2">
-                <Sliders size={16} className="text-emerald-500" />
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                  1. Your Property Assumptions
-                </h3>
-              </div>
-              <span className="text-[10px] font-mono text-slate-400">Live Calculated</span>
-            </div>
-
-            {/* Input 1: Property Price */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-700 dark:text-slate-300">Property Asking Price</span>
-                <span className="text-base font-extrabold font-mono text-emerald-600 dark:text-emerald-400">
-                  {formatInrLakhs(purchasePriceLakhs)}
-                </span>
-              </div>
-              <input
-                type="range"
-                min={20}
-                max={300}
-                step={2.5}
-                value={purchasePriceLakhs}
-                onChange={(e) => setPurchasePriceLakhs(Number(e.target.value))}
-                className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-[#172033] rounded-lg"
-              />
-              <div className="flex justify-between text-[10px] font-mono text-slate-400">
-                <span>₹20 Lakhs</span>
-                <span>₹1.5 Crore</span>
-                <span>₹3.0 Crore</span>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* Inputs */}
+        <div className="lg:col-span-5">
+          <Card className="sticky top-24 space-y-5">
+            <div className="flex items-center gap-2 pb-3 border-b border-line">
+              <span className="w-8 h-8 rounded-lg bg-brand-soft text-brand flex items-center justify-center"><Sliders size={16} /></span>
+              <div>
+                <h3 className="text-sm font-semibold text-ink">Your assumptions</h3>
+                <p className="text-xs text-ink-3">Live-calculated</p>
               </div>
             </div>
 
-            {/* Input 2: Down Payment */}
-            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-[#273449]/80">
-              <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-700 dark:text-slate-300">Down Payment ({downPaymentPct}%)</span>
-                <span className="text-sm font-bold font-mono text-slate-900 dark:text-white">
-                  ₹{(downPaymentInr / 100000).toFixed(1)} Lakhs
-                </span>
-              </div>
-              <input
-                type="range"
-                min={10}
-                max={50}
-                step={5}
-                value={downPaymentPct}
-                onChange={(e) => setDownPaymentPct(Number(e.target.value))}
-                className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-[#172033] rounded-lg"
-              />
-              <div className="flex justify-between text-[10px] font-mono text-slate-400">
-                <span>10% (Min)</span>
-                <span>20% (Standard)</span>
-                <span>50% (High Equity)</span>
-              </div>
-              <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-[#172033] p-2 rounded-xl border border-slate-200 dark:border-[#273449]">
-                Loan Principal Needed: <strong className="text-slate-900 dark:text-white">₹{(loanAmountInr / 100000).toFixed(1)} Lakhs</strong> ({(100 - downPaymentPct)}%)
-              </div>
+            <SliderField
+              label="Property price"
+              valueLabel={<span className="text-pos">{formatInrLakhs(purchasePriceLakhs)}</span>}
+              min={20} max={300} step={2.5} value={purchasePriceLakhs}
+              onChange={setPurchasePriceLakhs}
+            />
+
+            <SliderField
+              label={`Down payment (${downPaymentPct}%)`}
+              valueLabel={`₹${(downPaymentInr / 100000).toFixed(1)}L`}
+              min={10} max={50} step={5} value={downPaymentPct}
+              onChange={setDownPaymentPct}
+            />
+
+            <div className="text-[11px] text-ink-3 -mt-2">
+              Loan principal: <span className="font-semibold text-ink">₹{(loanAmountInr / 100000).toFixed(1)}L</span> ({(100 - downPaymentPct)}%)
             </div>
 
-            {/* Input 3: Home Loan Interest Rate */}
-            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-[#273449]/80">
-              <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-700 dark:text-slate-300">Loan Interest Rate (20 Years)</span>
-                <span className="text-sm font-bold font-mono text-blue-600 dark:text-blue-400">
-                  {interestRate}% p.a.
-                </span>
-              </div>
-              <input
-                type="range"
-                min={7.0}
-                max={12.0}
-                step={0.25}
-                value={interestRate}
-                onChange={(e) => setInterestRate(Number(e.target.value))}
-                className="w-full accent-blue-500 cursor-pointer h-2 bg-slate-200 dark:bg-[#172033] rounded-lg"
-              />
-              <div className="flex justify-between text-[10px] font-mono text-slate-400">
-                <span>7.5% (Prime)</span>
-                <span>8.5% (Current SBI/HDFC)</span>
-                <span>11.0%</span>
-              </div>
-            </div>
+            <SliderField
+              label="Loan interest (20 yr)"
+              valueLabel={`${interestRate}% p.a.`}
+              min={7} max={12} step={0.25} value={interestRate}
+              onChange={setInterestRate}
+            />
 
-            {/* Input 4: Target Rental Yield */}
-            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-[#273449]/80">
-              <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-700 dark:text-slate-300">Expected Rental Yield</span>
-                <span className="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
-                  {targetYield}% (₹{monthlyRent.toLocaleString('en-IN')}/mo)
-                </span>
-              </div>
-              <input
-                type="range"
-                min={3.0}
-                max={10.0}
-                step={0.25}
-                value={targetYield}
-                onChange={(e) => setTargetYield(Number(e.target.value))}
-                className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-[#172033] rounded-lg"
-              />
-              <div className="flex justify-between text-[10px] font-mono text-slate-400">
-                <span>3.5% (City Min)</span>
-                <span>5.5% (Bengaluru IT Corridor)</span>
-                <span>8.0%+</span>
-              </div>
-            </div>
+            <SliderField
+              label="Rental yield"
+              valueLabel={<span className="text-pos">{targetYield}% (₹{monthlyRent.toLocaleString('en-IN')}/mo)</span>}
+              min={3} max={10} step={0.25} value={targetYield}
+              onChange={setTargetYield}
+            />
 
-            {/* Input 5: Holding Period */}
-            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-[#273449]/80">
-              <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-700 dark:text-slate-300">Investment Holding Period</span>
-                <span className="text-sm font-bold font-mono text-slate-900 dark:text-white">
-                  {holdingPeriod} Years
-                </span>
-              </div>
-              <input
-                type="range"
-                min={1}
-                max={10}
-                step={1}
-                value={holdingPeriod}
-                onChange={(e) => setHoldingPeriod(Number(e.target.value))}
-                className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-[#172033] rounded-lg"
-              />
-              <div className="flex justify-between text-[10px] font-mono text-slate-400">
-                <span>1 Year</span>
-                <span>5 Years (Recommended)</span>
-                <span>10 Years</span>
-              </div>
-            </div>
-          </div>
+            <SliderField
+              label="Holding period"
+              valueLabel={`${holdingPeriod} yr`}
+              min={1} max={10} step={1} value={holdingPeriod}
+              onChange={setHoldingPeriod}
+            />
+          </Card>
         </div>
 
-        {/* Right Column: Clear, Visual Results (7 Cols) */}
+        {/* Results */}
         <div className="lg:col-span-7 space-y-4">
-          {/* Hero Verdict Card */}
-          <div className="p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm relative overflow-hidden">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-[#273449]">
+          {/* Hero verdict */}
+          <Card>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-line">
               <div>
-                <span className="text-[10px] font-mono font-bold uppercase text-slate-400">
-                  Projected 5-Year Investment Outcome
-                </span>
-                <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-0.5">
-                  +₹{(result.totalProfitInr / 100000).toFixed(1)} Lakhs
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-3">Projected outcome</p>
+                <div className="mt-1 text-3xl font-semibold tracking-tight text-ink">
+                  +₹{(result.totalProfitInr / 100000).toFixed(1)}L
                 </div>
-                <div className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1 mt-1">
-                  <TrendingUp size={14} /> +{result.totalRoiPct}% Total ROI ({result.annualizedRoiPct}% per year)
+                <div className="mt-1 flex items-center gap-1 text-sm text-pos font-medium">
+                  <TrendingUp size={14} /> +{result.totalRoiPct}% total ROI · {result.annualizedRoiPct}% / yr
                 </div>
               </div>
-
-              {/* Verdict Pill */}
-              <div className="flex flex-col items-start sm:items-end">
-                <span className="text-[10px] font-mono text-slate-400 uppercase">Decision Verdict</span>
-                <span className={`px-4 py-1.5 rounded-2xl text-xs font-extrabold tracking-wider mt-1 ${
-                  result.decision === 'BUY'
-                    ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/30'
-                    : (result.decision === 'HOLD' ? 'bg-amber-500 text-white' : 'bg-rose-500 text-white')
-                }`}>
-                  {result.decision === 'BUY' ? 'RECOMMENDED: BUY' : (result.decision === 'HOLD' ? 'MODERATE: HOLD' : 'AVOID / RE-EVALUATE')}
-                </span>
+              <div className="shrink-0">
+                <Badge tone={recommendationTone(result.decision)} className="text-xs px-3 py-1">
+                  {result.decision === 'BUY' ? 'Recommended: Buy' : result.decision === 'HOLD' ? 'Moderate: Hold' : 'Avoid / Re-evaluate'}
+                </Badge>
               </div>
             </div>
 
-            {/* 3 Core Financial Summary Boxes */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4">
-              {/* Box 1: Monthly EMI */}
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449]">
-                <span className="text-[10px] font-mono uppercase text-slate-400 block">Monthly Loan EMI</span>
-                <span className="text-base font-extrabold font-mono text-slate-900 dark:text-white mt-1 block">
-                  ₹{result.monthlyEmi.toLocaleString('en-IN')}/mo
-                </span>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400">20-yr loan @ {interestRate}%</span>
+              <div>
+                <p className="text-[11px] text-ink-3 uppercase tracking-wide">Monthly EMI</p>
+                <p className="text-lg font-semibold text-ink mt-0.5">₹{result.monthlyEmi.toLocaleString('en-IN')}/mo</p>
+                <p className="text-xs text-ink-3">20-yr loan</p>
               </div>
-
-              {/* Box 2: Monthly Rent Income */}
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449]">
-                <span className="text-[10px] font-mono uppercase text-slate-400 block">Monthly Rent Inflow</span>
-                <span className="text-base font-extrabold font-mono text-emerald-600 dark:text-emerald-400 mt-1 block">
-                  +₹{monthlyRent.toLocaleString('en-IN')}/mo
-                </span>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400">{targetYield}% gross yield</span>
+              <div>
+                <p className="text-[11px] text-ink-3 uppercase tracking-wide">Rent inflow</p>
+                <p className="text-lg font-semibold text-pos mt-0.5">+₹{monthlyRent.toLocaleString('en-IN')}/mo</p>
+                <p className="text-xs text-ink-3">{targetYield}% gross yield</p>
               </div>
-
-              {/* Box 3: Net Cash Flow */}
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449]">
-                <span className="text-[10px] font-mono uppercase text-slate-400 block">Net Monthly Cash Flow</span>
-                <span className={`text-base font-extrabold font-mono mt-1 block ${
-                  result.netMonthlyCashFlow >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'
-                }`}>
+              <div>
+                <p className="text-[11px] text-ink-3 uppercase tracking-wide">Net cash flow</p>
+                <p className={clsx('text-lg font-semibold mt-0.5', result.netMonthlyCashFlow >= 0 ? 'text-pos' : 'text-warn')}>
                   {result.netMonthlyCashFlow >= 0 ? '+' : ''}₹{result.netMonthlyCashFlow.toLocaleString('en-IN')}/mo
-                </span>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                  {result.netMonthlyCashFlow >= 0 ? 'Surplus cash flow' : 'Out-of-pocket EMI gap'}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Upfront Cash Required Breakdown */}
-          <div className="p-5 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-[#273449]">
-              <div className="flex items-center gap-2">
-                <Wallet size={15} className="text-emerald-500" />
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                  Total Upfront Cash Needed to Buy
-                </h3>
-              </div>
-              <span className="text-xs font-extrabold font-mono text-slate-900 dark:text-white">
-                ₹{(totalUpfrontNeededInr / 100000).toFixed(1)} Lakhs
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449] flex items-center justify-between">
-                <span className="text-slate-500 dark:text-slate-400">Down Payment ({downPaymentPct}%):</span>
-                <span className="font-bold text-slate-900 dark:text-white">₹{(downPaymentInr / 100000).toFixed(1)} Lakhs</span>
-              </div>
-              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449] flex items-center justify-between">
-                <span className="text-slate-500 dark:text-slate-400">Govt Stamp Duty & Reg (6.6%):</span>
-                <span className="font-bold text-slate-900 dark:text-white">₹{(estStampDutyRegInr / 100000).toFixed(1)} Lakhs</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Future Property Worth Timeline */}
-          <div className="p-5 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-[#273449]">
-              <div className="flex items-center gap-2">
-                <Calendar size={15} className="text-blue-500" />
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                  Estimated Property Value Growth
-                </h3>
-              </div>
-              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">~6.5% p.a. Historical Growth</span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3 text-center">
-              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449]">
-                <span className="text-[10px] font-mono uppercase text-slate-400 block">In 1 Year</span>
-                <span className="text-sm font-extrabold font-mono text-slate-900 dark:text-white mt-1 block">
-                  {formatInrLakhs(result.projected2025ValLakhs)}
-                </span>
-                <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">+₹{(result.projected2025ValLakhs - purchasePriceLakhs).toFixed(1)}L gain</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449]">
-                <span className="text-[10px] font-mono uppercase text-slate-400 block">In 2 Years</span>
-                <span className="text-sm font-extrabold font-mono text-slate-900 dark:text-white mt-1 block">
-                  {formatInrLakhs(result.projected2026ValLakhs)}
-                </span>
-                <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">+₹{(result.projected2026ValLakhs - purchasePriceLakhs).toFixed(1)}L gain</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-500/30">
-                <span className="text-[10px] font-mono uppercase text-emerald-700 dark:text-emerald-400 font-bold block">
-                  In {holdingPeriod} Years
-                </span>
-                <span className="text-sm font-extrabold font-mono text-emerald-700 dark:text-emerald-300 mt-1 block">
-                  {formatInrLakhs(result.projectedFutureValLakhs)}
-                </span>
-                <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">
-                  +₹{(result.projectedFutureValLakhs - purchasePriceLakhs).toFixed(1)}L gain
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Smart Plain-English Investor Insights */}
-          <div className="p-5 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-3">
-            <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-[#273449]">
-              <Lightbulb size={15} className="text-amber-500" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                Investor Takeaways & Sensitivity
-              </h3>
-            </div>
-
-            <div className="space-y-2 text-xs">
-              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449] flex items-start gap-2.5">
-                <ShieldCheck size={16} className="text-emerald-500 shrink-0 mt-0.5" />
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
-                  <strong>Break-even Timeline:</strong> Holding this property for at least <strong>3.5 years</strong> fully absorbs the ₹{(estStampDutyRegInr / 100000).toFixed(1)}L registration tax and home loan interest.
                 </p>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449] flex items-start gap-2.5">
-                <Info size={16} className="text-blue-500 shrink-0 mt-0.5" />
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
-                  {flipResult.rentFlipText}
-                </p>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449] flex items-start gap-2.5">
-                <AlertTriangle size={16} className="text-amber-500 shrink-0 mt-0.5" />
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
-                  {flipResult.rateFlipText}
-                </p>
+                <p className="text-xs text-ink-3">{result.netMonthlyCashFlow >= 0 ? 'Surplus' : 'EMI gap'}</p>
               </div>
             </div>
-          </div>
+          </Card>
+
+          {/* Upfront cash */}
+          <Card>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-8 h-8 rounded-lg bg-brand-soft text-brand flex items-center justify-center"><Wallet size={16} /></span>
+              <h3 className="text-sm font-semibold text-ink">Total upfront cash needed</h3>
+              <span className="ml-auto text-lg font-semibold text-ink">₹{(totalUpfrontNeededInr / 100000).toFixed(1)}L</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="rounded-lg border border-line p-3 flex items-center justify-between text-sm">
+                <span className="text-ink-3">Down payment ({downPaymentPct}%)</span>
+                <span className="font-semibold text-ink">₹{(downPaymentInr / 100000).toFixed(1)}L</span>
+              </div>
+              <div className="rounded-lg border border-line p-3 flex items-center justify-between text-sm">
+                <span className="text-ink-3">Stamp duty & reg (6.6%)</span>
+                <span className="font-semibold text-ink">₹{(estStampDutyRegInr / 100000).toFixed(1)}L</span>
+              </div>
+            </div>
+          </Card>
+
+          {/* Growth chart */}
+          <Card>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-8 h-8 rounded-lg bg-brand-soft text-brand flex items-center justify-center"><Calendar size={16} /></span>
+              <h3 className="text-sm font-semibold text-ink">Estimated property value growth</h3>
+              <span className="ml-auto text-xs text-pos font-medium">~6.5% p.a.</span>
+            </div>
+            <div className="flex items-end justify-between gap-2 pt-6" style={{ height: 140 }}>
+              {growthPoints.map((pt) => (
+                <div key={pt.label} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                  <span className={clsx('text-xs font-semibold', pt.highlight ? 'text-pos' : 'text-ink')}>{formatInrLakhs(pt.value)}</span>
+                  <div
+                    className={clsx('w-full max-w-[70px] rounded-t-md transition-all', pt.highlight ? 'bg-pos' : 'bg-brand')}
+                    style={{ height: `${(pt.value / maxVal) * 70}px` }}
+                  />
+                  <span className="text-[11px] text-ink-3">{pt.label}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Takeaways */}
+          <Card>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-8 h-8 rounded-lg bg-warn-soft text-warn flex items-center justify-center"><Lightbulb size={16} /></span>
+              <h3 className="text-sm font-semibold text-ink">Investor takeaways</h3>
+            </div>
+            <div className="space-y-2.5 text-sm text-ink-2">
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 size={16} className="text-pos shrink-0 mt-0.5" />
+                <span>Holding at least <span className="font-semibold text-ink">3.5 years</span> fully absorbs the ₹{(estStampDutyRegInr / 100000).toFixed(1)}L registration and loan interest.</span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <Info size={16} className="text-brand shrink-0 mt-0.5" />
+                <span>{flipResult.rentFlipText}</span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <AlertTriangle size={16} className="text-warn shrink-0 mt-0.5" />
+                <span>{flipResult.rateFlipText}</span>
+              </div>
+            </div>
+          </Card>
         </div>
       </div>
     </div>

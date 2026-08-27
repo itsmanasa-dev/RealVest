@@ -4,21 +4,24 @@ import {
   Scale,
   Trophy,
   ArrowRight,
-  Check,
   Search,
-  Sliders,
   Bookmark,
   BookmarkCheck,
-  Sparkles,
-  RotateCcw,
-  Building2,
-  MapPin,
-  AlertCircle,
+  Plus,
+  ArrowLeft,
+  X,
+  TrendingUp,
 } from 'lucide-react';
 import { useTranslation } from '../../context/LanguageContext';
 import { formatInrLakhs, formatInrRent } from '../../utils/currency';
 import { comparisonApi } from '../../services/api/comparisonApi';
 import { propertyApi } from '../../services/api/propertyApi';
+import { SectionHeader } from '../ui/SectionHeader';
+import { Button } from '../ui/Button';
+import { Badge, recommendationTone, riskTone } from '../ui/Badge';
+import { Card } from '../ui/Card';
+import { PropertyCard } from '../property/PropertyCard';
+import { clsx } from 'clsx';
 
 interface CompareViewProps {
   properties: Property[];
@@ -33,19 +36,15 @@ export const CompareView: React.FC<CompareViewProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  // User Requirements Search State
   const [locality, setLocality] = useState<string>('Whitefield');
   const [minBudget, setMinBudget] = useState<number>(25);
   const [maxBudget, setMaxBudget] = useState<number>(85);
   const [propertyType, setPropertyType] = useState<string>('Residential');
   const [bhk, setBhk] = useState<number | 'all'>('all');
-  const [minSqft, setMinSqft] = useState<number>(800);
-  const [maxSqft, setMaxSqft] = useState<number>(2000);
   const [goal, setGoal] = useState<string>('Capital Appreciation');
   const [risk, setRisk] = useState<string>('Moderate');
   const [holdingPeriod, setHoldingPeriod] = useState<string>('3–5 years');
 
-  // Comparison State
   const [availableProperties, setAvailableProperties] = useState<Property[]>(initialProperties);
   const [selectedIds, setSelectedIds] = useState<string[]>([
     initialProperties[0]?.id || '',
@@ -56,8 +55,6 @@ export const CompareView: React.FC<CompareViewProps> = ({
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  // Dynamic Comparison Result from Backend
   const [backendComparison, setBackendComparison] = useState<any>(null);
 
   const localitiesList = [
@@ -72,7 +69,6 @@ export const CompareView: React.FC<CompareViewProps> = ({
     'Any Bengaluru',
   ];
 
-  // Handle Find Matching Properties via FastAPI Search Endpoint
   const handleFindMatches = async () => {
     setIsSearching(true);
     setErrorMessage(null);
@@ -83,8 +79,6 @@ export const CompareView: React.FC<CompareViewProps> = ({
         max_budget: maxBudget,
         property_type: propertyType,
         bhk: bhk === 'all' ? undefined : bhk,
-        min_sqft: minSqft,
-        max_sqft: maxSqft,
         goal,
         risk,
         holding_period: holdingPeriod,
@@ -100,7 +94,6 @@ export const CompareView: React.FC<CompareViewProps> = ({
       }
     } catch (err: any) {
       console.warn('Backend API search fallback to local filtering:', err.message);
-      // Local fallback
       const filtered = initialProperties.filter((p) => {
         const budgetOk = p.askingPriceLakhs >= minBudget * 0.8 && p.askingPriceLakhs <= maxBudget * 1.2;
         return budgetOk;
@@ -114,7 +107,6 @@ export const CompareView: React.FC<CompareViewProps> = ({
     }
   };
 
-  // Run Comparison on Backend
   const runBackendComparison = async (ids: string[]) => {
     if (ids.length === 0) return;
     setIsComparing(true);
@@ -140,6 +132,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
     if (selectedIds.length > 0) {
       runBackendComparison(selectedIds);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedIds]);
 
   const selectedProps = selectedIds
@@ -169,7 +162,6 @@ export const CompareView: React.FC<CompareViewProps> = ({
     }
   };
 
-  // Handle Save Comparison to MySQL
   const handleSaveComparison = async () => {
     setIsSaving(true);
     setSaveSuccessMsg(null);
@@ -210,365 +202,216 @@ export const CompareView: React.FC<CompareViewProps> = ({
       setSaveSuccessMsg('Comparison saved successfully.');
       setTimeout(() => setSaveSuccessMsg(null), 5000);
     } catch (err: any) {
-      setErrorMessage('Couldn\'t save this comparison. Please try again.');
+      setErrorMessage("Couldn't save this comparison. Please try again.");
       setTimeout(() => setErrorMessage(null), 4000);
     } finally {
       setIsSaving(false);
     }
   };
 
+  const metricRows: { label: string; render: (p: Property) => React.ReactNode }[] = [
+    { label: t.asking_price, render: (p) => <span className="font-semibold text-ink">{formatInrLakhs(p.askingPriceLakhs)}</span> },
+    { label: 'Estimated value', render: (p) => <span className="font-semibold text-brand">{formatInrLakhs(p.fairValueLakhs)}</span> },
+    { label: t.monthly_rent, render: (p) => <span className="text-ink-2">{formatInrRent(p.monthlyRent)}</span> },
+    { label: t.proj_roi, render: (p) => <span className="font-semibold text-pos">{p.annualYield}%</span> },
+    { label: 'Investment score', render: (p) => (
+        <div className="flex items-center gap-1.5">
+          <span className="font-semibold text-ink">{p.investmentScore}/100</span>
+          <div className="w-10 h-1.5 rounded-full bg-surface-strong overflow-hidden">
+            <div className="h-full bg-brand" style={{ width: `${p.investmentScore}%` }} />
+          </div>
+        </div>
+      ) },
+    { label: 'Risk', render: (p) => <Badge tone={riskTone(p.riskRadar.overallRisk)}>{p.riskRadar.overallRisk}</Badge> },
+    { label: t.verdict, render: (p) => <Badge tone={recommendationTone(p.recommendation)}>{p.recommendation}</Badge> },
+  ];
+
   return (
-    <div className="space-y-6 pb-12 w-full max-w-6xl mx-auto">
-      {/* Title & Top Action Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-[#273449]">
-        <div>
+    <div className="space-y-6 pb-4">
+      <SectionHeader
+        eyebrow="Compare"
+        title={t.compare_title}
+        subtitle={t.compare_subtitle}
+        action={
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-mono text-[10px] font-bold border border-emerald-500/30">
-              LIVE ANALYSIS
-            </span>
+            {selectedIds.length < 3 && (
+              <Button variant="secondary" onClick={handleAddSlot}>
+                <Plus size={15} /> Add 3rd
+              </Button>
+            )}
+            <Button variant="secondary" onClick={() => onNavigate('saved-comparisons')}>
+              <BookmarkCheck size={15} /> Saved
+            </Button>
           </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
-            {t.compare_title}
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            {t.compare_subtitle}
-          </p>
-        </div>
+        }
+      />
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => onNavigate('saved-comparisons')}
-            className="px-4 py-2 rounded-2xl bg-white dark:bg-[#172033] border border-slate-200 dark:border-[#273449] text-slate-700 dark:text-slate-200 hover:border-emerald-500 font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
-          >
-            <BookmarkCheck size={14} className="text-emerald-500" />
-            <span>Saved Comparisons</span>
-          </button>
-
-          {selectedIds.length < 3 && (
-            <button
-              onClick={handleAddSlot}
-              className="px-3.5 py-2 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-mono text-xs font-bold hover:bg-emerald-100 transition-colors cursor-pointer"
-            >
-              + {t.add_asset}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Step 1: User Requirements Input Panel */}
-      <div className="p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-5">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#273449]">
-          <div className="flex items-center gap-2">
-            <Sliders size={16} className="text-emerald-500" />
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">
-              1. Enter Your Comparison Requirements
-            </h3>
+      {/* Requirements panel */}
+      <Card>
+        <div className="flex items-center gap-2 mb-4">
+          <span className="w-8 h-8 rounded-lg bg-brand-soft text-brand flex items-center justify-center"><Search size={16} /></span>
+          <div>
+            <h3 className="text-sm font-semibold text-ink">What are you looking for?</h3>
+            <p className="text-xs text-ink-3">Set your requirements to find matching properties</p>
           </div>
-          <span className="text-xs font-mono text-slate-400">Bengaluru Housing & Rental Data</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Area / Locality */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-              Area / Locality:
-            </label>
-            <select
-              value={locality}
-              onChange={(e) => setLocality(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
-            >
-              {localitiesList.map((loc) => (
-                <option key={loc} value={loc}>
-                  {loc}
-                </option>
-              ))}
+            <label className="text-xs font-semibold text-ink-2">Area / Locality</label>
+            <select value={locality} onChange={(e) => setLocality(e.target.value)} className="input">
+              {localitiesList.map((loc) => <option key={loc} value={loc}>{loc}</option>)}
             </select>
           </div>
 
-          {/* Budget Range */}
           <div className="space-y-1.5">
-            <div className="flex justify-between items-center text-xs font-bold">
-              <span className="text-slate-700 dark:text-slate-300">Budget Range:</span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold">
-                ₹{minBudget}L – ₹{maxBudget}L
-              </span>
+            <div className="flex justify-between items-center">
+              <label className="text-xs font-semibold text-ink-2">Budget</label>
+              <span className="text-xs font-semibold text-brand">₹{minBudget}L – ₹{maxBudget}L</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <input
-                type="number"
-                value={minBudget}
-                onChange={(e) => setMinBudget(Number(e.target.value))}
-                placeholder="Min ₹L"
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-xs font-mono font-semibold text-slate-900 dark:text-white"
-              />
-              <input
-                type="number"
-                value={maxBudget}
-                onChange={(e) => setMaxBudget(Number(e.target.value))}
-                placeholder="Max ₹L"
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-xs font-mono font-semibold text-slate-900 dark:text-white"
-              />
+              <input type="number" value={minBudget} onChange={(e) => setMinBudget(Number(e.target.value))} className="input" placeholder="Min ₹L" />
+              <input type="number" value={maxBudget} onChange={(e) => setMaxBudget(Number(e.target.value))} className="input" placeholder="Max ₹L" />
             </div>
           </div>
 
-          {/* Property Type & BHK */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-              Type & BHK:
-            </label>
+            <label className="text-xs font-semibold text-ink-2">Type & BHK</label>
             <div className="grid grid-cols-2 gap-2">
-              <select
-                value={propertyType}
-                onChange={(e) => setPropertyType(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
-              >
-                <option value="Residential">Residential</option>
-                <option value="Commercial">Commercial</option>
-                <option value="Land">Land / Plot</option>
-                <option value="Any">Any Type</option>
+              <select value={propertyType} onChange={(e) => setPropertyType(e.target.value)} className="input">
+                <option>Residential</option><option>Commercial</option><option>Land / Plot</option><option>Any Type</option>
               </select>
-
-              <select
-                value={bhk}
-                onChange={(e) => setBhk(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
-              >
-                <option value="all">All BHK</option>
-                <option value="1">1 BHK</option>
-                <option value="2">2 BHK</option>
-                <option value="3">3 BHK</option>
-                <option value="4">4+ BHK</option>
+              <select value={bhk} onChange={(e) => setBhk(e.target.value === 'all' ? 'all' : Number(e.target.value))} className="input">
+                <option value="all">All BHK</option><option value="1">1 BHK</option><option value="2">2 BHK</option>
+                <option value="3">3 BHK</option><option value="4">4+ BHK</option>
               </select>
             </div>
           </div>
 
-          {/* Investment Goal */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-              Investment Goal:
-            </label>
-            <select
-              value={goal}
-              onChange={(e) => setGoal(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
-            >
-              <option value="Capital Appreciation">Capital Appreciation</option>
-              <option value="Rental Income">Rental Income</option>
-              <option value="Balanced">Balanced Growth</option>
+            <label className="text-xs font-semibold text-ink-2">Investment goal</label>
+            <select value={goal} onChange={(e) => setGoal(e.target.value)} className="input">
+              <option>Capital Appreciation</option><option>Rental Income</option><option>Balanced Growth</option>
             </select>
           </div>
         </div>
 
-        {/* Find Matching Properties Button */}
-        <button
-          onClick={handleFindMatches}
-          disabled={isSearching}
-          className="w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs shadow-md shadow-emerald-500/25 transition-all cursor-pointer flex items-center justify-center gap-2"
-        >
-          <Search size={15} />
-          <span>{isSearching ? 'Finding Matching Bengaluru Dataset Properties...' : 'FIND MATCHING PROPERTIES'}</span>
-        </button>
+        <Button className="mt-4 w-full" size="lg" onClick={handleFindMatches} disabled={isSearching}>
+          <Search size={16} />
+          {isSearching ? 'Finding matching properties…' : 'Find matching properties'}
+        </Button>
 
         {errorMessage && (
-          <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs flex items-center gap-2">
-            <AlertCircle size={14} className="shrink-0" />
-            <span>{errorMessage}</span>
-          </div>
+          <div className="mt-3 p-3 rounded-lg bg-warn-soft text-warn text-sm">{errorMessage}</div>
         )}
-      </div>
+      </Card>
 
-      {/* Property Selector Row (Slot A, Slot B, Slot C) */}
+      {/* Property slots */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-        {selectedIds.map((currentId, slotIdx) => (
-          <div
-            key={slotIdx}
-            className="p-4 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-2"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold uppercase text-emerald-600 dark:text-emerald-400">
-                Property Slot {String.fromCharCode(65 + slotIdx)}
-              </span>
-              {selectedIds.length > 2 && (
+        {selectedIds.map((currentId, slotIdx) => {
+          const currentProp = availableProperties.find((p) => p.id === currentId);
+          return (
+            <Card key={slotIdx} padded={false} className="p-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-brand">Slot {String.fromCharCode(65 + slotIdx)}</span>
+                {selectedIds.length > 2 && (
+                  <button onClick={() => handleRemoveSlot(slotIdx)} className="text-xs text-ink-3 hover:text-neg cursor-pointer flex items-center gap-0.5">
+                    <X size={12} /> Remove
+                  </button>
+                )}
+              </div>
+              {currentProp ? (
                 <button
-                  onClick={() => handleRemoveSlot(slotIdx)}
-                  className="text-[11px] text-rose-500 hover:underline font-mono cursor-pointer"
+                  onClick={() => onSelectProperty(currentProp)}
+                  className="w-full text-left text-sm font-medium text-ink hover:text-brand truncate cursor-pointer"
                 >
-                  Remove
+                  {currentProp.title}
                 </button>
+              ) : (
+                <select value={currentId} onChange={(e) => handleSelectSlot(slotIdx, e.target.value)} className="input">
+                  {availableProperties.map((p) => (
+                    <option key={p.id} value={p.id}>{p.title} ({formatInrLakhs(p.askingPriceLakhs)})</option>
+                  ))}
+                </select>
               )}
-            </div>
-
-            <select
-              value={currentId}
-              onChange={(e) => handleSelectSlot(slotIdx, e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
-            >
-              {availableProperties.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.title} ({formatInrLakhs(p.askingPriceLakhs)})
-                </option>
-              ))}
-            </select>
-          </div>
-        ))}
+            </Card>
+          );
+        })}
       </div>
 
-      {/* Comparison Table (Responsive Dribbble Card) */}
-      <div className="rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm overflow-hidden">
-        <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-[#273449] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Scale size={16} className="text-emerald-500" />
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">
-              2. Side-by-Side Investment Metrics Comparison
-            </h3>
+      {/* Comparison table */}
+      {selectedProps.length > 0 && (
+        <Card padded={false} className="overflow-hidden">
+          <div className="flex items-center gap-2 px-5 py-4 border-b border-line">
+            <span className="w-8 h-8 rounded-lg bg-brand-soft text-brand flex items-center justify-center"><Scale size={16} /></span>
+            <h3 className="text-sm font-semibold text-ink">Side-by-side comparison</h3>
+            {isComparing && <span className="text-xs text-ink-3">updating…</span>}
           </div>
-          <span className="text-xs font-mono text-slate-400">Investment Analysis</span>
-        </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-mono">
-            <thead>
-              <tr className="border-b border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033]">
-                <th className="p-3.5 text-slate-500 dark:text-slate-400 font-bold uppercase">{t.metric_col}</th>
-                {selectedProps.map((p) => (
-                  <th key={p.id} className="p-3.5 text-slate-900 dark:text-white font-extrabold">
-                    {p.location} ({p.code})
-                  </th>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-line bg-surface-soft/60">
+                  <th className="p-4 text-left font-medium text-ink-3 w-44">Metrics</th>
+                  {selectedProps.map((p, i) => (
+                    <th key={p.id} className={clsx('p-4 text-left', bestProperty?.id === p.id && 'bg-brand-soft/40')}>
+                      <div className="flex items-center gap-1.5">
+                        {bestProperty?.id === p.id && <Trophy size={14} className="text-warn" />}
+                        <span className="font-semibold text-ink">{p.location}</span>
+                      </div>
+                      <span className="text-xs text-ink-3">{p.title}</span>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-line">
+                {metricRows.map((row, ri) => (
+                  <tr key={ri}>
+                    <td className="p-4 text-ink-3">{row.label}</td>
+                    {selectedProps.map((p) => (
+                      <td key={p.id} className={clsx('p-4', bestProperty?.id === p.id && 'bg-brand-soft/40')}>
+                        {row.render(p)}
+                      </td>
+                    ))}
+                  </tr>
                 ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-[#273449]">
-              <tr>
-                <td className="p-3.5 text-slate-500 dark:text-slate-400 font-medium">{t.asking_price}</td>
-                {selectedProps.map((p) => (
-                  <td key={p.id} className="p-3.5 font-bold text-slate-900 dark:text-white">
-                    {formatInrLakhs(p.askingPriceLakhs)}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="p-3.5 text-slate-500 dark:text-slate-400 font-medium">Estimated Value</td>
-                {selectedProps.map((p) => (
-                  <td key={p.id} className="p-3.5 font-extrabold text-emerald-600 dark:text-emerald-400">
-                    {formatInrLakhs(p.fairValueLakhs)}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="p-3.5 text-slate-500 dark:text-slate-400 font-medium">Valuation Deal Status</td>
-                {selectedProps.map((p) => (
-                  <td key={p.id} className="p-3.5 font-bold text-slate-800 dark:text-slate-200">
-                    {p.dealStatus} ({p.dealDiffPct > 0 ? `+${p.dealDiffPct}%` : `${p.dealDiffPct}%`})
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="p-3.5 text-slate-500 dark:text-slate-400 font-medium">{t.monthly_rent}</td>
-                {selectedProps.map((p) => (
-                  <td key={p.id} className="p-3.5 text-slate-800 dark:text-slate-200">
-                    {formatInrRent(p.monthlyRent)}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="p-3.5 text-slate-500 dark:text-slate-400 font-medium">{t.proj_roi}</td>
-                {selectedProps.map((p) => (
-                  <td key={p.id} className="p-3.5 font-extrabold text-emerald-600 dark:text-emerald-400">
-                    {p.annualYield}% p.a.
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="p-3.5 text-slate-500 dark:text-slate-400 font-medium">Investment Score</td>
-                {selectedProps.map((p) => (
-                  <td key={p.id} className="p-3.5 font-extrabold text-slate-900 dark:text-white">
-                    {p.investmentScore}/100
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="p-3.5 text-slate-500 dark:text-slate-400 font-medium">Data Confidence</td>
-                {selectedProps.map((p) => (
-                  <td key={p.id} className="p-3.5 font-bold text-slate-900 dark:text-white">
-                    {p.confidenceScore}%
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="p-3.5 text-slate-500 dark:text-slate-400 font-medium">{t.verdict}</td>
-                {selectedProps.map((p) => (
-                  <td key={p.id} className="p-3.5">
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white ${
-                      p.recommendation === 'BUY' ? 'bg-emerald-600' : 'bg-amber-600'
-                    }`}>
-                      {p.recommendation}
-                    </span>
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
 
-      {/* Best Pick Recommendation Banner */}
+      {/* Best pick banner */}
       {bestProperty && (
-        <div className="p-6 rounded-3xl border border-emerald-500/30 bg-emerald-50/40 dark:bg-[#111827] shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="rv-card p-5 border-l-4 border-l-brand flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/20">
+            <span className="w-10 h-10 rounded-lg bg-brand-soft text-brand flex items-center justify-center shrink-0">
               <Trophy size={20} />
-            </div>
-            <div className="space-y-1">
-              <span className="text-[10px] font-mono uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400">
-                {t.realvest_top_pick}
-              </span>
-              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
-                {bestProperty.title}
-              </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-300">
-                Top risk-adjusted return ({bestProperty.annualYield}% rental yield, estimated value ₹{bestProperty.fairValueLakhs} L).
+            </span>
+            <div>
+              <p className="section-eyebrow mb-1">RealVest top pick</p>
+              <h3 className="text-base font-semibold text-ink">{bestProperty.title}</h3>
+              <p className="text-sm text-ink-2 mt-1">
+                Top risk-adjusted return ({bestProperty.annualYield}% rental yield, est. value {formatInrLakhs(bestProperty.fairValueLakhs)}).
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 w-full md:w-auto">
-            <button
-              onClick={handleSaveComparison}
-              disabled={isSaving}
-              className="flex-1 md:flex-none px-4 py-2.5 rounded-2xl bg-white dark:bg-[#172033] border border-slate-200 dark:border-[#273449] text-slate-800 dark:text-slate-200 font-extrabold text-xs hover:border-emerald-500 transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
-            >
-              <Bookmark size={14} className="text-emerald-500" />
-              <span>{isSaving ? 'Saving...' : 'Save Comparison'}</span>
-            </button>
-
-            <button
-              onClick={() => {
-                onSelectProperty(bestProperty);
-                onNavigate('analysis');
-              }}
-              className="flex-1 md:flex-none px-4 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 shadow-md shadow-emerald-500/20 cursor-pointer"
-            >
-              <span>{t.inspect_btn}</span>
-              <ArrowRight size={14} />
-            </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <Button variant="secondary" onClick={handleSaveComparison} disabled={isSaving}>
+              <Bookmark size={15} /> {isSaving ? 'Saving…' : 'Save Comparison'}
+            </Button>
+            <Button onClick={() => onSelectProperty(bestProperty)}>
+              Inspect <ArrowRight size={15} />
+            </Button>
           </div>
         </div>
       )}
 
-      {/* Save Success Banner */}
       {saveSuccessMsg && (
-        <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold flex items-center justify-between gap-3 animate-fadeIn">
-          <div className="flex items-center gap-2">
-            <Check size={16} className="text-emerald-500" />
-            <span>{saveSuccessMsg}</span>
-          </div>
-          <button
-            onClick={() => onNavigate('saved-comparisons')}
-            className="px-3 py-1 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 cursor-pointer"
-          >
-            View in Saved Comparisons →
-          </button>
+        <div className="p-3 rounded-lg bg-pos-soft text-pos text-sm flex items-center justify-between gap-3 rv-fade-in">
+          <span>{saveSuccessMsg}</span>
+          <button onClick={() => onNavigate('saved-comparisons')} className="underline font-medium cursor-pointer">View saved →</button>
         </div>
       )}
     </div>

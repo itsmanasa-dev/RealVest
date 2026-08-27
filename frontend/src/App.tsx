@@ -6,6 +6,7 @@ import { propertyApi } from './services/api/propertyApi';
 
 import { Header } from './components/layout/Header';
 import { MobileNav } from './components/layout/MobileNav';
+import { Sidebar } from './components/layout/Sidebar';
 
 import { DashboardView } from './components/views/DashboardView';
 import { ExplorerView } from './components/views/ExplorerView';
@@ -15,8 +16,6 @@ import { SavedComparisonsView } from './components/views/SavedComparisonsView';
 import { SimulatorView } from './components/views/SimulatorView';
 import { MarketIntelligenceView } from './components/views/MarketIntelligenceView';
 import { AIAdvisorView } from './components/views/AIAdvisorView';
-
-import { Sidebar } from './components/layout/Sidebar';
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
@@ -81,8 +80,8 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B1120] text-[#0F172A] dark:text-[#F8FAFC] flex font-sans transition-colors duration-200">
-      {/* Desktop Sidebar (Persistent on lg screens) */}
+    <div className="min-h-screen bg-canvas text-ink flex font-sans">
+      {/* Desktop Sidebar (persistent on lg screens) */}
       <Sidebar
         activeTab={activeTab}
         onTabChange={handleTabChange}
@@ -92,7 +91,6 @@ function AppContent() {
 
       {/* Main App Canvas */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Header */}
         <Header
           activeTab={activeTab}
           isDark={isDark}
@@ -161,7 +159,7 @@ function AppContent() {
         </main>
       </div>
 
-      {/* Mobile Bottom Navigation Dock (Visible on < lg screens) */}
+      {/* Mobile Bottom Navigation Dock (visible on < lg screens) */}
       <div className="lg:hidden">
         <MobileNav activeTab={activeTab} onTabChange={handleTabChange} />
       </div>

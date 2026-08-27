@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Search, Sun, Moon, ArrowLeft, Globe, Bell } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Search, Sun, Moon, ArrowLeft, Globe, Home, Check } from 'lucide-react';
 import type { NavTab } from '../../types';
 import { useTranslation } from '../../context/LanguageContext';
 import type { Language } from '../../i18n/translations';
+import { clsx } from 'clsx';
 
 interface HeaderProps {
-  categoryLabel?: string;
   activeTab: NavTab;
   isDark: boolean;
   onToggleTheme: () => void;
@@ -14,8 +14,13 @@ interface HeaderProps {
   showBack?: boolean;
 }
 
+const LANGUAGES: { code: Language; label: string }[] = [
+  { code: 'en', label: 'English' },
+  { code: 'hi', label: 'हिंदी' },
+  { code: 'kn', label: 'ಕನ್ನಡ' },
+];
+
 export const Header: React.FC<HeaderProps> = ({
-  categoryLabel,
   activeTab,
   isDark,
   onToggleTheme,
@@ -24,112 +29,119 @@ export const Header: React.FC<HeaderProps> = ({
   showBack,
 }) => {
   const { language, setLanguage, t } = useTranslation();
-  const [showLangMenu, setShowLangMenu] = useState(false);
-  const [hasNotif, setHasNotif] = useState(true);
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const languages: { code: Language; label: string }[] = [
-    { code: 'en', label: 'English' },
-    { code: 'hi', label: 'हिंदी (Hindi)' },
-    { code: 'kn', label: 'ಕನ್ನಡ (Kannada)' },
-  ];
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const pageTitle =
+    activeTab === 'dashboard' ? t.nav_dashboard :
+    activeTab === 'explore' ? t.nav_explore :
+    activeTab === 'analysis' ? t.nav_analysis :
+    activeTab === 'compare' ? t.nav_compare :
+    activeTab === 'saved-comparisons' ? 'Saved Comparisons' :
+    activeTab === 'simulator' ? t.nav_simulator :
+    activeTab === 'markets' ? t.nav_markets :
+    t.nav_advisor;
 
   return (
-    <header className="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#111827]/95 backdrop-blur-md border-b border-slate-200 dark:border-[#273449] transition-colors">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Left: Avatar + Welcome Greeting (Matching Dribbble Reference) or Back Button */}
+    <header className="sticky top-0 z-30 bg-canvas/90 backdrop-blur-md border-b border-line">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+        {/* Left */}
         <div className="flex items-center gap-3 min-w-0">
           {showBack ? (
             <button
               onClick={onBack}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#172033] transition-colors cursor-pointer border border-slate-200 dark:border-[#273449]"
+              className="btn btn-ghost -ml-2"
             >
-              <ArrowLeft size={15} />
+              <ArrowLeft size={16} />
               <span>{t.back_to_assets}</span>
             </button>
           ) : (
-            <div className="flex items-center gap-3">
-              {/* User Avatar */}
-              <div className="relative w-9 h-9 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shrink-0 shadow-sm">
-                <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 flex items-center justify-center overflow-hidden">
-                  <span className="font-semibold text-xs text-emerald-600 dark:text-emerald-400">RV</span>
-                </div>
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#111827]" />
-              </div>
-
-              <div>
-                <div className="text-xs text-slate-400 leading-none">Welcome,</div>
-                <div className="text-sm font-semibold text-slate-900 dark:text-white leading-tight mt-0.5">
-                  Courtney
-                </div>
-              </div>
+            <div className="flex items-center gap-2 lg:hidden">
+              <span className="w-8 h-8 rounded-lg bg-brand text-white flex items-center justify-center">
+                <Home size={16} strokeWidth={2.4} />
+              </span>
             </div>
           )}
 
-          {/* Desktop Search Bar */}
+          <div className="hidden md:block min-w-0">
+            <span className="text-sm font-semibold text-ink tracking-tight">{pageTitle}</span>
+          </div>
+
+          {/* Desktop search */}
           {!showBack && (
             <button
               onClick={onSearchClick}
-              className="hidden md:flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-100 dark:bg-[#172033] text-slate-400 text-xs hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer border border-transparent dark:border-[#273449] w-64 lg:w-72 text-left ml-4"
+              className="ml-2 hidden md:flex items-center gap-2.5 px-4 py-2 rounded-md bg-surface border border-line text-ink-3 text-sm w-64 lg:w-80 text-left hover:border-line-strong hover:text-ink-2 transition-colors"
             >
-              <Search size={14} className="text-slate-400 shrink-0" />
-              <span className="truncate">Search properties, corridors...</span>
+              <Search size={15} className="shrink-0" />
+              <span className="truncate">{t.search_placeholder}</span>
             </button>
           )}
         </div>
 
-        {/* Right Actions: Notification Bell + Language + Theme Toggle */}
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Notification Bell (from Dribbble screen) */}
-          <button
-            onClick={() => setHasNotif(false)}
-            className="relative p-2 rounded-full bg-slate-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer border border-slate-200/60 dark:border-[#273449]"
-            title="Notifications"
-          >
-            <Bell size={16} />
-            {hasNotif && (
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#111827]" />
-            )}
-          </button>
-
-          {/* Language Switcher Dropdown */}
-          <div className="relative">
+        {/* Right actions */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {/* Mobile search icon */}
+          {!showBack && (
             <button
-              onClick={() => setShowLangMenu(!showLangMenu)}
-              className="px-3 py-1.5 rounded-full bg-slate-100 dark:bg-[#172033] text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 text-xs font-mono font-medium flex items-center gap-1.5 transition-colors cursor-pointer border border-slate-200/60 dark:border-[#273449]"
-              title="Change Language"
+              onClick={onSearchClick}
+              className="md:hidden w-9 h-9 rounded-md bg-surface border border-line text-ink-2 flex items-center justify-center cursor-pointer"
+              aria-label="Search"
             >
-              <Globe size={13} />
-              <span className="uppercase">{language}</span>
+              <Search size={16} />
             </button>
+          )}
 
-            {showLangMenu && (
-              <div className="absolute right-0 mt-1.5 w-40 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-[#273449] shadow-xl py-1.5 z-50 overflow-hidden">
-                {languages.map((lang) => (
+          {/* Language switcher */}
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={() => setOpen(!open)}
+              className="w-9 h-9 rounded-md bg-surface border border-line text-ink-2 hover:text-ink flex items-center justify-center cursor-pointer"
+              aria-label="Change language"
+              aria-expanded={open}
+            >
+              <Globe size={16} />
+            </button>
+            {open && (
+              <div className="absolute right-0 mt-1.5 w-44 rv-card p-1.5 shadow-pop z-50 rv-fade-in">
+                {LANGUAGES.map((lang) => (
                   <button
                     key={lang.code}
                     onClick={() => {
                       setLanguage(lang.code);
-                      setShowLangMenu(false);
+                      setOpen(false);
                     }}
-                    className={`w-full px-3.5 py-1.5 text-left text-xs font-medium transition-colors cursor-pointer flex items-center justify-between ${
+                    className={clsx(
+                      'w-full flex items-center justify-between px-3 py-2 rounded-md text-sm cursor-pointer',
                       language === lang.code
-                        ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-semibold'
-                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#172033]'
-                    }`}
+                        ? 'bg-brand-soft text-brand font-semibold'
+                        : 'text-ink-2 hover:bg-surface-soft'
+                    )}
                   >
                     <span>{lang.label}</span>
-                    {language === lang.code && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />}
+                    {language === lang.code && <Check size={14} />}
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Theme Toggle Button */}
+          {/* Theme toggle */}
           <button
             onClick={onToggleTheme}
-            className="p-2 rounded-full bg-slate-100 dark:bg-[#172033] text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer border border-slate-200/60 dark:border-[#273449]"
-            title={`${t.switch_to} ${isDark ? t.light_mode : t.dark_mode}`}
+            className="w-9 h-9 rounded-md bg-surface border border-line text-ink-2 hover:text-ink flex items-center justify-center cursor-pointer"
+            aria-label={isDark ? t.light_mode : t.dark_mode}
+            title={isDark ? t.light_mode : t.dark_mode}
           >
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
@@ -138,6 +150,3 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
-
-
-

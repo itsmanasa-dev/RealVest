@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import type { Property, AssetCategory } from '../../types';
+import React, { useState, useMemo } from 'react';
+import type { Property } from '../../types';
 import {
   Search,
   MapPin,
@@ -11,15 +11,29 @@ import {
   Home,
   Store,
   Trees,
-  Check,
 } from 'lucide-react';
 import { useTranslation } from '../../context/LanguageContext';
-import { formatInrLakhs } from '../../utils/currency';
+import { SectionHeader } from '../ui/SectionHeader';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Skeleton } from '../ui/Skeleton';
+import { PropertyCard } from '../property/PropertyCard';
+import { clsx } from 'clsx';
 
 interface ExplorerViewProps {
   properties: Property[];
   onSelectProperty: (property: Property) => void;
 }
+
+const QUICK_AREAS = ['Whitefield', 'Electronic City', 'Sarjapur Road', 'Hebbal', 'HSR Layout', 'Indiranagar', 'Bellandur'];
+
+const PROPERTY_TYPES = [
+  { id: 'All', label: 'All Types', icon: Home },
+  { id: 'Apartments', label: 'Apartments', icon: Building },
+  { id: 'Offices', label: 'Offices', icon: Briefcase },
+  { id: 'Villas', label: 'Villas', icon: Trees },
+  { id: 'Commercial', label: 'Commercial', icon: Store },
+];
 
 export const ExplorerView: React.FC<ExplorerViewProps> = ({
   properties,
@@ -28,34 +42,45 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
+  const [didFilter, setDidFilter] = useState(false);
 
-  // Filter States
+  // Filter states
   const [selectedCity, setSelectedCity] = useState<string>('All Bengaluru');
   const [selectedType, setSelectedType] = useState<string>('All');
   const [minRoi, setMinRoi] = useState<number>(0);
   const [maxPriceLakhs, setMaxPriceLakhs] = useState<number>(300);
   const [minPriceLakhs, setMinPriceLakhs] = useState<number>(20);
 
-  const cities = [
-    'All Bengaluru',
-    'Whitefield',
-    'Indiranagar',
-    'HSR Layout',
-    'Electronic City',
-    'Sarjapur Road',
-    'Koramangala',
-    'Bellandur',
-    'Hebbal',
-  ];
+  const activeFilters = (selectedCity !== 'All Bengaluru' ? 1 : 0) +
+    (selectedType !== 'All' ? 1 : 0) + (minRoi > 0 ? 1 : 0);
 
-  const propertyTypes = [
-    { id: 'All', label: 'All Types', icon: Home },
-    { id: 'Apartments', label: 'Apartments', icon: Building },
-    { id: 'Offices', label: 'Offices', icon: Briefcase },
-    { id: 'Town Houses', label: 'Town Houses', icon: Home },
-    { id: 'Villas', label: 'Villas & Cottages', icon: Trees },
-    { id: 'Commercial', label: 'Commercial', icon: Store },
-  ];
+  const filteredProperties = useMemo(() => {
+    return properties.filter((prop) => {
+      const matchesSearch =
+        prop.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        prop.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        prop.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (prop.code || '').toLowerCase().includes(searchQuery.toLowerCase());
+
+      const matchesCity =
+        selectedCity === 'All Bengaluru' ||
+        prop.location.toLowerCase().includes(selectedCity.toLowerCase()) ||
+        prop.city.toLowerCase().includes(selectedCity.toLowerCase());
+
+      const matchesType =
+        selectedType === 'All' ||
+        (selectedType === 'Apartments' && prop.category === 'Residential') ||
+        (selectedType === 'Offices' && prop.category === 'Commercial') ||
+        (selectedType === 'Commercial' && prop.category === 'Commercial') ||
+        (selectedType === 'Villas' && prop.category.includes('Villa')) ||
+        (selectedType === 'Town Houses' && prop.category === 'Residential');
+
+      const matchesRoi = prop.annualYield >= minRoi;
+      const matchesPrice = prop.askingPriceLakhs >= minPriceLakhs && prop.askingPriceLakhs <= maxPriceLakhs;
+
+      return matchesSearch && matchesCity && matchesType && matchesRoi && matchesPrice;
+    });
+  }, [properties, searchQuery, selectedCity, selectedType, minRoi, minPriceLakhs, maxPriceLakhs]);
 
   const handleResetFilters = () => {
     setSelectedCity('All Bengaluru');
@@ -66,232 +91,158 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
     setSearchQuery('');
   };
 
-  const filteredProperties = properties.filter((prop) => {
-    const matchesSearch =
-      prop.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      prop.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      prop.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      prop.code.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesCity =
-      selectedCity === 'All Bengaluru' ||
-      prop.location.toLowerCase().includes(selectedCity.toLowerCase()) ||
-      prop.city.toLowerCase().includes(selectedCity.toLowerCase());
-
-    const matchesType =
-      selectedType === 'All' ||
-      (selectedType === 'Apartments' && prop.category === 'Residential') ||
-      (selectedType === 'Offices' && prop.category === 'Commercial') ||
-      (selectedType === 'Commercial' && prop.category === 'Commercial') ||
-      (selectedType === 'Villas' && prop.category.includes('Villa')) ||
-      (selectedType === 'Town Houses' && prop.category === 'Residential');
-
-    const matchesRoi = prop.annualYield >= minRoi;
-    const matchesPrice = prop.askingPriceLakhs >= minPriceLakhs && prop.askingPriceLakhs <= maxPriceLakhs;
-
-    return matchesSearch && matchesCity && matchesType && matchesRoi && matchesPrice;
-  });
+  const resetToAll = () => {
+    setSelectedCity('All Bengaluru');
+    setSelectedType('All');
+    setMinRoi(0);
+  };
 
   return (
-    <div className="space-y-5 pb-12 w-full">
-      {/* Header (Screen 2: Explore Property + Filter Button) */}
-      <div className="flex items-center justify-between gap-3 pb-2 border-b border-slate-200 dark:border-[#273449]">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Explore Property
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            {filteredProperties.length} properties available in Bengaluru
-          </p>
-        </div>
+    <div className="space-y-6 pb-4">
+      <SectionHeader
+        eyebrow="Discover"
+        title="Where do you want to invest?"
+        subtitle={`${filteredProperties.length} properties available across Bengaluru`}
+        action={
+          <Button variant="secondary" onClick={() => setShowFilterDrawer(true)}>
+            <SlidersHorizontal size={16} />
+            Filters
+            {activeFilters > 0 && (
+              <span className="w-2 h-2 rounded-full bg-brand" />
+            )}
+          </Button>
+        }
+      />
 
-        {/* Filter Toggle Button (Top-Right Filter Icon) */}
-        <button
-          onClick={() => setShowFilterDrawer(true)}
-          className="p-2.5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-[#273449] text-slate-700 dark:text-slate-200 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors shadow-sm cursor-pointer flex items-center gap-1.5"
-          title="Open Filters"
-        >
-          <SlidersHorizontal size={18} />
-          {(selectedCity !== 'All Bengaluru' || selectedType !== 'All' || minRoi > 0) && (
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
-          )}
-        </button>
-      </div>
-
-      {/* Pill Search Input Bar */}
-      <div className="relative w-full">
-        <Search size={16} className="absolute left-4 top-3 text-slate-400" />
+      {/* Search */}
+      <div className="relative">
+        <Search size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-3" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search Properties..."
-          className="w-full pl-11 pr-4 py-2.5 rounded-full border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] text-slate-900 dark:text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 transition-all shadow-sm"
+          placeholder="Search localities, BHK, project names…"
+          className="input pl-10 py-3 text-[15px]"
+          aria-label="Search properties"
         />
       </div>
 
-      {/* Active Filter Chips Preview */}
-      {(selectedCity !== 'All Bengaluru' || selectedType !== 'All' || minRoi > 0) && (
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-          <span className="text-slate-400 font-mono text-[11px]">Active:</span>
+      {/* Quick area suggestions */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+        <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-3 shrink-0">
+          Areas
+        </span>
+        {QUICK_AREAS.map((area) => {
+          const selected = selectedCity === area;
+          return (
+            <button
+              key={area}
+              onClick={() => {
+                setSelectedCity(selected ? 'All Bengaluru' : area);
+                setDidFilter(true);
+              }}
+              className={clsx(
+                'flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border whitespace-nowrap cursor-pointer transition-colors',
+                selected
+                  ? 'bg-brand text-white border-brand'
+                  : 'bg-surface border-line text-ink-2 hover:border-line-strong'
+              )}
+            >
+              <MapPin size={12} />
+              {area}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Active filter chips */}
+      {activeFilters > 0 && (
+        <div className="flex items-center gap-2 flex-wrap">
           {selectedCity !== 'All Bengaluru' && (
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-medium">
-              {selectedCity}
-            </span>
+            <Badge tone="brand">{selectedCity}<button onClick={resetToAll} className="ml-1 hover:opacity-70"><X size={11} /></button></Badge>
           )}
           {selectedType !== 'All' && (
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-medium">
-              {selectedType}
-            </span>
+            <Badge tone="brand">{selectedType}<button onClick={resetToAll} className="ml-1 hover:opacity-70"><X size={11} /></button></Badge>
           )}
           {minRoi > 0 && (
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-medium">
-              ROI &ge; {minRoi}%
-            </span>
+            <Badge tone="brand">ROI ≥ {minRoi}%<button onClick={resetToAll} className="ml-1 hover:opacity-70"><X size={11} /></button></Badge>
           )}
-          <button
-            onClick={handleResetFilters}
-            className="text-[11px] text-slate-400 hover:text-rose-500 underline ml-2 cursor-pointer"
-          >
+          <button onClick={handleResetFilters} className="text-xs text-ink-3 hover:text-ink underline cursor-pointer">
             Clear all
           </button>
         </div>
       )}
 
-      {/* 2-Column Property Card Grid (Screen 2 Layout) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
-        {filteredProperties.length === 0 ? (
-          <div className="col-span-full p-12 text-center rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827]">
-            <p className="text-slate-400 font-mono text-sm">
-              {t.no_properties_found}
-            </p>
-            <button
-              onClick={handleResetFilters}
-              className="mt-3 px-4 py-2 rounded-full bg-emerald-500 text-white text-xs font-semibold hover:bg-emerald-600 transition-colors cursor-pointer"
-            >
-              Reset Filters
-            </button>
+      {/* Grid */}
+      {filteredProperties.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
+          {filteredProperties.map((prop) => (
+            <PropertyCard key={prop.id} property={prop} onSelect={onSelectProperty} className="rv-fade-in" />
+          ))}
+        </div>
+      ) : (
+        <div className="rv-card p-12 text-center">
+          <div className="mx-auto w-12 h-12 rounded-full bg-surface-soft flex items-center justify-center">
+            <Search size={22} className="text-ink-3" />
           </div>
-        ) : (
-          filteredProperties.map((prop, idx) => {
-            const badgeTag = idx % 3 === 0 ? 'Trending' : (idx % 3 === 1 ? 'Available' : 'Closing Soon');
-            const badgeClass = idx % 3 === 0
-              ? 'bg-blue-600 text-white'
-              : (idx % 3 === 1 ? 'bg-emerald-600 text-white' : 'bg-amber-500 text-white');
+          <h3 className="mt-4 text-base font-semibold text-ink">No matching properties</h3>
+          <p className="mt-1 text-sm text-ink-3">No properties match your current filters.</p>
+          <Button className="mt-5" onClick={handleResetFilters}>Adjust filters</Button>
+        </div>
+      )}
 
-            return (
-              <div
-                key={prop.id}
-                onClick={() => onSelectProperty(prop)}
-                className="group rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] overflow-hidden shadow-sm hover:shadow-md hover:border-emerald-500/40 transition-all cursor-pointer flex flex-col justify-between"
-              >
-                {/* Photo with Top-Left Floating Badge */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-900">
-                  <img
-                    src={prop.imageUrl}
-                    alt={prop.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-
-                  {/* Floating Top-Left Status Pill (from Dribbble Screen 2) */}
-                  <div className="absolute top-3 left-3">
-                    <span className={`px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold tracking-wide shadow-md ${badgeClass}`}>
-                      {badgeTag}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Card Details: Title on left, Price on right, ROI pill below */}
-                <div className="p-4 space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
-                      {prop.title}
-                    </h4>
-                    <span className="text-sm font-extrabold font-mono text-slate-900 dark:text-white shrink-0">
-                      {formatInrLakhs(prop.askingPriceLakhs)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-1">
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-mono text-[10px] font-bold border border-emerald-500/20">
-                      R.O.I. {prop.annualYield}%
-                    </span>
-                    <span className="text-[11px] text-slate-400 truncate max-w-[140px]">
-                      {prop.location}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        )}
-      </div>
-
-      {/* Screen 3: Dedicated Interactive Filters Sheet / Drawer Modal */}
+      {/* Filter drawer */}
       {showFilterDrawer && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fadeIn">
-          <div className="w-full max-w-lg rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-[#273449] shadow-2xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
-            {/* Drawer Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#273449]">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setShowFilterDrawer(false)}
-                  className="p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
-                >
-                  <X size={20} />
-                </button>
-                <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
-                  Filters
-                </h3>
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm"
+          onClick={() => setShowFilterDrawer(false)}
+        >
+          <div
+            className="w-full sm:max-w-lg rv-card rounded-t-2xl sm:rounded-2xl shadow-pop p-6 space-y-5 max-h-[92vh] overflow-y-auto animate-fadeIn"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-label="Filters"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <button onClick={() => setShowFilterDrawer(false)} className="btn btn-ghost -ml-2 cursor-pointer" aria-label="Close"><X size={18} /></button>
+                <h3 className="text-lg font-semibold text-ink">Filters</h3>
               </div>
-
               <button
                 onClick={handleResetFilters}
-                className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
+                className="text-xs font-medium text-brand hover:underline flex items-center gap-1 cursor-pointer"
               >
-                Reset
+                <RotateCcw size={13} /> Reset
               </button>
             </div>
 
-            {/* City Dropdown Selector */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                City <span className="text-rose-500">*</span>
-              </label>
-              <div className="relative">
-                <select
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none appearance-none cursor-pointer"
-                >
-                  {cities.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-                <MapPin size={16} className="absolute right-3.5 top-3.5 text-slate-400 pointer-events-none" />
-              </div>
+            {/* City */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-ink-2">Area / Locality</label>
+              <select value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)} className="input">
+                {['All Bengaluru', 'Whitefield', 'Indiranagar', 'HSR Layout', 'Electronic City', 'Sarjapur Road', 'Koramangala', 'Bellandur', 'Hebbal'].map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
             </div>
 
-            {/* Property Type Grid of Icon Chips */}
+            {/* Type */}
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                Property Type:
-              </label>
+              <label className="text-xs font-semibold text-ink-2">Property type</label>
               <div className="grid grid-cols-3 gap-2">
-                {propertyTypes.map((type) => {
+                {PROPERTY_TYPES.map((type) => {
                   const Icon = type.icon;
                   const isSelected = selectedType === type.id;
                   return (
                     <button
                       key={type.id}
                       onClick={() => setSelectedType(type.id)}
-                      className={`p-2.5 rounded-2xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      className={clsx(
+                        'px-3 py-2.5 rounded-md border text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer',
                         isSelected
-                          ? 'bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/20'
-                          : 'bg-slate-50 dark:bg-[#172033] border-slate-200 dark:border-[#273449] text-slate-700 dark:text-slate-300 hover:border-slate-300'
-                      }`}
+                          ? 'bg-brand text-white border-brand'
+                          : 'bg-surface border-line text-ink-2 hover:border-line-strong'
+                      )}
                     >
                       <Icon size={14} />
                       <span className="truncate">{type.label}</span>
@@ -301,13 +252,11 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
               </div>
             </div>
 
-            {/* R.O.I Range Slider */}
+            {/* ROI */}
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-xs font-bold">
-                <span className="text-slate-700 dark:text-slate-300">R.O.I Range:</span>
-                <span className="text-emerald-600 dark:text-emerald-400 font-mono font-extrabold text-sm">
-                  {minRoi}%+
-                </span>
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-semibold text-ink-2">Minimum ROI</label>
+                <span className="text-sm font-semibold text-brand">{minRoi}%+</span>
               </div>
               <input
                 type="range"
@@ -316,25 +265,18 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                 step={1}
                 value={minRoi}
                 onChange={(e) => setMinRoi(Number(e.target.value))}
-                className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
+                style={{ ['--range' as string]: `${(minRoi / 25) * 100}%` }}
               />
-              <div className="flex justify-between text-[9px] font-mono text-slate-400">
-                <span>0%</span>
-                <span>5%</span>
-                <span>10%</span>
-                <span>15%</span>
-                <span>20%</span>
-                <span>25%+</span>
+              <div className="flex justify-between text-[10px] text-ink-3">
+                <span>0%</span><span>10%</span><span>20%</span><span>25%+</span>
               </div>
             </div>
 
-            {/* Price Range Slider & Min/Max Inputs */}
-            <div className="space-y-3">
-              <div className="flex justify-between items-center text-xs font-bold">
-                <span className="text-slate-700 dark:text-slate-300">Price Range:</span>
-                <span className="text-slate-900 dark:text-white font-mono font-extrabold text-sm">
-                  ₹{minPriceLakhs} L – ₹{maxPriceLakhs} L
-                </span>
+            {/* Price */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-semibold text-ink-2">Price range</label>
+                <span className="text-sm font-semibold text-ink">₹{minPriceLakhs}L – ₹{maxPriceLakhs}L</span>
               </div>
               <input
                 type="range"
@@ -343,51 +285,26 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                 step={5}
                 value={maxPriceLakhs}
                 onChange={(e) => setMaxPriceLakhs(Number(e.target.value))}
-                className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
+                style={{ ['--range' as string]: `${((maxPriceLakhs - 20) / 380) * 100}%` }}
               />
-
               <div className="grid grid-cols-2 gap-3 pt-1">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono text-slate-400 block">Min. Amount</span>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={minPriceLakhs}
-                      onChange={(e) => setMinPriceLakhs(Number(e.target.value))}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
-                    />
-                    <span className="absolute right-3 top-2 text-[10px] font-mono text-slate-400">₹ Lakhs</span>
-                  </div>
+                <div>
+                  <span className="text-[10px] text-ink-3 block mb-1">Min (₹L)</span>
+                  <input type="number" value={minPriceLakhs} onChange={(e) => setMinPriceLakhs(Number(e.target.value))} className="input" />
                 </div>
-
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono text-slate-400 block">Max. Amount</span>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={maxPriceLakhs}
-                      onChange={(e) => setMaxPriceLakhs(Number(e.target.value))}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
-                    />
-                    <span className="absolute right-3 top-2 text-[10px] font-mono text-slate-400">₹ Lakhs</span>
-                  </div>
+                <div>
+                  <span className="text-[10px] text-ink-3 block mb-1">Max (₹L)</span>
+                  <input type="number" value={maxPriceLakhs} onChange={(e) => setMaxPriceLakhs(Number(e.target.value))} className="input" />
                 </div>
               </div>
             </div>
 
-            {/* Save / Apply Full-Width Button (Vibrant Green) */}
-            <button
-              onClick={() => setShowFilterDrawer(false)}
-              className="w-full py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-sm shadow-lg shadow-emerald-500/25 transition-all cursor-pointer text-center"
-            >
-              Save
-            </button>
+            <Button fullWidth size="lg" onClick={() => setShowFilterDrawer(false)}>
+              Show {filteredProperties.length} properties
+            </Button>
           </div>
         </div>
       )}
     </div>
   );
 };
-
-
-

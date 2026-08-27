@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { Property, NavTab } from '../../types';
 import {
-  Brain,
   Send,
   Sparkles,
   Building2,
@@ -10,15 +9,17 @@ import {
   User,
   AlertCircle,
   X,
-  ArrowRight,
   TrendingUp,
-  Scale,
-  DollarSign,
+  Target,
+  ShieldCheck,
 } from 'lucide-react';
 import { useTranslation } from '../../context/LanguageContext';
 import { advisorApi } from '../../services/api/advisorApi';
 import { advisorService } from '../../services/advisorService';
 import { formatInrLakhs } from '../../utils/currency';
+import { Button } from '../ui/Button';
+import { Badge, recommendationTone } from '../ui/Badge';
+import { clsx } from 'clsx';
 
 interface Message {
   id: string;
@@ -40,16 +41,13 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
   onNavigate,
 }) => {
   const { t, language } = useTranslation();
-  
-  // Active property context
-  const [activeProperty, setActiveProperty] = useState<Property | null>(properties[0] || null);
 
-  // Chat State
+  const [activeProperty, setActiveProperty] = useState<Property | null>(properties[0] || null);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
       sender: 'advisor',
-      text: "Hello! I am your **RealVest AI Property & Investment Assistant**. Ask me about Bengaluru localities, rental cash flow, market fair values, or buy vs. rent decisions.",
+      text: "Hello! I am your **RealVest AI Investment Assistant**. Ask me about Bengaluru localities, rental cash flow, market fair values, or buy vs. rent decisions.",
       sources: ["RealVest Bengaluru Intelligence Engine"],
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
@@ -72,7 +70,6 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
     "Where should I invest ₹50L?",
     "Is Whitefield good for rental income?",
     "Buy vs rent?",
-    "Why was this property recommended?",
     "What are the biggest risks?",
   ];
 
@@ -92,7 +89,6 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
     setIsLoading(true);
     setErrorMessage(null);
 
-    // Build context payload
     const contextPayload: Record<string, any> = {};
     if (activeProperty) {
       contextPayload.property_id = activeProperty.id;
@@ -103,7 +99,6 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
       contextPayload.investment_score = activeProperty.investmentScore;
     }
 
-    // Build history payload
     const historyPayload = messages.slice(-6).map((m) => ({
       role: m.sender === 'user' ? ('user' as const) : ('assistant' as const),
       content: m.text,
@@ -120,9 +115,7 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
       };
       setMessages((prev) => [...prev, advisorMsg]);
     } catch (err: any) {
-
       console.warn('Advisor API backend offline or unreachable, utilizing built-in intelligence fallback:', err.message);
-      // Seamless built-in fallback
       try {
         const fallbackRes = await advisorService.query(query, language, properties, activeProperty);
         const fallbackMsg: Message = {
@@ -149,83 +142,69 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] min-h-[580px] max-w-4xl mx-auto pb-4">
+    <div className="flex flex-col h-[calc(100vh-140px)] min-h-[560px] max-w-4xl mx-auto pb-4">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-[#273449] shrink-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-line shrink-0">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-mono text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1">
-              <Sparkles size={11} /> AI INVESTMENT ASSISTANT
+          <div className="flex items-center gap-2.5">
+            <span className="w-9 h-9 rounded-lg bg-brand text-white flex items-center justify-center shrink-0">
+              <Bot size={19} />
             </span>
+            <div>
+              <h1 className="text-lg font-semibold tracking-tight text-ink leading-tight">RealVest Advisor</h1>
+              <p className="text-xs text-ink-3">Ask about Bengaluru properties, markets, and investment decisions.</p>
+            </div>
           </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
-            AI Advisor
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Ask about properties, investments, or Bengaluru markets.
-          </p>
         </div>
 
-        {/* Selected Property Context Selector */}
         {activeProperty && (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-[#273449] text-xs shadow-sm self-start sm:self-auto">
-            <Building2 size={13} className="text-emerald-500 shrink-0" />
-            <div className="truncate max-w-[200px]">
-              <span className="font-mono text-[10px] text-slate-400 uppercase">Context: </span>
-              <span className="font-bold text-slate-800 dark:text-slate-200">{activeProperty.title}</span>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface border border-line text-xs rv-fade-in self-start sm:self-auto">
+            <Building2 size={14} className="text-brand shrink-0" />
+            <div className="min-w-0">
+              <span className="text-[10px] uppercase tracking-wide text-ink-3 block leading-none">Analyzing</span>
+              <span className="font-semibold text-ink block truncate max-w-[200px]">{activeProperty.title}</span>
             </div>
-            <button
-              onClick={() => setActiveProperty(null)}
-              className="text-slate-400 hover:text-rose-500 p-0.5 rounded cursor-pointer transition-colors"
-              title="Clear Property Context"
-            >
-              <X size={13} />
+            <button onClick={() => setActiveProperty(null)} className="text-ink-3 hover:text-neg cursor-pointer" aria-label="Clear context">
+              <X size={14} />
             </button>
           </div>
         )}
       </div>
 
-      {/* Chat Messages Area */}
-      <div className="flex-1 overflow-y-auto py-4 space-y-4 px-1">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto py-4 space-y-4">
         {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`flex items-start gap-3 ${
-              msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
-            }`}
-          >
-            {/* Avatar */}
+          <div key={msg.id} className={clsx('flex items-start gap-3', msg.sender === 'user' && 'flex-row-reverse')}>
             <div
-              className={`w-8 h-8 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${
-                msg.sender === 'user'
-                  ? 'bg-slate-900 dark:bg-emerald-600 text-white'
-                  : 'bg-emerald-500 text-white shadow-emerald-500/20'
-              }`}
+              className={clsx(
+                'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
+                msg.sender === 'user' ? 'bg-ink text-canvas' : 'bg-brand text-white'
+              )}
             >
               {msg.sender === 'user' ? <User size={15} /> : <Bot size={16} />}
             </div>
 
-            {/* Message Bubble */}
             <div
-              className={`max-w-[85%] sm:max-w-[75%] rounded-3xl p-4 shadow-sm space-y-2 text-xs leading-relaxed ${
+              className={clsx(
+                'max-w-[85%] sm:max-w-[75%] text-sm leading-relaxed px-4 py-3',
                 msg.sender === 'user'
-                  ? 'bg-slate-900 dark:bg-emerald-600 text-white rounded-tr-sm font-medium'
-                  : 'bg-white dark:bg-[#111827] border border-slate-200 dark:border-[#273449] text-slate-800 dark:text-slate-200 rounded-tl-sm'
-              }`}
+                  ? 'bg-ink text-canvas rounded-xl rounded-tr-sm font-medium'
+                  : 'bg-surface border border-line rounded-xl rounded-tl-sm text-ink-2'
+              )}
             >
-              <div className="whitespace-pre-line font-sans">
+              <div className="whitespace-pre-line">
                 {msg.text.split('\n').map((line, i) => {
                   if (line.startsWith('• ')) {
                     return (
                       <div key={i} className="flex items-start gap-1.5 my-1">
-                        <span className="text-emerald-500 font-bold">•</span>
+                        <span className="text-brand font-bold mt-px">•</span>
                         <span>{line.replace(/^•\s*/, '')}</span>
                       </div>
                     );
                   }
                   if (line.startsWith('**') && line.endsWith('**')) {
                     return (
-                      <div key={i} className="font-extrabold text-slate-900 dark:text-white mt-1">
+                      <div key={i} className="font-semibold text-ink mt-1">
                         {line.replace(/\*\*/g, '')}
                       </div>
                     );
@@ -234,96 +213,75 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
                 })}
               </div>
 
-              {/* Sources tags if available */}
-              {msg.sources && msg.sources.length > 0 && (
-                <div className="pt-2 border-t border-slate-100 dark:border-[#273449]/80 flex flex-wrap items-center gap-1.5">
-                  <span className="text-[9px] font-mono uppercase text-slate-400">Sources:</span>
+              {msg.sources && msg.sources.length > 0 && msg.sender === 'advisor' && (
+                <div className="pt-2 mt-2 border-t border-line flex flex-wrap items-center gap-1.5">
+                  <span className="text-[10px] uppercase tracking-wide text-ink-3">Sources</span>
                   {msg.sources.map((src, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-[#172033] text-[9px] font-mono text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-[#273449]"
-                    >
+                    <span key={idx} className="px-2 py-0.5 rounded-full bg-surface-soft text-ink-2 text-[10px] font-medium">
                       {src}
                     </span>
                   ))}
                 </div>
               )}
 
-              <div
-                className={`text-[9px] font-mono ${
-                  msg.sender === 'user' ? 'text-slate-300' : 'text-slate-400'
-                } text-right`}
-              >
-                {msg.timestamp}
-              </div>
+              <div className={clsx('mt-1 text-[10px] text-ink-3', msg.sender === 'user' && 'text-canvas/60')}>{msg.timestamp}</div>
             </div>
           </div>
         ))}
 
-        {/* Loading Indicator */}
         {isLoading && (
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm shadow-emerald-500/20">
-              <Bot size={16} />
-            </div>
-            <div className="p-3.5 rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-[#273449] text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-brand text-white flex items-center justify-center shrink-0"><Bot size={16} /></div>
+            <div className="bg-surface border border-line rounded-xl px-4 py-3 text-sm text-ink-3 flex items-center gap-2">
               <div className="flex gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" />
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce [animation-delay:0.2s]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce [animation-delay:0.4s]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-brand animate-bounce" />
+                <span className="w-1.5 h-1.5 rounded-full bg-brand animate-bounce [animation-delay:0.15s]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-brand animate-bounce [animation-delay:0.3s]" />
               </div>
-              <span className="font-mono text-xs">RealVest is thinking...</span>
+              RealVest is thinking…
             </div>
           </div>
         )}
 
-        {/* Error Alert */}
         {errorMessage && (
-          <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs flex items-center gap-2 animate-fadeIn">
-            <AlertCircle size={15} className="shrink-0" />
-            <span>{errorMessage}</span>
+          <div className="p-3 rounded-lg bg-warn-soft text-warn text-sm flex items-center gap-2 rv-fade-in">
+            <AlertCircle size={15} className="shrink-0" /> {errorMessage}
           </div>
         )}
 
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Suggested Questions (Quick Pills) */}
-      <div className="py-2 shrink-0">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+      {/* Suggested prompts + input */}
+      <div className="pt-2 border-t border-line shrink-0 space-y-2.5">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5 pt-1">
           {suggestedQuestions.map((q, idx) => (
             <button
               key={idx}
               onClick={() => handleSendMessage(q)}
               disabled={isLoading}
-              className="px-3 py-1.5 rounded-full bg-white dark:bg-[#111827] border border-slate-200 dark:border-[#273449] hover:border-emerald-500 text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 text-[11px] font-medium whitespace-nowrap transition-all shadow-xs cursor-pointer"
+              className="px-3 py-1.5 rounded-full bg-surface border border-line text-ink-2 hover:border-brand hover:text-brand text-xs font-medium whitespace-nowrap transition-colors cursor-pointer disabled:opacity-50"
             >
               {q}
             </button>
           ))}
         </div>
-      </div>
 
-      {/* Bottom Input Area */}
-      <div className="pt-2 border-t border-slate-200 dark:border-[#273449] shrink-0">
-        <div className="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm focus-within:border-emerald-500 transition-all">
+        <div className="flex items-center gap-2 p-1.5 rounded-xl border border-line bg-surface shadow-card focus-within:border-brand transition-colors">
           <input
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask RealVest anything about Bengaluru properties, valuations, or investments..."
-            className="flex-1 px-3 py-2 text-xs text-slate-900 dark:text-white bg-transparent focus:outline-none placeholder:text-slate-400"
+            placeholder="Ask about properties, valuations, or investment decisions…"
+            className="flex-1 px-3 py-2 text-sm text-ink bg-transparent focus:outline-none placeholder:text-ink-3"
             disabled={isLoading}
+            aria-label="Ask the advisor"
           />
-          <button
-            onClick={() => handleSendMessage()}
-            disabled={!inputText.trim() || isLoading}
-            className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white font-bold text-xs transition-all flex items-center gap-1.5 shadow-sm shadow-emerald-500/20 cursor-pointer"
-          >
-            <span>Send</span>
-            <Send size={13} />
-          </button>
+          <Button onClick={() => handleSendMessage()} disabled={!inputText.trim() || isLoading} className="!px-4 shrink-0">
+            <span className="hidden sm:inline">Send</span>
+            <Send size={15} />
+          </Button>
         </div>
       </div>
     </div>

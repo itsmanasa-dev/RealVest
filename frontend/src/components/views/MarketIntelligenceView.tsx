@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import {
-  MapPin,
-  TrendingUp,
+  Map,
   Activity,
   ArrowUp,
   ArrowDown,
   ArrowRight,
-  Map,
   FileText,
   Sparkles,
-  Info,
+  TrendingUp,
+  Flame,
+  MapPin,
 } from 'lucide-react';
 import { Property } from '../../types';
-import { mockHotZones, mockProperties, marketData } from '../../data/mockProperties';
+import { mockHotZones, mockProperties } from '../../data/mockProperties';
 import { InteractiveMap } from '../common/InteractiveMap';
 import { useTranslation } from '../../context/LanguageContext';
-import { formatPercent } from '../../utils/currency';
+import { SectionHeader } from '../ui/SectionHeader';
+import { Card } from '../ui/Card';
+import { Stat } from '../ui/Stat';
+import { Badge } from '../ui/Badge';
+import { clsx } from 'clsx';
 
 interface MarketIntelligenceViewProps {
   properties?: Property[];
@@ -29,7 +33,6 @@ export const MarketIntelligenceView: React.FC<MarketIntelligenceViewProps> = ({
   const { t } = useTranslation();
   const [selectedHotZone, setSelectedHotZone] = useState(mockHotZones[0]);
 
-  // Historical observed annual benchmarks (2020-2024) + Legitimate Time-Series Forecasts (2025-2026)
   const trajectoryBars = [
     { year: '2020', hpi: 105.0, height: '42%', isForecast: false, range: null },
     { year: '2021', hpi: 114.2, height: '52%', isForecast: false, range: null },
@@ -41,32 +44,47 @@ export const MarketIntelligenceView: React.FC<MarketIntelligenceViewProps> = ({
   ];
 
   return (
-    <div className="space-y-6 pb-12 w-full">
-      {/* Title & Subtitle */}
-      <div className="pb-3 border-b border-slate-200 dark:border-[#273449]">
-        <h1 className="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
-          {t.market_intel_title}
-        </h1>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-          {t.market_intel_subtitle}
-        </p>
+    <div className="space-y-5 pb-4">
+      <SectionHeader
+        eyebrow="Markets"
+        title={t.market_intel_title}
+        subtitle={t.market_intel_subtitle}
+      />
+
+      {/* Selected hot zone chips */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+        <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-3 shrink-0">Hot zones</span>
+        {mockHotZones.map((zone) => {
+          const active = selectedHotZone.id === zone.id;
+          return (
+            <button
+              key={zone.id}
+              onClick={() => setSelectedHotZone(zone)}
+              className={clsx(
+                'px-3 py-1.5 rounded-full text-xs font-medium border whitespace-nowrap cursor-pointer transition-colors flex items-center gap-1.5',
+                active ? 'bg-brand text-white border-brand' : 'bg-surface border-line text-ink-2 hover:border-line-strong'
+              )}
+            >
+              <Flame size={12} className={active ? 'text-white' : 'text-warn'} />
+              {zone.name}
+              <span className={clsx('font-mono text-[10px]', active ? 'text-white/70' : 'text-pos')}>+{zone.growth30d}%</span>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Card 1: Interactive Real Bengaluru Geographic Map */}
-      <div className="rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm p-4 sm:p-6 space-y-4">
-        <div className="flex items-center justify-between">
+      {/* Map */}
+      <Card className="!p-0 overflow-hidden">
+        <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-line">
           <div className="flex items-center gap-2">
-            <Map size={18} className="text-emerald-600 dark:text-emerald-400" />
-            <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
-              {t.opportunity_heatmap}
-            </h3>
+            <span className="w-9 h-9 rounded-lg bg-brand-soft text-brand flex items-center justify-center"><Map size={18} /></span>
+            <div>
+              <h3 className="text-sm font-semibold text-ink">{t.opportunity_heatmap}</h3>
+              <p className="text-xs text-ink-3">Bengaluru geographic market overview</p>
+            </div>
           </div>
-          <span className="px-3 py-1 rounded-full text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-500/30 font-mono text-[10px] font-bold">
-            BENGALURU GIS SATELLITE
-          </span>
+          <Badge tone="brand" className="hidden sm:inline-flex">LIVE GIS</Badge>
         </div>
-
-        {/* Real Interactive Map Component */}
         <InteractiveMap
           hotZones={mockHotZones}
           selectedZone={selectedHotZone}
@@ -74,88 +92,71 @@ export const MarketIntelligenceView: React.FC<MarketIntelligenceViewProps> = ({
           properties={properties}
           onSelectProperty={onSelectProperty}
         />
-      </div>
+      </Card>
 
-      {/* Card 2: Trend Velocity & Capital Appreciation: 2020-2024 Actual vs 2025-2026 Forecast */}
-      <div className="p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4">
+      {/* Trend velocity */}
+      <Card>
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <Activity size={16} className="text-blue-600 dark:text-blue-400" />
-              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
-                {t.trend_velocity}
-              </h3>
+              <span className="w-8 h-8 rounded-lg bg-brand-soft text-brand flex items-center justify-center"><Activity size={16} /></span>
+              <h3 className="text-sm font-semibold text-ink">{t.trend_velocity}</h3>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              {t.five_year_projection}
-            </p>
+            <p className="text-xs text-ink-3 mt-1">{t.five_year_projection}</p>
           </div>
-
           <div className="text-right">
-            <div className="text-2xl font-semibold font-mono text-blue-600 dark:text-blue-400 tracking-tight">
-              +34.3%
-            </div>
-            <div className="text-[10px] font-mono uppercase text-slate-400">
-              {t.yoy_average} (HPI 141.0)
-            </div>
+            <div className="text-2xl font-semibold font-mono text-pos tracking-tight">+34.3%</div>
+            <div className="text-[10px] font-mono uppercase text-ink-3">{t.yoy_average} (HPI 141.0)</div>
           </div>
         </div>
 
-        {/* Legend Indicator */}
-        <div className="flex items-center justify-between text-[11px] font-mono pt-1 border-t border-slate-100 dark:border-[#273449]">
+        <div className="flex items-center justify-between text-[11px] font-mono pt-3 mt-3 border-t border-line">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded bg-blue-600" />
-            <span className="text-slate-600 dark:text-slate-300">{t.observed_through_2024}</span>
+            <span className="w-2.5 h-2.5 rounded bg-brand" />
+            <span className="text-ink-2">{t.observed_through_2024}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded bg-emerald-500 border border-dashed border-emerald-300" />
-            <span className="text-emerald-600 dark:text-emerald-400 font-medium">{t.forecast_2025_2026}</span>
+            <span className="w-2.5 h-2.5 rounded bg-pos border border-dashed border-line-strong" />
+            <span className="text-pos font-medium">{t.forecast_2025_2026}</span>
           </div>
         </div>
 
-        {/* 7-Bar Chart with Historical vs 2025/2026 Forecast & Confidence Interval */}
-        <div className="pt-2">
+        {/* Chart */}
+        <div className="pt-4">
           <div className="h-40 w-full flex items-end justify-between gap-2 sm:gap-4 px-1 pb-2">
             {trajectoryBars.map((item) => (
               <div key={item.year} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group relative">
-                {/* Tooltip for Confidence Interval */}
                 {item.isForecast && item.range && (
-                  <div className="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-[9px] font-mono px-2 py-0.5 rounded shadow whitespace-nowrap z-20 pointer-events-none">
+                  <div className="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity bg-ink text-canvas text-[9px] font-mono px-2 py-0.5 rounded shadow-card whitespace-nowrap z-20 pointer-events-none">
                     95% CI: {item.range}
                   </div>
                 )}
 
                 <div
                   style={{ height: item.height }}
-                  className={`w-full rounded-t transition-all relative ${
+                  className={clsx(
+                    'w-full rounded-t transition-all relative',
                     item.isForecast
-                      ? 'bg-emerald-500/90 dark:bg-emerald-500 border-2 border-dashed border-emerald-300 shadow-sm'
+                      ? 'bg-pos border-2 border-dashed border-pos/50 shadow-sm'
                       : item.year === '2024'
-                      ? 'bg-blue-600 dark:bg-blue-600 shadow-sm'
-                      : 'bg-blue-100 dark:bg-slate-800'
-                  }`}
+                      ? 'bg-brand shadow-sm'
+                      : 'bg-brand/15'
+                  )}
                 >
                   {item.isForecast && (
-                    <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-pos animate-ping" />
                   )}
                 </div>
 
                 <div className="text-center">
-                  <span className={`block text-xs font-mono font-medium ${
-                    item.isForecast
-                      ? 'text-emerald-600 dark:text-emerald-400'
-                      : item.year === '2024'
-                      ? 'text-blue-600 dark:text-blue-400 font-semibold'
-                      : 'text-slate-400'
-                  }`}>
+                  <span className={clsx(
+                    'block text-xs font-mono font-medium',
+                    item.isForecast ? 'text-pos' : item.year === '2024' ? 'text-brand font-semibold' : 'text-ink-3'
+                  )}>
                     {item.year}
                   </span>
-                  <span className="block text-[9px] font-mono text-slate-400">
-                    {item.hpi}
-                  </span>
-                  <span className={`text-[8px] font-mono uppercase font-semibold block mt-0.5 ${
-                    item.isForecast ? 'text-emerald-500' : 'text-slate-400'
-                  }`}>
+                  <span className="block text-[9px] font-mono text-ink-3">{item.hpi}</span>
+                  <span className={clsx('text-[8px] font-mono uppercase font-semibold block mt-0.5', item.isForecast ? 'text-pos' : 'text-ink-3')}>
                     {item.isForecast ? 'FCST' : 'ACT'}
                   </span>
                 </div>
@@ -164,77 +165,61 @@ export const MarketIntelligenceView: React.FC<MarketIntelligenceViewProps> = ({
           </div>
         </div>
 
-        {/* Statistical Forecast Range Detail Box */}
-        <div className="p-3.5 rounded-lg bg-emerald-50/50 dark:bg-[#172033] border border-emerald-200/60 dark:border-[#273449] space-y-1.5">
-          <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-emerald-800 dark:text-emerald-400">
+        {/* Forecast detail */}
+        <div className="p-4 rounded-lg bg-pos-soft/50 border border-pos/20 space-y-2.5">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-pos">
             <Sparkles size={13} />
-            <span>2025–2026 Macro Statistical Projections (NHB Polynomial Time-Series)</span>
+            <span>{t.forecast_label}</span>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-1">
-            <div className="p-2 rounded-lg bg-white/80 dark:bg-[#111827]/80 border border-emerald-100 dark:border-[#273449]">
-              <span className="text-[10px] text-slate-400 block uppercase">2025 Projected HPI</span>
-              <span className="font-semibold text-slate-900 dark:text-white">148.5</span>
-              <span className="text-[9px] text-emerald-600 dark:text-emerald-400 block mt-0.5">95% Range: 139.2 – 157.8</span>
+          <div className="grid grid-cols-2 gap-2.5 text-sm font-mono">
+            <div className="p-3 rounded-lg bg-surface border border-line">
+              <span className="text-[10px] text-ink-3 block uppercase">2025 Projected HPI</span>
+              <span className="font-semibold text-ink">148.5</span>
+              <span className="text-[9px] text-pos block mt-0.5">95% Range: 139.2 – 157.8</span>
             </div>
-            <div className="p-2 rounded-lg bg-white/80 dark:bg-[#111827]/80 border border-emerald-100 dark:border-[#273449]">
-              <span className="text-[10px] text-slate-400 block uppercase">2026 Projected HPI</span>
-              <span className="font-semibold text-slate-900 dark:text-white">155.0</span>
-              <span className="text-[9px] text-emerald-600 dark:text-emerald-400 block mt-0.5">95% Range: 144.2 – 165.8</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Card 3: Yield Trajectories */}
-      <div className="p-5 rounded-xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4">
-        <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-[#273449]">
-          <TrendingUp size={16} className="text-blue-600 dark:text-blue-400" />
-          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
-            {t.yield_trajectories}
-          </h3>
-        </div>
-
-        {/* 2 Metric Boxes Side-by-Side */}
-        <div className="grid grid-cols-2 gap-3.5">
-          <div className="p-3.5 rounded-lg border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033]">
-            <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400">
-              <span>{t.cash_on_cash}</span>
-              <ArrowUp size={12} className="text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <div className="text-xl font-semibold font-mono text-slate-900 dark:text-white mt-1">
-              7.8%
-            </div>
-          </div>
-
-          <div className="p-3.5 rounded-lg border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033]">
-            <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400">
-              <span>{t.cap_rate}</span>
-              <ArrowDown size={12} className="text-blue-600 dark:text-blue-400" />
-            </div>
-            <div className="text-xl font-semibold font-mono text-slate-900 dark:text-white mt-1">
-              5.6%
+            <div className="p-3 rounded-lg bg-surface border border-line">
+              <span className="text-[10px] text-ink-3 block uppercase">2026 Projected HPI</span>
+              <span className="font-semibold text-ink">155.0</span>
+              <span className="text-[9px] text-pos block mt-0.5">95% Range: 144.2 – 165.8</span>
             </div>
           </div>
         </div>
+      </Card>
 
-        {/* Institutional Grade Note Box */}
-        <div className="p-3.5 rounded-lg bg-blue-50/50 dark:bg-[#172033] border-l-2 border-l-blue-600 space-y-2">
-          <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
-            {t.institutional_report_text}
-          </p>
+      {/* Yield trajectories */}
+      <Card>
+        <div className="flex items-center gap-2 pb-3 border-b border-line">
+          <span className="w-8 h-8 rounded-lg bg-brand-soft text-brand flex items-center justify-center"><TrendingUp size={16} /></span>
+          <h3 className="text-sm font-semibold text-ink">{t.yield_trajectories}</h3>
+        </div>
 
+        <div className="grid grid-cols-2 gap-3.5 mt-3">
+          <Stat
+            label={t.cash_on_cash}
+            value="7.8%"
+            icon={ArrowUp}
+            iconTone="pos"
+          />
+          <Stat
+            label={t.cap_rate}
+            value="5.6%"
+            icon={ArrowDown}
+            iconTone="brand"
+          />
+        </div>
+
+        <div className="p-4 rounded-lg bg-brand-soft/40 border-l-2 border-l-brand mt-3 space-y-2">
+          <p className="text-xs text-ink-2 leading-relaxed font-medium">{t.institutional_report_text}</p>
           <div className="text-right">
             <button
               onClick={() => alert('Bengaluru Micro-market Intelligence Brief generated from NHB Residex and Certified Valuation Models.')}
-              className="text-xs font-mono font-medium text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1 cursor-pointer"
+              className="text-xs font-medium text-brand hover:underline inline-flex items-center gap-1 cursor-pointer"
             >
               <FileText size={12} /> {t.full_report_btn} <ArrowRight size={12} />
             </button>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };
-
-
