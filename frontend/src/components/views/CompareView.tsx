@@ -49,7 +49,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
   return (
     <div className="space-y-5 pb-20 max-w-2xl mx-auto">
       {/* Title & Subtitle */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200/80 dark:border-slate-800/80">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200 dark:border-[#273449]">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {t.compare_title}
@@ -62,7 +62,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
         {selectedIds.length < 3 && (
           <button
             onClick={handleAddSlot}
-            className="px-3.5 py-2 rounded-2xl bg-blue-50 dark:bg-slate-800 text-blue-700 dark:text-slate-200 font-mono text-xs font-bold hover:bg-blue-100 dark:hover:bg-slate-700 transition-colors cursor-pointer self-start sm:self-auto"
+            className="px-3.5 py-2 rounded-2xl bg-blue-50 dark:bg-[#172033] text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-[#273449] font-mono text-xs font-bold hover:bg-blue-100 dark:hover:bg-[#1e2c47] transition-colors cursor-pointer self-start sm:self-auto"
           >
             {t.add_asset}
           </button>
@@ -74,7 +74,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
         {selectedIds.map((currentId, slotIdx) => (
           <div
             key={slotIdx}
-            className="p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-2"
+            className="p-4 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-2"
           >
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono font-bold uppercase text-slate-400">
@@ -93,7 +93,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
             <select
               value={currentId}
               onChange={(e) => handleSelectSlot(slotIdx, e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#031427] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-900 dark:text-white text-xs font-semibold focus:outline-none"
             >
               {properties.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -106,10 +106,10 @@ export const CompareView: React.FC<CompareViewProps> = ({
       </div>
 
       {/* Comparison Table */}
-      <div className="rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm overflow-hidden">
+      <div className="rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm overflow-hidden">
         <table className="w-full text-left text-xs font-mono">
           <thead>
-            <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+            <tr className="border-b border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033]">
               <th className="p-3.5 text-slate-400 font-bold uppercase">{t.metric_col}</th>
               {selectedProps.map((p) => (
                 <th key={p.id} className="p-3.5 text-slate-900 dark:text-white font-extrabold">
@@ -118,7 +118,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+          <tbody className="divide-y divide-slate-100 dark:divide-[#273449]">
             <tr>
               <td className="p-3.5 text-slate-400 font-semibold">{t.asking_price}</td>
               {selectedProps.map((p) => (
@@ -130,7 +130,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
             <tr>
               <td className="p-3.5 text-slate-400 font-semibold">{t.est_value}</td>
               {selectedProps.map((p) => (
-                <td key={p.id} className="p-3.5 font-extrabold text-blue-600 dark:text-emerald-400 text-sm">
+                <td key={p.id} className="p-3.5 font-extrabold text-blue-600 dark:text-blue-400 text-sm">
                   {formatInrLakhs(p.fairValueLakhs)}
                 </td>
               ))}
@@ -177,7 +177,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
 
       {/* Best Pick Recommendation Banner */}
       {bestProperty && (
-        <div className="p-5 sm:p-6 rounded-3xl bg-blue-600 dark:bg-blue-600 text-white shadow-lg shadow-blue-600/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="p-5 sm:p-6 rounded-3xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-2xl bg-white/20 text-white flex items-center justify-center shrink-0">
               <Trophy size={20} />
@@ -209,3 +209,4 @@ export const CompareView: React.FC<CompareViewProps> = ({
     </div>
   );
 };
+

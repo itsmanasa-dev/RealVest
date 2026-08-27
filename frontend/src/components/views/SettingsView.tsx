@@ -24,9 +24,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   return (
     <div className="space-y-6 pb-12 max-w-2xl mx-auto">
       {/* Header */}
-      <div className="pb-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="pb-4 border-b border-slate-200 dark:border-[#273449]">
         <div className="flex items-center gap-2 mb-1">
-          <span className="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-mono text-[11px] font-bold uppercase tracking-wider">
+          <span className="px-2.5 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 font-mono text-[11px] font-bold uppercase tracking-wider border border-blue-500/20">
             SYSTEM PREFERENCES
           </span>
         </div>
@@ -40,9 +40,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       <div className="space-y-6">
         {/* Language Selection Card */}
-        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm space-y-4">
+        <div className="p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-blue-500/10 text-blue-500">
+            <div className="p-2.5 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
               <Globe size={20} />
             </div>
             <div>
@@ -62,15 +62,15 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   onClick={() => setLanguage(l.code)}
                   className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-1 ${
                     isActive
-                      ? 'bg-blue-600 dark:bg-emerald-500 text-white border-blue-600 dark:border-emerald-500 shadow-md'
-                      : 'bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-400'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                      : 'bg-slate-50 dark:bg-[#172033] border-slate-200 dark:border-[#273449] text-slate-700 dark:text-slate-300 hover:border-blue-400'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-sm">{l.label}</span>
                     {isActive && <Check size={16} />}
                   </div>
-                  <span className={`text-[10px] ${isActive ? 'text-blue-100 dark:text-emerald-100' : 'text-slate-400'}`}>
+                  <span className={`text-[10px] ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
                     {l.sub}
                   </span>
                 </button>
@@ -80,9 +80,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {/* Theme Archetype */}
-        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm space-y-4">
+        <div className="p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-emerald-500/10 text-emerald-500">
+            <div className="p-2.5 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
               {isDark ? <Moon size={20} /> : <Sun size={20} />}
             </div>
             <div>
@@ -95,11 +95,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           <div className="pt-2 flex items-center justify-between">
             <span className="text-xs md:text-sm font-medium text-slate-700 dark:text-slate-200">
-              Current: <b className="text-emerald-500">{isDark ? 'Electric Obsidian (#031427)' : 'Decision Light (#f8fafd)'}</b>
+              Current: <b className="text-blue-600 dark:text-blue-400">{isDark ? 'Electric Obsidian (#0B1120 / #111827)' : 'Decision Light (#F8FAFC / #FFFFFF)'}</b>
             </span>
             <button
               onClick={onToggleTheme}
-              className="px-4 py-2 rounded-xl bg-emerald-500 text-white font-mono text-xs font-bold hover:bg-emerald-600 transition-all cursor-pointer shadow-md"
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs font-bold transition-all cursor-pointer shadow-md"
             >
               {t.toggle_theme}
             </button>
@@ -107,7 +107,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {/* Currency Benchmark */}
-        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm space-y-4">
+        <div className="p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-2xl bg-amber-500/10 text-amber-500">
               <IndianRupee size={20} />
@@ -131,7 +131,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-md'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      : 'bg-slate-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-[#1e2c47] border border-transparent dark:border-[#273449]'
                   }`}
                 >
                   {c}
@@ -142,7 +142,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {/* Dataset Coverage */}
-        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034] shadow-sm space-y-3">
+        <div className="p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-3">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-2xl bg-indigo-500/10 text-indigo-500">
               <Database size={20} />
@@ -162,3 +162,4 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     </div>
   );
 };
+

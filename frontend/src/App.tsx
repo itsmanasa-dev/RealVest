@@ -107,7 +107,12 @@ function AppContent() {
 
         {activeTab === 'simulator' && <SimulatorView onBack={handleBack} />}
 
-        {activeTab === 'markets' && <MarketIntelligenceView />}
+        {activeTab === 'markets' && (
+          <MarketIntelligenceView
+            properties={mockProperties}
+            onSelectProperty={handleSelectProperty}
+          />
+        )}
 
         {activeTab === 'advisor' && (
           <AIAdvisorView

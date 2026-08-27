@@ -51,7 +51,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={t.search_placeholder}
-          className="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 dark:focus:ring-emerald-500/40 transition-all shadow-sm"
+          className="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 dark:focus:ring-blue-500/40 transition-all shadow-sm"
         />
       </div>
 
@@ -66,8 +66,8 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                 onClick={() => setSelectedCategory(cat.key)}
                 className={`px-3.5 py-1.5 rounded-2xl text-xs font-mono font-bold tracking-tight whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-blue-600 dark:bg-emerald-500 text-white shadow-sm'
-                    : 'bg-white dark:bg-[#102034] text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-[#273449] hover:bg-slate-50 dark:hover:bg-[#172033]'
                 }`}
               >
                 {cat.label}
@@ -86,7 +86,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
               className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                 selectedBhk === b
                   ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  : 'bg-slate-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-[#1e2c47] border border-transparent dark:border-[#273449]'
               }`}
             >
               {b === 'all' ? 'All' : `${b}BHK`}
@@ -98,7 +98,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
       {/* Property Cards Stack / Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
         {filteredProperties.length === 0 ? (
-          <div className="col-span-full p-12 text-center rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034]">
+          <div className="col-span-full p-12 text-center rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827]">
             <p className="text-slate-400 font-mono text-sm">
               {t.no_properties_found}
             </p>
@@ -108,7 +108,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
             <div
               key={prop.id}
               onClick={() => onSelectProperty(prop)}
-              className="group rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-500/40 dark:hover:border-emerald-500/40 transition-all duration-300 transform hover:scale-[1.01] cursor-pointer flex flex-col justify-between"
+              className="group rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-500/40 dark:hover:border-blue-500/40 transition-all duration-300 transform hover:scale-[1.01] cursor-pointer flex flex-col justify-between"
             >
               {/* Photo Container */}
               <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-900">
@@ -117,7 +117,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                   alt={prop.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#031427]/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120]/70 via-transparent to-transparent" />
 
                 {/* Top-Right Match Badge */}
                 <div className="absolute top-3 right-3">
@@ -149,12 +149,12 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                   <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">
                     <MapPin size={14} className="text-slate-400 shrink-0" />
                     <span>{prop.location}, {prop.city}</span>
-                    {prop.bhk > 0 && <span className="ml-1 px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold">{prop.bhk} BHK</span>}
+                    {prop.bhk > 0 && <span className="ml-1 px-1.5 py-0.2 rounded bg-slate-100 dark:bg-[#172033] text-[10px] font-bold">{prop.bhk} BHK</span>}
                   </div>
                 </div>
 
                 {/* Numbers Grid */}
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 grid grid-cols-3 gap-2">
+                <div className="pt-3 border-t border-slate-100 dark:border-[#273449] grid grid-cols-3 gap-2">
                   <div>
                     <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{t.asking_price}</span>
                     <div className="text-sm sm:text-base font-extrabold font-mono text-slate-900 dark:text-white">
@@ -163,7 +163,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                   </div>
                   <div>
                     <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{t.est_value}</span>
-                    <div className="text-sm sm:text-base font-extrabold font-mono text-blue-600 dark:text-emerald-400">
+                    <div className="text-sm sm:text-base font-extrabold font-mono text-blue-600 dark:text-blue-400">
                       {formatInrLakhs(prop.fairValueLakhs)}
                     </div>
                   </div>
@@ -182,3 +182,4 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
     </div>
   );
 };
+

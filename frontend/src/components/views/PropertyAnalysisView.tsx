@@ -82,7 +82,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
       </div>
 
       {/* Card 1: AI Decision Synthesis */}
-      <div className="p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm flex flex-col items-center text-center space-y-6">
+      <div className="p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm flex flex-col items-center text-center space-y-6">
         <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
           {t.decision_synthesis}
         </h3>
@@ -108,7 +108,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
               strokeLinecap="round"
-              className="text-blue-600 dark:text-emerald-400 transition-all duration-1000 ease-out"
+              className="text-blue-600 dark:text-blue-400 transition-all duration-1000 ease-out"
               fill="transparent"
             />
           </svg>
@@ -123,19 +123,19 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
         </div>
 
         {/* Valuation Comparison Strip */}
-        <div className="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+        <div className="w-full p-4 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449] flex items-center justify-between">
           <div className="text-left">
             <div className="text-[10px] font-mono uppercase text-slate-400 font-bold">{t.asking_price}</div>
             <div className="text-base font-extrabold font-mono text-slate-900 dark:text-white">
               {formatInrLakhs(property.askingPriceLakhs)}
             </div>
           </div>
-          <div className="text-center px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold">
+          <div className="text-center px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20">
             {isDiscount ? `${Math.abs(diffPct).toFixed(1)}% Discount` : `+${diffPct.toFixed(1)}% Premium`}
           </div>
           <div className="text-right">
             <div className="text-[10px] font-mono uppercase text-slate-400 font-bold">{t.ml_fair_value}</div>
-            <div className="text-base font-extrabold font-mono text-blue-600 dark:text-emerald-400">
+            <div className="text-base font-extrabold font-mono text-blue-600 dark:text-blue-400">
               {formatInrLakhs(property.fairValueLakhs)}
             </div>
           </div>
@@ -145,13 +145,13 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
         <div className="w-full flex flex-col sm:flex-row gap-2.5">
           <button
             onClick={() => alert(`Initiating acquisition briefing for ${property.title} in ${property.location}.`)}
-            className="flex-1 py-3.5 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="flex-1 py-3.5 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <ShoppingCart size={18} /> {t.initiate_acquisition}
           </button>
           <button
             onClick={() => onNavigate('simulator')}
-            className="py-3.5 px-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-sm hover:bg-slate-100 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="py-3.5 px-5 rounded-2xl border border-slate-200 dark:border-[#273449] bg-slate-50 dark:bg-[#172033] text-slate-700 dark:text-slate-200 font-bold text-sm hover:bg-slate-100 dark:hover:bg-[#1e2c47] transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <Sliders size={18} /> {t.open_simulator}
           </button>
@@ -161,7 +161,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
       {/* Row: 2 Metric Cards */}
       <div className="grid grid-cols-2 gap-4">
         {/* EXP. MONTHLY RENT */}
-        <div className="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm">
+        <div className="p-5 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm">
           <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-400 uppercase">
             <Wallet size={14} /> {t.monthly_rent}
           </div>
@@ -171,7 +171,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
         </div>
 
         {/* PROJ. ROI */}
-        <div className="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm">
+        <div className="p-5 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm">
           <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-400 uppercase">
             <LineChart size={14} /> {t.proj_roi}
           </div>
@@ -182,9 +182,9 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
       </div>
 
       {/* Card 2: Decision Rationale */}
-      <div className="p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-4">
-        <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-          <Lightbulb size={20} className="text-blue-600 dark:text-emerald-400" />
+      <div className="p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4">
+        <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-[#273449]">
+          <Lightbulb size={20} className="text-blue-600 dark:text-blue-400" />
           <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
             {t.decision_rationale}
           </h3>
@@ -203,8 +203,8 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
       </div>
 
       {/* Card 3: Risk Assessment */}
-      <div className="p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-4">
-        <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+      <div className="p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4">
+        <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-[#273449]">
           <Radar size={20} className="text-amber-500" />
           <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
             {t.risk_assessment}
@@ -237,3 +237,4 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
     </div>
   );
 };
+

@@ -11,14 +11,24 @@ import {
   Sparkles,
   Info,
 } from 'lucide-react';
-import { mockHotZones, marketData } from '../../data/mockProperties';
+import { Property } from '../../types';
+import { mockHotZones, mockProperties, marketData } from '../../data/mockProperties';
 import { InteractiveMap } from '../common/InteractiveMap';
 import { useTranslation } from '../../context/LanguageContext';
 import { formatPercent } from '../../utils/currency';
 
-export const MarketIntelligenceView: React.FC = () => {
+interface MarketIntelligenceViewProps {
+  properties?: Property[];
+  onSelectProperty?: (property: Property) => void;
+}
+
+export const MarketIntelligenceView: React.FC<MarketIntelligenceViewProps> = ({
+  properties = mockProperties,
+  onSelectProperty,
+}) => {
   const { t } = useTranslation();
   const [selectedHotZone, setSelectedHotZone] = useState(mockHotZones[0]);
+
 
   // Historical observed annual benchmarks (2020-2024) + Legitimate Time-Series Forecasts (2025-2026)
   const trajectoryBars = [
@@ -62,8 +72,11 @@ export const MarketIntelligenceView: React.FC = () => {
           hotZones={mockHotZones}
           selectedZone={selectedHotZone}
           onSelectZone={setSelectedHotZone}
+          properties={properties}
+          onSelectProperty={onSelectProperty}
         />
       </div>
+
 
       {/* Card 2: Trend Velocity & Capital Appreciation: 2020-2024 Actual vs 2025-2026 Forecast */}
       <div className="p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4">

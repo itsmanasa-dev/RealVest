@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sliders, RotateCcw, Lightbulb, Save, ArrowLeft, Percent, Calculator, TrendingUp } from 'lucide-react';
+import { Sliders, RotateCcw, Lightbulb, Save, ArrowLeft, Percent, Calculator, TrendingUp, Sparkles, Calendar } from 'lucide-react';
 import { useTranslation } from '../../context/LanguageContext';
 import { formatInrLakhs, formatInrRent, formatPercent } from '../../utils/currency';
 import { simulatorService } from '../../services/simulatorService';
@@ -65,12 +65,17 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
       </div>
 
       {/* Card 1: Scenario Variables */}
-      <div className="p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-5">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-          <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
-            {t.scenario_variables}
-          </h3>
-          <Sliders size={18} className="text-blue-600 dark:text-emerald-400" />
+      <div className="p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-5">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#273449]">
+          <div className="flex items-center gap-2">
+            <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+              {t.scenario_variables}
+            </h3>
+            <span className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-[#172033] text-blue-600 dark:text-blue-400 text-[10px] font-mono font-bold border border-blue-200 dark:border-[#273449]">
+              {t.user_assumption}
+            </span>
+          </div>
+          <Sliders size={18} className="text-blue-600 dark:text-blue-400" />
         </div>
 
         {/* Slider 1: Purchase Price */}
@@ -88,7 +93,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
             step={2.5}
             value={purchasePriceLakhs}
             onChange={(e) => setPurchasePriceLakhs(Number(e.target.value))}
-            className="w-full accent-blue-600 dark:accent-emerald-400 cursor-pointer h-2 bg-blue-100 dark:bg-slate-800 rounded-lg"
+            className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
           />
           <div className="flex justify-between text-[10px] font-mono text-slate-400">
             <span>₹20 L</span>
@@ -112,7 +117,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
             step={5}
             value={downPaymentPct}
             onChange={(e) => setDownPaymentPct(Number(e.target.value))}
-            className="w-full accent-blue-600 dark:accent-emerald-400 cursor-pointer h-2 bg-blue-100 dark:bg-slate-800 rounded-lg"
+            className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
           />
         </div>
 
@@ -131,7 +136,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
             step={0.25}
             value={interestRate}
             onChange={(e) => setInterestRate(Number(e.target.value))}
-            className="w-full accent-blue-600 dark:accent-emerald-400 cursor-pointer h-2 bg-blue-100 dark:bg-slate-800 rounded-lg"
+            className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
           />
         </div>
 
@@ -150,7 +155,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
             step={0.2}
             value={targetYield}
             onChange={(e) => setTargetYield(Number(e.target.value))}
-            className="w-full accent-blue-600 dark:accent-emerald-400 cursor-pointer h-2 bg-blue-100 dark:bg-slate-800 rounded-lg"
+            className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
           />
         </div>
 
@@ -169,25 +174,67 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
             step={1}
             value={holdingPeriod}
             onChange={(e) => setHoldingPeriod(Number(e.target.value))}
-            className="w-full accent-blue-600 dark:accent-emerald-400 cursor-pointer h-2 bg-blue-100 dark:bg-slate-800 rounded-lg"
+            className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
           />
         </div>
 
         {/* Reset Button */}
         <button
           onClick={handleReset}
-          className="w-full py-2.5 rounded-2xl bg-blue-50 dark:bg-slate-800/80 hover:bg-blue-100 dark:hover:bg-slate-800 text-blue-700 dark:text-slate-200 font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-2.5 rounded-2xl bg-slate-100 dark:bg-[#172033] hover:bg-slate-200 dark:hover:bg-[#1e2c47] text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer border border-transparent dark:border-[#273449]"
         >
           <RotateCcw size={14} /> {t.reset_base}
         </button>
       </div>
 
+      {/* Projections Card: 2025, 2026 & 5-Year Future Scenarios */}
+      <div className="p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-3">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-[#273449]">
+          <div className="flex items-center gap-2">
+            <Calendar size={16} className="text-blue-600 dark:text-blue-400" />
+            <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
+              {t.five_year_scenario}
+            </h4>
+          </div>
+          <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            {t.model_projection}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 text-center pt-1">
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-100 dark:border-[#273449]">
+            <span className="text-[10px] font-mono uppercase text-slate-400 block font-semibold">2025 Value</span>
+            <span className="text-base font-extrabold font-mono text-slate-900 dark:text-white mt-1 block">
+              {formatInrLakhs(dynamicResult.projected2025ValLakhs)}
+            </span>
+            <span className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400">+6.5% 1Y</span>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#172033] border border-slate-100 dark:border-[#273449]">
+            <span className="text-[10px] font-mono uppercase text-slate-400 block font-semibold">2026 Value</span>
+            <span className="text-base font-extrabold font-mono text-slate-900 dark:text-white mt-1 block">
+              {formatInrLakhs(dynamicResult.projected2026ValLakhs)}
+            </span>
+            <span className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400">+13.4% 2Y</span>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800">
+            <span className="text-[10px] font-mono uppercase text-blue-600 dark:text-blue-300 block font-semibold">{holdingPeriod}Y Value</span>
+            <span className="text-base font-extrabold font-mono text-blue-700 dark:text-blue-400 mt-1 block">
+              {formatInrLakhs(dynamicResult.projectedFutureValLakhs)}
+            </span>
+            <span className="text-[9px] font-mono text-blue-600 dark:text-blue-300">Compounded</span>
+          </div>
+        </div>
+      </div>
+
       {/* Row: 2 Scenario Cards (Base Case vs Your Scenario) */}
       <div className="grid grid-cols-2 gap-4">
         {/* BASE CASE */}
-        <div className="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-3">
-          <div className="pb-2 border-b border-slate-100 dark:border-slate-800 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">
-            {t.base_case} (₹75 L)
+        <div className="p-5 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-3">
+          <div className="pb-2 border-b border-slate-100 dark:border-[#273449] flex items-center justify-between text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">
+            <span>{t.base_case}</span>
+            <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-[#172033] font-normal">Observed</span>
           </div>
 
           <div>
@@ -213,7 +260,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
         </div>
 
         {/* YOUR SCENARIO */}
-        <div className="p-5 rounded-3xl bg-blue-600 dark:bg-blue-600 text-white shadow-md shadow-blue-600/20 space-y-3 relative overflow-hidden">
+        <div className="p-5 rounded-3xl bg-blue-600 text-white shadow-md shadow-blue-600/20 space-y-3 relative overflow-hidden">
           <div className="pb-2 border-b border-white/20 flex items-center justify-between text-[11px] font-mono font-bold uppercase tracking-wider text-blue-100">
             <span>{t.your_scenario}</span>
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
@@ -247,7 +294,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
       </div>
 
       {/* Card 3: Insight Engine Box */}
-      <div className="p-4 sm:p-5 rounded-3xl bg-blue-50/80 dark:bg-slate-800/80 border border-blue-100 dark:border-slate-700/60 flex items-start gap-3.5">
+      <div className="p-4 sm:p-5 rounded-3xl bg-blue-50/80 dark:bg-[#172033] border border-blue-100 dark:border-[#273449] flex items-start gap-3.5">
         <div className="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
           <Lightbulb size={18} />
         </div>
@@ -267,10 +314,11 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
       {/* Save Scenario Full-Width Button */}
       <button
         onClick={() => alert(`Scenario saved: ${formatInrLakhs(purchasePriceLakhs)} asset @ ${interestRate}% interest, projected ${dynamicResult.totalRoiPct}% ROI over ${holdingPeriod} years.`)}
-        className="w-full py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
+        className="w-full py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
       >
         <Save size={18} /> {t.save_scenario}
       </button>
     </div>
   );
 };
+
