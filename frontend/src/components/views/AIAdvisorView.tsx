@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '../../context/LanguageContext';
 import { advisorApi } from '../../services/api/advisorApi';
+import { advisorService } from '../../services/advisorService';
 import { formatInrLakhs } from '../../utils/currency';
 
 interface Message {
@@ -38,7 +39,7 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
   onSelectProperty,
   onNavigate,
 }) => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   
   // Active property context
   const [activeProperty, setActiveProperty] = useState<Property | null>(properties[0] || null);
@@ -113,8 +114,21 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
       };
       setMessages((prev) => [...prev, advisorMsg]);
     } catch (err: any) {
-      console.error('Advisor API call error:', err);
-      setErrorMessage("Unable to reach the RealVest Advisor right now. Please try again.");
+      console.warn('Advisor API backend offline or unreachable, utilizing built-in intelligence fallback:', err.message);
+      // Seamless built-in fallback
+      try {
+        const fallbackRes = await advisorService.query(query, language, properties, activeProperty);
+        const fallbackMsg: Message = {
+          id: `advisor-${Date.now()}`,
+          sender: 'advisor',
+          text: fallbackRes.answer,
+          sources: fallbackRes.sources || ["RealVest Built-in Intelligence"],
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        };
+        setMessages((prev) => [...prev, fallbackMsg]);
+      } catch (fallbackErr: any) {
+        setErrorMessage("Advisor service is temporarily unavailable. Please try again in a moment.");
+      }
     } finally {
       setIsLoading(false);
     }
