@@ -10,49 +10,60 @@ Base = declarative_base()
 
 _engine = None
 _SessionLocal = None
-_init_error = None
 
-def get_engine():
-    global _engine, _SessionLocal, _init_error
+def init_db_engine():
+    global _engine, _SessionLocal
     if _engine is not None:
-        return _engine
+        return _engine, _SessionLocal
 
     db_url = settings.DATABASE_URL
     try:
-        if not db_url.startswith("mysql"):
-            raise ValueError(f"DATABASE_URL must be a MySQL connection string (e.g. mysql+pymysql://root:password@localhost:3306/realvest). Received: {db_url}")
-        
-        # Connect to MySQL
-        _engine = create_engine(
-            db_url,
-            pool_pre_ping=True,
-            pool_recycle=3600,
-            connect_args={"connect_timeout": 5}
-        )
-        
-        with _engine.connect() as conn:
-            conn.execute(text("SELECT 1"))
-        
-        logger.info("Successfully connected to MySQL database: %s", db_url.split("@")[-1])
-        _SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
-        return _engine
+        if db_url and db_url.startswith("mysql"):
+            # Attempt connection to MySQL
+            test_engine = create_engine(
+                db_url,
+                pool_pre_ping=True,
+                pool_recycle=3600,
+                connect_args={"connect_timeout": 4}
+            )
+            with test_engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            logger.info("Successfully connected to MySQL database: %s", db_url.split("@")[-1])
+            _engine = test_engine
+            _SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
+            return _engine, _SessionLocal
+        elif db_url and db_url.startswith("sqlite"):
+            _engine = create_engine(db_url, connect_args={"check_same_thread": False})
+            _SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
+            return _engine, _SessionLocal
     except Exception as e:
-        _init_error = e
-        logger.error("MySQL connection error: %s", str(e))
-        return None
+        logger.warning("Primary database connection (%s) failed: %s. Initializing fallback persistent database.", db_url.split("@")[-1] if "@" in db_url else db_url, str(e))
 
-# Attempt initial connection
-engine = get_engine()
-SessionLocal = _SessionLocal
+    # Resilient fallback database for cloud container deployments where local MySQL is absent
+    fallback_url = "sqlite:///./realvest.db"
+    _engine = create_engine(fallback_url, connect_args={"check_same_thread": False})
+    _SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
+    logger.info("Initialized persistent fallback database (SQLite).")
+    return _engine, _SessionLocal
+
+engine, SessionLocal = init_db_engine()
+
+def get_engine():
+    global engine, SessionLocal
+    if engine is None:
+        engine, SessionLocal = init_db_engine()
+    return engine
+
+def get_session():
+    global engine, SessionLocal
+    if SessionLocal is None:
+        engine, SessionLocal = init_db_engine()
+    return SessionLocal()
 
 def get_db():
     global engine, SessionLocal
-    if engine is None:
-        engine = get_engine()
-        SessionLocal = _SessionLocal
-
-    if engine is None or SessionLocal is None:
-        raise RuntimeError(f"MySQL connection is not established: {_init_error}")
+    if SessionLocal is None:
+        engine, SessionLocal = init_db_engine()
     
     db = SessionLocal()
     try:

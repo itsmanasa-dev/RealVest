@@ -32,11 +32,12 @@ logger = logging.getLogger("realvest")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialize database tables
-    if engine is not None:
+    db_engine = get_engine()
+    if db_engine is not None:
         logger.info("Initializing RealVest database tables...")
         try:
-            Base.metadata.create_all(bind=engine)
-            db = SessionLocal()
+            Base.metadata.create_all(bind=db_engine)
+            db = get_session()
             try:
                 property_service.ensure_seeded(db)
             finally:
@@ -45,7 +46,7 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             logger.error("Database initialization error during lifespan: %s", str(e))
     else:
-        logger.warning("Database engine is not ready during lifespan.")
+        logger.warning("Database engine could not be initialized during lifespan.")
     yield
 
 app = FastAPI(
