@@ -89,11 +89,12 @@ export const SavedComparisonsView: React.FC<SavedComparisonsViewProps> = ({
         title="Saved comparisons"
         subtitle="Your saved investment scenarios"
         action={
-          <Button onClick={() => onNavigate('compare')}>
+          <Button onClick={() => onNavigate('analysis')}>
             <Plus size={15} /> New Comparison
           </Button>
         }
       />
+
 
       {errorMsg && (
         <div className="p-4 rounded-lg bg-warn-soft text-warn text-sm flex items-center gap-2">
@@ -165,11 +166,12 @@ export const SavedComparisonsView: React.FC<SavedComparisonsViewProps> = ({
           </div>
           <h3 className="mt-4 text-base font-semibold text-ink">No saved comparisons yet</h3>
           <p className="mt-1 text-sm text-ink-3 max-w-sm mx-auto">
-            Compare properties in the Compare tab and click "Save Comparison" to keep your scenarios here.
+            Compare properties in the Analysis workspace and click "Save Comparison" to keep your scenarios here.
           </p>
-          <Button className="mt-5" onClick={() => onNavigate('compare')}>
+          <Button className="mt-5" onClick={() => onNavigate('analysis')}>
             <Scale size={15} /> Compare properties
           </Button>
+
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

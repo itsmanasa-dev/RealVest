@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Sun, Moon, ArrowLeft, Globe, Home, Check } from 'lucide-react';
+import { Search, Sun, Moon, ArrowLeft, Globe, Home, Check, Brain } from 'lucide-react';
 import type { NavTab } from '../../types';
 import { useTranslation } from '../../context/LanguageContext';
 import type { Language } from '../../i18n/translations';
@@ -12,6 +12,7 @@ interface HeaderProps {
   onSearchClick?: () => void;
   onBack?: () => void;
   showBack?: boolean;
+  onOpenAdvisor?: () => void;
 }
 
 const LANGUAGES: { code: Language; label: string }[] = [
@@ -27,6 +28,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSearchClick,
   onBack,
   showBack,
+  onOpenAdvisor,
 }) => {
   const { language, setLanguage, t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -46,11 +48,11 @@ export const Header: React.FC<HeaderProps> = ({
     activeTab === 'dashboard' ? t.nav_dashboard :
     activeTab === 'explore' ? t.nav_explore :
     activeTab === 'analysis' ? t.nav_analysis :
-    activeTab === 'compare' ? t.nav_compare :
-    activeTab === 'saved-comparisons' ? 'Saved Comparisons' :
+    activeTab === 'saved-comparisons' ? 'Saved Scenarios' :
     activeTab === 'simulator' ? t.nav_simulator :
     activeTab === 'markets' ? t.nav_markets :
-    t.nav_advisor;
+    'Settings';
+
 
   return (
     <header className="sticky top-0 z-30 bg-canvas/90 backdrop-blur-md border-b border-line">
@@ -145,7 +147,20 @@ export const Header: React.FC<HeaderProps> = ({
           >
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
+
+          {/* AI Advisor Trigger Button */}
+          {onOpenAdvisor && (
+            <button
+              onClick={onOpenAdvisor}
+              className="px-2.5 py-1.5 rounded-md bg-brand-soft text-brand hover:bg-brand hover:text-white border border-brand/20 transition-all text-xs font-semibold flex items-center gap-1.5 cursor-pointer ml-1 shadow-xs"
+              title="Open AI Advisor"
+            >
+              <Brain size={14} />
+              <span className="hidden sm:inline">Advisor</span>
+            </button>
+          )}
         </div>
+
       </div>
     </header>
   );

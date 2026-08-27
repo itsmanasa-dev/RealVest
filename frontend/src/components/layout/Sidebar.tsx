@@ -25,14 +25,12 @@ const PRIMARY: { id: NavTab; label: string; icon: React.ElementType }[] = [
   { id: 'dashboard', label: '', icon: LayoutDashboard },
   { id: 'explore', label: '', icon: Compass },
   { id: 'analysis', label: '', icon: LineChart },
-  { id: 'compare', label: '', icon: Scale },
   { id: 'markets', label: '', icon: TrendingUp },
-  { id: 'advisor', label: '', icon: Brain },
 ];
 
 const SECONDARY: { id: NavTab; label: string; icon: React.ElementType }[] = [
-  { id: 'saved-comparisons', label: '', icon: BookmarkCheck },
   { id: 'simulator', label: '', icon: Sliders },
+  { id: 'saved-comparisons', label: '', icon: BookmarkCheck },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
@@ -44,15 +42,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
       p.id === 'dashboard' ? t.nav_dashboard :
       p.id === 'explore' ? t.nav_explore :
       p.id === 'analysis' ? t.nav_analysis :
-      p.id === 'compare' ? t.nav_compare :
-      p.id === 'markets' ? t.nav_markets :
-      t.nav_advisor,
+      t.nav_markets,
   }));
 
   const secondary = SECONDARY.map((s) => ({
     ...s,
-    label: s.id === 'saved-comparisons' ? 'Saved' : t.nav_simulator,
+    label: s.id === 'saved-comparisons' ? 'Saved Scenarios' : t.nav_simulator,
   }));
+
 
   const NavButton: React.FC<{ item: typeof primary[0] }> = ({ item }) => {
     const Icon = item.icon;

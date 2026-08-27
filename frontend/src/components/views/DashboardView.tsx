@@ -22,12 +22,14 @@ interface DashboardViewProps {
   properties: Property[];
   onSelectProperty: (property: Property) => void;
   onNavigate: (tab: NavTab) => void;
+  onOpenAdvisor?: () => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
   properties,
   onSelectProperty,
   onNavigate,
+  onOpenAdvisor,
 }) => {
   const { t } = useTranslation();
   const top = [...properties].sort((a, b) => b.annualYield - a.annualYield).slice(0, 3);
@@ -83,7 +85,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Advisor insight banner */}
       <div className="rv-card p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5 min-w-0">
-          <span className="w-11 h-11 rounded-lg bg-brand text-white flex items-center justify-center shrink-0">
+          <span className="w-11 h-11 rounded-lg bg-brand text-white flex items-center justify-center shrink-0 shadow-sm">
             <Brain size={22} />
           </span>
           <div className="min-w-0">
@@ -98,7 +100,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <Button variant="secondary" onClick={() => onNavigate('simulator')}>
             <Sliders size={15} /> {t.new_analysis_btn}
           </Button>
-          <Button onClick={() => onNavigate('advisor')}>
+          <Button onClick={onOpenAdvisor ? onOpenAdvisor : () => onNavigate('analysis')}>
             <Sparkles size={15} /> {t.ask_ai_btn}
           </Button>
         </div>
@@ -107,16 +109,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Quick actions */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: 'Explore Properties', desc: `${properties.length} active listings`, tab: 'explore' as NavTab, icon: Compass },
-          { label: 'Compare', desc: 'Side-by-side analysis', tab: 'compare' as NavTab, icon: Scale },
-          { label: 'Simulate', desc: 'EMI & cash flow', tab: 'simulator' as NavTab, icon: Sliders },
-          { label: 'AI Advisor', desc: 'Investment guidance', tab: 'advisor' as NavTab, icon: Brain },
-        ].map((a) => {
+          { label: 'Explore Properties', desc: `${properties.length} active listings`, action: () => onNavigate('explore'), icon: Compass },
+          { label: 'Asset Analysis', desc: 'Valuation & comparison', action: () => onNavigate('analysis'), icon: Scale },
+          { label: 'Simulate', desc: 'EMI & cash flow', action: () => onNavigate('simulator'), icon: Sliders },
+          { label: 'AI Advisor', desc: 'Contextual assistant', action: onOpenAdvisor ? onOpenAdvisor : () => onNavigate('analysis'), icon: Brain },
+        ].map((a, idx) => {
           const Icon = a.icon;
           return (
             <button
-              key={a.tab}
-              onClick={() => onNavigate(a.tab)}
+              key={idx}
+              onClick={a.action}
               className="rv-card rv-card-hover p-4 flex flex-col items-start gap-3 text-left cursor-pointer group"
             >
               <span className="w-9 h-9 rounded-lg bg-brand-soft text-brand flex items-center justify-center group-hover:bg-brand group-hover:text-white transition-colors">
@@ -130,6 +132,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           );
         })}
       </div>
+
 
       {/* Recommended opportunities */}
       <div>

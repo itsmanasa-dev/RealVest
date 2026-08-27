@@ -3,9 +3,9 @@ import type { NavTab } from '../../types';
 import {
   LayoutDashboard,
   Compass,
-  Scale,
+  LineChart,
   TrendingUp,
-  Brain,
+  Sliders,
 } from 'lucide-react';
 import { useTranslation } from '../../context/LanguageContext';
 import { clsx } from 'clsx';
@@ -21,10 +21,11 @@ export const MobileNav: React.FC<MobileNavProps> = ({ activeTab, onTabChange }) 
   const navItems: { id: NavTab; label: string; icon: React.ElementType }[] = [
     { id: 'dashboard', label: t.nav_dashboard, icon: LayoutDashboard },
     { id: 'explore', label: t.nav_explore, icon: Compass },
-    { id: 'compare', label: t.nav_compare, icon: Scale },
+    { id: 'analysis', label: t.nav_analysis, icon: LineChart },
     { id: 'markets', label: t.nav_markets, icon: TrendingUp },
-    { id: 'advisor', label: t.nav_advisor, icon: Brain },
+    { id: 'simulator', label: t.nav_simulator, icon: Sliders },
   ];
+
 
   return (
     <nav

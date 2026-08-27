@@ -2,11 +2,11 @@ export type NavTab =
   | 'dashboard' 
   | 'explore' 
   | 'analysis' 
-  | 'compare'
   | 'saved-comparisons'
   | 'simulator' 
   | 'markets' 
-  | 'advisor';
+  | 'settings';
+
 
 export type AssetCategory = 'All Assets' | 'Residential' | 'Commercial' | 'Villa / Penthouse';
 

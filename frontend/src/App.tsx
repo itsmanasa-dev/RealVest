@@ -11,17 +11,17 @@ import { Sidebar } from './components/layout/Sidebar';
 import { DashboardView } from './components/views/DashboardView';
 import { ExplorerView } from './components/views/ExplorerView';
 import { PropertyAnalysisView } from './components/views/PropertyAnalysisView';
-import { CompareView } from './components/views/CompareView';
 import { SavedComparisonsView } from './components/views/SavedComparisonsView';
 import { SimulatorView } from './components/views/SimulatorView';
 import { MarketIntelligenceView } from './components/views/MarketIntelligenceView';
-import { AIAdvisorView } from './components/views/AIAdvisorView';
+import { GlobalAdvisorDrawer } from './components/common/GlobalAdvisorDrawer';
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
   const [previousTab, setPreviousTab] = useState<NavTab>('explore');
   const [properties, setProperties] = useState<Property[]>(mockProperties);
   const [selectedProperty, setSelectedProperty] = useState<Property>(mockProperties[0]);
+  const [isAdvisorOpen, setIsAdvisorOpen] = useState<boolean>(false);
   const [isDark, setIsDark] = useState<boolean>(() => {
     const savedTheme = localStorage.getItem('realvest_theme');
     return savedTheme === 'dark';
@@ -98,6 +98,7 @@ function AppContent() {
           onSearchClick={() => handleTabChange('explore')}
           onBack={handleBack}
           showBack={activeTab === 'analysis'}
+          onOpenAdvisor={() => setIsAdvisorOpen(true)}
         />
 
         {/* Unified Main Content Container */}
@@ -107,6 +108,7 @@ function AppContent() {
               properties={properties}
               onSelectProperty={handleSelectProperty}
               onNavigate={handleTabChange}
+              onOpenAdvisor={() => setIsAdvisorOpen(true)}
             />
           )}
 
@@ -120,15 +122,9 @@ function AppContent() {
           {activeTab === 'analysis' && (
             <PropertyAnalysisView
               property={selectedProperty}
-              onBack={handleBack}
-              onNavigate={handleTabChange}
-            />
-          )}
-
-          {activeTab === 'compare' && (
-            <CompareView
               properties={properties}
               onSelectProperty={handleSelectProperty}
+              onBack={handleBack}
               onNavigate={handleTabChange}
             />
           )}
@@ -148,16 +144,18 @@ function AppContent() {
               onSelectProperty={handleSelectProperty}
             />
           )}
-
-          {activeTab === 'advisor' && (
-            <AIAdvisorView
-              properties={properties}
-              onSelectProperty={handleSelectProperty}
-              onNavigate={handleTabChange}
-            />
-          )}
         </main>
       </div>
+
+      {/* Global Contextual AI Advisor Drawer & Floating Trigger */}
+      <GlobalAdvisorDrawer
+        activeTab={activeTab}
+        selectedProperty={selectedProperty}
+        properties={properties}
+        isOpen={isAdvisorOpen}
+        onClose={() => setIsAdvisorOpen(false)}
+        onOpen={() => setIsAdvisorOpen(true)}
+      />
 
       {/* Mobile Bottom Navigation Dock (visible on < lg screens) */}
       <div className="lg:hidden">

@@ -185,41 +185,7 @@ export const MarketIntelligenceView: React.FC<MarketIntelligenceViewProps> = ({
           </div>
         </div>
       </Card>
-
-      {/* Yield trajectories */}
-      <Card>
-        <div className="flex items-center gap-2 pb-3 border-b border-line">
-          <span className="w-8 h-8 rounded-lg bg-brand-soft text-brand flex items-center justify-center"><TrendingUp size={16} /></span>
-          <h3 className="text-sm font-semibold text-ink">{t.yield_trajectories}</h3>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3.5 mt-3">
-          <Stat
-            label={t.cash_on_cash}
-            value="7.8%"
-            icon={ArrowUp}
-            iconTone="pos"
-          />
-          <Stat
-            label={t.cap_rate}
-            value="5.6%"
-            icon={ArrowDown}
-            iconTone="brand"
-          />
-        </div>
-
-        <div className="p-4 rounded-lg bg-brand-soft/40 border-l-2 border-l-brand mt-3 space-y-2">
-          <p className="text-xs text-ink-2 leading-relaxed font-medium">{t.institutional_report_text}</p>
-          <div className="text-right">
-            <button
-              onClick={() => alert('Bengaluru Micro-market Intelligence Brief generated from NHB Residex and Certified Valuation Models.')}
-              className="text-xs font-medium text-brand hover:underline inline-flex items-center gap-1 cursor-pointer"
-            >
-              <FileText size={12} /> {t.full_report_btn} <ArrowRight size={12} />
-            </button>
-          </div>
-        </div>
-      </Card>
     </div>
   );
 };
+
