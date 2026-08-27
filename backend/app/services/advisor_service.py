@@ -3,7 +3,6 @@ import re
 import logging
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
-import httpx
 
 from backend.app.core.config import settings
 from backend.app.models.property import PropertyModel
@@ -11,34 +10,41 @@ from backend.app.models.comparison import ComparisonModel
 
 logger = logging.getLogger("advisor_service")
 
-# Official System Instructions for RealVest Grok Advisor
-REALVEST_SYSTEM_PROMPT = """You are RealVest Advisor, an AI-powered property and investment decision-support assistant focused strictly on Bengaluru real estate.
+# Official System Instruction for RealVest Gemini Advisor
+REALVEST_SYSTEM_PROMPT = """You are RealVest Advisor, an AI-powered real-estate investment decision-support assistant focused on Bengaluru.
 
-Your responsibilities:
-- Help users understand Bengaluru property opportunities
-- Explain property valuations and fair market estimates
-- Explain rental yield and rental potential
-- Explain investment suitability and risk factors
-- Compare properties side-by-side
-- Explain market trends across Bengaluru micro-markets (Whitefield, Sarjapur, Electronic City, Hebbal, Indiranagar, etc.)
-- Help users understand buy-vs-rent decisions
-- Help users evaluate options according to their budget and requirements
+Help users understand:
+- Bengaluru property markets
+- property valuation
+- rental potential
+- rental yield
+- investment suitability
+- location selection
+- buy vs rent
+- property comparison
+- investment risks
+- RealVest analysis
 
-Strict Guidelines & Rules:
-1. Never guarantee investment returns.
-2. Never claim certainty about future property prices.
-3. Never fabricate property information or listings.
-4. Never fabricate ROI.
-5. Never fabricate rental yields.
-6. Never fabricate market statistics.
-7. Never fabricate investment scores.
-8. ALWAYS ground your answers in the supplied RealVest database context when provided.
-9. Clearly distinguish RealVest empirical data from general real estate guidance.
-10. If required data is unavailable in the context, explicitly state so.
-11. Keep answers concise, clear, structured, and actionable using bullet points and markdown.
-12. Ask brief follow-up questions when important user information (budget, goal, horizon) is missing.
-13. NEVER mention internal implementation details such as MySQL, FastAPI, API endpoints, database schemas, Pydantic, SQLAlchemy, model filenames, or backend architecture.
-14. Always present user-facing metrics as: "Property Analysis", "Market Data", "Investment Analysis", "Rental Potential", "Risk Factor", "Investment Fit", or "Recommendation".
+Use supplied RealVest data when available.
+
+Never invent property data.
+Never invent ROI.
+Never invent rental values.
+Never guarantee investment returns.
+If RealVest data is unavailable, clearly say so.
+
+Give practical, concise explanations using bullet points and markdown.
+
+Do not expose internal implementation details such as:
+MySQL
+FastAPI
+API keys
+database schemas
+Python files
+ML implementation
+model filenames
+backend architecture
+to normal users.
 """
 
 class AdvisorService:
@@ -193,24 +199,24 @@ class AdvisorService:
                 break
 
         # ----------------------------------------------------
-        # 2. Try Calling Official xAI Grok API (grok-4.6)
+        # 2. Try Calling Official Google Gemini API (gemini-3.7-flash)
         # ----------------------------------------------------
-        api_key = settings.XAI_API_KEY or os.getenv("XAI_API_KEY", "")
-        grok_model = settings.GROK_MODEL or "grok-4.6"
+        api_key = settings.GEMINI_API_KEY or os.getenv("GEMINI_API_KEY", "")
+        gemini_model = settings.GEMINI_MODEL or "gemini-3.7-flash"
 
         if api_key:
-            grok_response = cls._call_grok_api(
+            gemini_response = cls._call_gemini_api(
                 api_key=api_key,
-                model=grok_model,
+                model=gemini_model,
                 user_message=msg_str,
                 db_context=db_context_text,
                 history=history
             )
-            if grok_response:
-                sources.append("xAI Grok Intelligence Engine")
+            if gemini_response:
+                sources.append("Google Gemini Intelligence Engine")
                 return {
                     "success": True,
-                    "reply": grok_response,
+                    "reply": gemini_response,
                     "sources": list(dict.fromkeys(sources)),
                     "context_used": context_used
                 }
@@ -235,7 +241,7 @@ class AdvisorService:
         }
 
     @classmethod
-    def _call_grok_api(
+    def _call_gemini_api(
         cls,
         api_key: str,
         model: str,
@@ -243,68 +249,67 @@ class AdvisorService:
         db_context: str,
         history: List[Any]
     ) -> Optional[str]:
-        """Calls xAI Grok API using OpenAI SDK or httpx client."""
-        # 1. Format conversation history
-        messages_payload = [{"role": "system", "content": REALVEST_SYSTEM_PROMPT}]
-
-        # Include up to 6 recent conversation history messages
-        for item in history[-6:]:
-            if isinstance(item, dict):
-                role = item.get("role", "user")
-                content = item.get("content", "")
-            else:
-                role = getattr(item, "role", "user")
-                content = getattr(item, "content", "")
-
-            if role in ["user", "assistant"] and content:
-                messages_payload.append({"role": role, "content": content})
-
-        # Final prompt with database context
-        final_user_prompt = user_message
-        if db_context.strip():
-            final_user_prompt += f"\n\n--- REALVEST DATABASE CONTEXT ---\n{db_context.strip()}\n--- END CONTEXT ---"
-
-        messages_payload.append({"role": "user", "content": final_user_prompt})
-
-        # Try OpenAI SDK client
+        """Calls Google Gemini API using the official google-genai SDK with model fallback."""
         try:
-            from openai import OpenAI
-            client = OpenAI(api_key=api_key, base_url="https://api.x.ai/v1")
-            response = client.chat.completions.create(
-                model=model,
-                messages=messages_payload,
+            from google import genai
+            from google.genai import types
+
+            client = genai.Client(api_key=api_key)
+
+            # Build prompt contents with history and database grounding context
+            prompt_parts = []
+
+            # Include up to 6 recent conversation history turns
+            if history:
+                prompt_parts.append("Previous Conversation History:")
+                for item in history[-6:]:
+                    if isinstance(item, dict):
+                        role = item.get("role", "user")
+                        content = item.get("content", "")
+                    else:
+                        role = getattr(item, "role", "user")
+                        content = getattr(item, "content", "")
+
+                    if content:
+                        label = "User" if role == "user" else "Assistant"
+                        prompt_parts.append(f"{label}: {content}")
+                prompt_parts.append("")
+
+            # Database Context
+            if db_context.strip():
+                prompt_parts.append("Supplied RealVest Database Context:")
+                prompt_parts.append(db_context.strip())
+                prompt_parts.append("")
+
+            prompt_parts.append(f"User Query: {user_message}")
+            full_prompt = "\n".join(prompt_parts)
+
+            config = types.GenerateContentConfig(
+                system_instruction=REALVEST_SYSTEM_PROMPT,
                 temperature=0.3,
-                max_tokens=650
+                max_output_tokens=750,
             )
-            if response.choices and response.choices[0].message.content:
-                return response.choices[0].message.content.strip()
-        except Exception as e:
-            logger.warning(f"OpenAI SDK call to xAI failed: {e}. Trying direct HTTP request...")
 
-        # Fallback to direct HTTP request with httpx
-        try:
-            url = "https://api.x.ai/v1/chat/completions"
-            headers = {
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json"
-            }
-            payload = {
-                "model": model,
-                "messages": messages_payload,
-                "temperature": 0.3,
-                "max_tokens": 650
-            }
-            with httpx.Client(timeout=25.0) as http_client:
-                res = http_client.post(url, headers=headers, json=payload)
-                if res.status_code == 200:
-                    data = res.json()
-                    return data["choices"][0]["message"]["content"].strip()
-                else:
-                    logger.error(f"xAI API returned status {res.status_code}: {res.text}")
+            candidate_models = [model, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
+            candidate_models = list(dict.fromkeys(candidate_models))
+
+            for m in candidate_models:
+                try:
+                    response = client.models.generate_content(
+                        model=m,
+                        contents=full_prompt,
+                        config=config,
+                    )
+                    if response and response.text:
+                        return response.text.strip()
+                except Exception as model_err:
+                    logger.warning(f"Gemini model '{m}' call failed: {model_err}")
+
         except Exception as e:
-            logger.error(f"HTTP call to xAI API failed: {e}")
+            logger.error(f"Google Gemini API call failed: {e}")
 
         return None
+
 
     @classmethod
     def _generate_fallback_reply(
