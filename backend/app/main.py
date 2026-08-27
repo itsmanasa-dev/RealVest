@@ -16,7 +16,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.app.core.config import settings
-from backend.app.core.database import engine, Base, SessionLocal
+from backend.app.core.database import get_engine, get_session, Base, engine, SessionLocal
 from backend.app.models.property import PropertyModel
 from backend.app.models.comparison import ComparisonModel
 from backend.app.services.property_service import property_service
