@@ -6,7 +6,11 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT_DIR))
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 from backend.app.core.config import settings
+
 
 def test_grok_connection():
     api_key = settings.XAI_API_KEY or os.getenv("XAI_API_KEY", "")

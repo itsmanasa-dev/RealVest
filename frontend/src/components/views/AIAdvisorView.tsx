@@ -103,8 +103,14 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
       contextPayload.investment_score = activeProperty.investmentScore;
     }
 
+    // Build history payload
+    const historyPayload = messages.slice(-6).map((m) => ({
+      role: m.sender === 'user' ? ('user' as const) : ('assistant' as const),
+      content: m.text,
+    }));
+
     try {
-      const response = await advisorApi.sendMessage(query, contextPayload);
+      const response = await advisorApi.sendMessage(query, contextPayload, historyPayload);
       const advisorMsg: Message = {
         id: `advisor-${Date.now()}`,
         sender: 'advisor',
@@ -114,6 +120,7 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
       };
       setMessages((prev) => [...prev, advisorMsg]);
     } catch (err: any) {
+
       console.warn('Advisor API backend offline or unreachable, utilizing built-in intelligence fallback:', err.message);
       // Seamless built-in fallback
       try {

@@ -10,6 +10,18 @@ router = APIRouter(prefix="/advisor", tags=["AI Advisor"])
 def advisor_chat(req: ChatRequest, db: Session = Depends(get_db)):
     """
     Conversational property and investment assistant aware of RealVest dataset, ML models, and comparison context.
+    Uses official xAI Grok API (grok-4.6) with RealVest context grounding.
     """
-    res = advisor_service.generate_reply(db=db, message=req.message, context=req.context)
-    return ChatResponse(**res)
+    res = advisor_service.generate_reply(
+        db=db,
+        message=req.message,
+        context=req.context,
+        history=req.history
+    )
+    return ChatResponse(
+        success=res.get("success", True),
+        reply=res.get("reply", ""),
+        sources=res.get("sources", []),
+        context_used=res.get("context_used", {})
+    )
+
