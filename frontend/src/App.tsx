@@ -61,7 +61,7 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafd] dark:bg-[#031427] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B1120] text-[#0F172A] dark:text-[#F8FAFC] flex flex-col font-sans transition-colors duration-300">
       {/* Top Header */}
       <Header
         activeTab={activeTab}

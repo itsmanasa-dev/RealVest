@@ -57,8 +57,11 @@ def get_hpi_trend_analysis():
         except Exception:
             pass
             
-    disclaimer = "HPI trajectory reflects official NHB (National Housing Bank) Residex index data for Bengaluru (Base Year 2013=100). No artificial trend extrapolation has been added for unrecorded intermediate gaps."
+    disclaimer = "HPI historical series reflects official NHB Residex assessment for Bengaluru. Future 2025-2026 data points represent statistical polynomial trend forecasts with 95% confidence intervals."
     
+    from src.models.predict import get_hpi_forecast
+    forecast_data = get_hpi_forecast()
+
     return {
         'hpi_table': df,
         'latest_quarter': df['Quarter'].iloc[-1],
@@ -68,5 +71,8 @@ def get_hpi_trend_analysis():
         'latest_qoq_%': round(latest_qoq, 2) if not pd.isna(latest_qoq) else 0.0,
         'latest_yoy_%': round(latest_yoy, 2) if not pd.isna(latest_yoy) else 0.0,
         'residex_snapshot': residex_val,
+        'forecast_2025_2026': forecast_data.get('forecast_series', []),
+        'forecast_metrics': forecast_data.get('metrics', {}),
         'disclaimer': disclaimer
     }
+

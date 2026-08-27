@@ -1,0 +1,84 @@
+{
+  "model_type": "Ridge Polynomial Time-Series",
+  "historical_end_period": "Mar 2018",
+  "metrics": {
+    "r2": -3.51554293333385,
+    "mae": 14.284141218433177,
+    "rmse": 15.203267869113747,
+    "std_err": 4.518155614286325
+  },
+  "forecast_series": [
+    {
+      "quarter": "Q1 2025",
+      "forecastHpi": 141.4,
+      "confidenceInterval": [
+        132.5,
+        150.3
+      ],
+      "type": "FORECAST"
+    },
+    {
+      "quarter": "Q2 2025",
+      "forecastHpi": 142.3,
+      "confidenceInterval": [
+        133.4,
+        151.2
+      ],
+      "type": "FORECAST"
+    },
+    {
+      "quarter": "Q3 2025",
+      "forecastHpi": 143.2,
+      "confidenceInterval": [
+        134.3,
+        152.1
+      ],
+      "type": "FORECAST"
+    },
+    {
+      "quarter": "Q4 2025",
+      "forecastHpi": 143.9,
+      "confidenceInterval": [
+        135.0,
+        152.8
+      ],
+      "type": "FORECAST"
+    },
+    {
+      "quarter": "Q1 2026",
+      "forecastHpi": 144.5,
+      "confidenceInterval": [
+        135.6,
+        153.4
+      ],
+      "type": "FORECAST"
+    },
+    {
+      "quarter": "Q2 2026",
+      "forecastHpi": 145.0,
+      "confidenceInterval": [
+        136.1,
+        153.9
+      ],
+      "type": "FORECAST"
+    },
+    {
+      "quarter": "Q3 2026",
+      "forecastHpi": 145.5,
+      "confidenceInterval": [
+        136.6,
+        154.4
+      ],
+      "type": "FORECAST"
+    },
+    {
+      "quarter": "Q4 2026",
+      "forecastHpi": 145.8,
+      "confidenceInterval": [
+        136.9,
+        154.7
+      ],
+      "type": "FORECAST"
+    }
+  ]
+}

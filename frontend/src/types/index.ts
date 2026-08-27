@@ -77,12 +77,15 @@ export interface SimulationResult {
   netMonthlyCashFlow: number;
   netAnnualCashFlow: number;
   rentalYieldPct: number;
+  projected2025ValLakhs: number;
+  projected2026ValLakhs: number;
   projectedFutureValLakhs: number;
   totalProfitInr: number;
   totalRoiPct: number;
   annualizedRoiPct: number;
   decision: 'BUY' | 'HOLD' | 'AVOID';
 }
+
 
 export interface DecisionFlipResult {
   currentDecision: 'BUY' | 'HOLD' | 'AVOID';
@@ -113,11 +116,25 @@ export interface HPIRecord {
   'HPI@Assessment Prices': number;
   'QoQ_Change_%'?: number | null;
   'YoY_Change_%'?: number | null;
+  isObserved?: boolean;
+}
+
+export interface ForecastRecord {
+  quarter: string;
+  year: string;
+  forecastHpi: number;
+  confidenceInterval: [number, number]; // [lower_bound, upper_bound]
+  type: 'FORECAST';
 }
 
 export interface MarketData {
   latestHpi: number;
   totalGrowthPct: number;
   latestYoyPct: number;
+  historicalEndQuarter: string;
+  historicalThroughYear: number;
   series: HPIRecord[];
+  forecastSeries: ForecastRecord[];
+  forecastModel: string;
 }
+

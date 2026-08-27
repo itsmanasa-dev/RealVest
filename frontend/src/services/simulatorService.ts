@@ -37,6 +37,13 @@ export function calculateScenario(params: SimulationParams): SimulationResult {
 
   const futureValInr = purchaseInr * Math.pow(1.0 + (appreciationRate / 100.0), holdingPeriod);
   const projectedFutureValLakhs = parseFloat((futureValInr / 100000.0).toFixed(2));
+  
+  // Explicit 2025 (1-year forward) and 2026 (2-year forward) forecasts
+  const val2025Inr = purchaseInr * (1.0 + (appreciationRate / 100.0));
+  const val2026Inr = purchaseInr * Math.pow(1.0 + (appreciationRate / 100.0), 2);
+  const projected2025ValLakhs = parseFloat((val2025Inr / 100000.0).toFixed(2));
+  const projected2026ValLakhs = parseFloat((val2026Inr / 100000.0).toFixed(2));
+
   const capitalGainInr = futureValInr - purchaseInr;
   const totalRentalIncomeInr = netAnnualCashFlow * holdingPeriod;
   const totalProfitInr = Math.round(capitalGainInr + totalRentalIncomeInr);
@@ -63,6 +70,8 @@ export function calculateScenario(params: SimulationParams): SimulationResult {
     netMonthlyCashFlow,
     netAnnualCashFlow,
     rentalYieldPct,
+    projected2025ValLakhs,
+    projected2026ValLakhs,
     projectedFutureValLakhs,
     totalProfitInr,
     totalRoiPct,
@@ -70,6 +79,7 @@ export function calculateScenario(params: SimulationParams): SimulationResult {
     decision,
   };
 }
+
 
 /**
  * Calculates sensitivity decision flip boundaries

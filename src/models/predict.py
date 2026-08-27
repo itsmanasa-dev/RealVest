@@ -1,9 +1,14 @@
 import os
+import sys
 import joblib
 import pandas as pd
 import numpy as np
 
-MODELS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'models')
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
+MODELS_DIR = os.path.join(ROOT_DIR, 'models')
 
 _price_model_cache = None
 _rent_model_cache = None
@@ -122,3 +127,16 @@ def predict_rent_price(locality, area_sqft, beds, bathrooms=None, balconies=None
         'locality_used': locality_clean,
         'mae_margin': round(mae, 0)
     }
+
+def get_hpi_forecast():
+    """
+    Get 2025-2026 HPI macro forecast with confidence intervals.
+    """
+    path = os.path.join(MODELS_DIR, 'forecast_metrics.json')
+    if not os.path.exists(path):
+        from src.models.train_models import train_hpi_forecast_model
+        return train_hpi_forecast_model()
+    import json
+    with open(path, 'r') as f:
+        return json.load(f)
+

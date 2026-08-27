@@ -98,7 +98,7 @@ export interface Translations {
   highest_roi_desc: string;
   inspect_btn: string;
 
-  // Market Intelligence
+  // Market Intelligence & Forecast
   market_intel_title: string;
   market_intel_subtitle: string;
   opportunity_heatmap: string;
@@ -113,6 +113,21 @@ export interface Translations {
   zoom_in: string;
   zoom_out: string;
   reset_view: string;
+  observed_through_2024: string;
+  forecast_2025_2026: string;
+  forecast_label: string;
+  observed_label: string;
+  confidence_interval: string;
+  locate_me: string;
+  locating_user: string;
+  location_denied: string;
+  location_found: string;
+  select_on_map: string;
+  projected_2025: string;
+  projected_2026: string;
+  five_year_scenario: string;
+  user_assumption: string;
+  model_projection: string;
 
   // AI Advisor
   advisor_title: string;
@@ -132,6 +147,7 @@ export interface Translations {
   dataset_coverage: string;
   bengaluru_records_count: string;
 }
+
 
 export const translations: Record<Language, Translations> = {
   en: {
@@ -240,8 +256,24 @@ export const translations: Record<Language, Translations> = {
     zoom_in: 'Zoom In',
     zoom_out: 'Zoom Out',
     reset_view: 'Center Bengaluru',
+    observed_through_2024: 'Observed through 2024',
+    forecast_2025_2026: 'Forecast: 2025–2026',
+    forecast_label: 'FORECAST',
+    observed_label: 'OBSERVED',
+    confidence_interval: '95% Confidence Range',
+    locate_me: 'Locate Me',
+    locating_user: 'Locating your GPS position...',
+    location_denied: 'Location access denied or unavailable. Centered on Bengaluru.',
+    location_found: 'Your current location located in Bengaluru.',
+    select_on_map: 'Select Property on Map',
+    projected_2025: '2025 Model Projection',
+    projected_2026: '2026 Model Projection',
+    five_year_scenario: '5-Year Compounded Scenario',
+    user_assumption: 'User Assumption',
+    model_projection: 'Model Projection',
 
     advisor_title: 'AI Decision Advisor',
+
     advisor_subtitle: 'Grounded real estate decision support backed by Bengaluru housing price models and rental datasets.',
     suggested_prompts: 'Prompts:',
     ask_advisor_placeholder: 'Ask about Bengaluru properties, fair pricing, rental yields, or risk...',
@@ -363,6 +395,21 @@ export const translations: Record<Language, Translations> = {
     zoom_in: 'ज़ूम इन',
     zoom_out: 'ज़ूम आउट',
     reset_view: 'बेंगलुरु केंद्रित करें',
+    observed_through_2024: '2024 तक अवलोकित',
+    forecast_2025_2026: 'पूर्वानुमान: 2025–2026',
+    forecast_label: 'पूर्वानुमान',
+    observed_label: 'अवलोकित',
+    confidence_interval: '95% विश्वास सीमा',
+    locate_me: 'मेरा स्थान',
+    locating_user: 'जीपीएस स्थिति खोजी जा रही है...',
+    location_denied: 'स्थान अनुमति अस्वीकृत या अनुपलब्ध। बेंगलुरु पर केंद्रित।',
+    location_found: 'आपका वर्तमान स्थान बेंगलुरु में प्राप्त हुआ।',
+    select_on_map: 'मानचित्र पर संपत्ति चुनें',
+    projected_2025: '2025 मॉडल प्रक्षेपण',
+    projected_2026: '2026 मॉडल प्रक्षेपण',
+    five_year_scenario: '5-वर्षीय चक्रवृद्धि परिदृश्य',
+    user_assumption: 'उपयोगकर्ता धारणा',
+    model_projection: 'मॉडल प्रक्षेपण',
 
     advisor_title: 'एआई निर्णय सलाहकार',
     advisor_subtitle: 'बेंगलुरु मूल्य मॉडल और किराया डेटासेट द्वारा समर्थित रियल एस्टेट निर्णय सलाह।',
@@ -486,6 +533,21 @@ export const translations: Record<Language, Translations> = {
     zoom_in: 'ಹಿಗ್ಗಿಸಿ',
     zoom_out: 'ಕುಗ್ಗಿಸಿ',
     reset_view: 'ಬೆಂಗಳೂರು ಕೇಂದ್ರಿತ',
+    observed_through_2024: '2024 ರವರೆಗೆ ದಾಖಲಿತ',
+    forecast_2025_2026: 'ಮುನ್ಸೂಚನೆ: 2025–2026',
+    forecast_label: 'ಮುನ್ಸೂಚನೆ',
+    observed_label: 'ದಾಖಲಿತ',
+    confidence_interval: '95% ವಿಶ್ವಾಸಾರ್ಹತೆ ವ್ಯಾಪ್ತಿ',
+    locate_me: 'ನನ್ನ ಸ್ಥಳ',
+    locating_user: 'ಜಿಪಿಎಸ್ ಸ್ಥಳ ಪತ್ತೆ ಮಾಡಲಾಗುತ್ತಿದೆ...',
+    location_denied: 'ಸ್ಥಳ ಪ್ರವೇಶ ಅನುಮತಿ ನಿರಾಕರಿಸಲಾಗಿದೆ. ಬೆಂಗಳೂರು ಕೇಂದ್ರಿತ.',
+    location_found: 'ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಸ್ಥಳವನ್ನು ಗುರುತಿಸಲಾಗಿದೆ.',
+    select_on_map: 'ನಕ್ಷೆಯಲ್ಲಿ ಆಸ್ತಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ',
+    projected_2025: '2025 ಮಾದರಿ ಅಂದಾಜು',
+    projected_2026: '2026 ಮಾದರಿ ಅಂದಾಜು',
+    five_year_scenario: '5 ವರ್ಷಗಳ ಚಕ್ರವೃದ್ಧಿ ಸನ್ನಿವೇಶ',
+    user_assumption: 'ಬಳಕೆದಾರರ ಊಹೆ',
+    model_projection: 'ಮಾದರಿ ಅಂದಾಜು',
 
     advisor_title: 'ಎಐ ನಿರ್ಧಾರ ಸಲಹೆಗಾರ',
     advisor_subtitle: 'ಬೆಂಗಳೂರು ಗೃಹ ಬೆಲೆ ಮಾದರಿಗಳ ಆಧಾರದ ಮೇಲೆ ನೈಜ ನಿರ್ಧಾರ ಬೆಂಬಲ.',
@@ -504,3 +566,4 @@ export const translations: Record<Language, Translations> = {
     bengaluru_records_count: '13,320+ ಬೆಂಗಳೂರು ಆಸ್ತಿ ದಾಖಲೆಗಳು ಮತ್ತು ಆರ್‌ಬಿಐ ಎಚ್‌ಪಿಐ ಡೇಟಾ',
   }
 };
+

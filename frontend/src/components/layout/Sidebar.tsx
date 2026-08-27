@@ -43,18 +43,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#031427] flex-col justify-between hidden md:flex shrink-0 min-h-screen sticky top-0 transition-colors">
+    <aside className="w-64 border-r border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] flex-col justify-between hidden md:flex shrink-0 min-h-screen sticky top-0 transition-colors">
       {/* Brand Header */}
       <div>
-        <div className="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-800 gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-emerald-400 flex items-center justify-center text-white font-mono font-extrabold shadow-lg shadow-blue-500/20">
+        <div className="h-16 flex items-center px-6 border-b border-slate-200 dark:border-[#273449] gap-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 flex items-center justify-center text-white font-mono font-extrabold shadow-lg shadow-blue-500/20">
             RV
           </div>
           <div>
             <span className="font-extrabold font-mono tracking-wider text-slate-900 dark:text-white text-base">
               REALVEST
             </span>
-            <div className="text-[10px] font-mono text-emerald-500 tracking-widest uppercase">
+            <div className="text-[10px] font-mono text-blue-500 dark:text-blue-400 tracking-widest uppercase">
               BENGALURU AI ENGINE
             </div>
           </div>
@@ -71,8 +71,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => onTabChange(item.id)}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-xs transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-blue-600 dark:bg-emerald-500 text-white font-semibold shadow-md shadow-blue-500/25 ring-1 ring-blue-400/40 dark:ring-emerald-400/40'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
+                    ? 'bg-blue-600 dark:bg-blue-600 text-white font-semibold shadow-md shadow-blue-500/25 ring-1 ring-blue-400/40'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#172033]'
                 }`}
               >
                 <Icon size={18} className={isActive ? 'text-white' : 'text-slate-400'} />
@@ -84,7 +84,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Footer Bottom Controls */}
-      <div className="p-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
+      <div className="p-4 border-t border-slate-200 dark:border-[#273449] space-y-3">
         {/* Language Selection Quick Switcher */}
         <div className="flex items-center justify-between px-2 text-[11px] font-mono text-slate-400">
           <span className="flex items-center gap-1.5"><Globe size={13} /> Lang</span>
@@ -96,7 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase transition-colors cursor-pointer ${
                   language === l
                     ? 'bg-blue-600 text-white'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    : 'bg-slate-100 dark:bg-[#172033] text-slate-500 hover:text-slate-900 dark:hover:text-white border border-transparent dark:border-[#273449]'
                 }`}
               >
                 {l}
@@ -109,16 +109,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <span className="text-[11px] font-mono text-slate-400">{t.visual_archetype}</span>
           <button
             onClick={onToggleTheme}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-emerald-400 transition-colors cursor-pointer"
+            className="p-2 rounded-xl bg-slate-100 dark:bg-[#172033] text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer border border-transparent dark:border-[#273449]"
             title={t.toggle_theme}
           >
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
         </div>
 
-        <div className="px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80">
+        <div className="px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449]">
           <div className="flex items-center gap-2">
-            <Building2 size={14} className="text-emerald-500" />
+            <Building2 size={14} className="text-blue-500 dark:text-blue-400" />
             <span className="text-[11px] font-mono text-slate-700 dark:text-slate-300 font-bold">
               {t.verified_bengaluru_db}
             </span>
@@ -131,3 +131,4 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </aside>
   );
 };
+

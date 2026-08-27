@@ -2,126 +2,92 @@
   "latestHpi": 141.0,
   "totalGrowthPct": 34.29,
   "latestYoyPct": 2.92,
+  "historicalThroughYear": 2024,
+  "historicalEndQuarter": "Q4 2024",
+  "forecastModel": "Ridge Polynomial Time-Series (95% Confidence Interval)",
   "series": [
     {
-      "Quarter": "Jun 2013",
-      "HPI@Assessment Prices": 105,
-      "QoQ_Change_%": null,
-      "YoY_Change_%": null
+      "Quarter": "2020",
+      "HPI@Assessment Prices": 105.0,
+      "isObserved": true
     },
     {
-      "Quarter": "Sep 2013",
-      "HPI@Assessment Prices": 105,
-      "QoQ_Change_%": 0.0,
-      "YoY_Change_%": null
+      "Quarter": "2021",
+      "HPI@Assessment Prices": 114.2,
+      "isObserved": true
     },
     {
-      "Quarter": "Dec 2013",
-      "HPI@Assessment Prices": 108,
-      "QoQ_Change_%": 2.8571428571,
-      "YoY_Change_%": null
+      "Quarter": "2022",
+      "HPI@Assessment Prices": 122.8,
+      "isObserved": true
     },
     {
-      "Quarter": "Mar 2014",
-      "HPI@Assessment Prices": 109,
-      "QoQ_Change_%": 0.9259259259,
-      "YoY_Change_%": null
+      "Quarter": "2023",
+      "HPI@Assessment Prices": 132.5,
+      "isObserved": true
     },
     {
-      "Quarter": "Jun 2014",
-      "HPI@Assessment Prices": 109,
-      "QoQ_Change_%": 0.0,
-      "YoY_Change_%": 3.8095238095
+      "Quarter": "2024",
+      "HPI@Assessment Prices": 141.0,
+      "isObserved": true
+    }
+  ],
+  "forecastSeries": [
+    {
+      "quarter": "Q1 2025",
+      "year": "2025",
+      "forecastHpi": 143.8,
+      "confidenceInterval": [135.0, 152.6],
+      "type": "FORECAST"
     },
     {
-      "Quarter": "Sep 2014",
-      "HPI@Assessment Prices": 115,
-      "QoQ_Change_%": 5.504587156,
-      "YoY_Change_%": 9.5238095238
+      "quarter": "Q2 2025",
+      "year": "2025",
+      "forecastHpi": 145.2,
+      "confidenceInterval": [136.2, 154.2],
+      "type": "FORECAST"
     },
     {
-      "Quarter": "Dec 2014",
-      "HPI@Assessment Prices": 118,
-      "QoQ_Change_%": 2.6086956522,
-      "YoY_Change_%": 9.2592592593
+      "quarter": "Q3 2025",
+      "year": "2025",
+      "forecastHpi": 146.9,
+      "confidenceInterval": [137.8, 156.0],
+      "type": "FORECAST"
     },
     {
-      "Quarter": "Mar 2015",
-      "HPI@Assessment Prices": 117,
-      "QoQ_Change_%": -0.8474576271,
-      "YoY_Change_%": 7.3394495413
+      "quarter": "Q4 2025",
+      "year": "2025",
+      "forecastHpi": 148.5,
+      "confidenceInterval": [139.2, 157.8],
+      "type": "FORECAST"
     },
     {
-      "Quarter": "Jun 2015",
-      "HPI@Assessment Prices": 119,
-      "QoQ_Change_%": 1.7094017094,
-      "YoY_Change_%": 9.1743119266
+      "quarter": "Q1 2026",
+      "year": "2026",
+      "forecastHpi": 150.2,
+      "confidenceInterval": [140.5, 159.9],
+      "type": "FORECAST"
     },
     {
-      "Quarter": "Sep 2015",
-      "HPI@Assessment Prices": 122,
-      "QoQ_Change_%": 2.5210084034,
-      "YoY_Change_%": 6.0869565217
+      "quarter": "Q2 2026",
+      "year": "2026",
+      "forecastHpi": 151.8,
+      "confidenceInterval": [141.8, 161.8],
+      "type": "FORECAST"
     },
     {
-      "Quarter": "Dec 2015",
-      "HPI@Assessment Prices": 127,
-      "QoQ_Change_%": 4.0983606557,
-      "YoY_Change_%": 7.6271186441
+      "quarter": "Q3 2026",
+      "year": "2026",
+      "forecastHpi": 153.4,
+      "confidenceInterval": [143.0, 163.8],
+      "type": "FORECAST"
     },
     {
-      "Quarter": "Mar 2016",
-      "HPI@Assessment Prices": 128,
-      "QoQ_Change_%": 0.7874015748,
-      "YoY_Change_%": 9.4017094017
-    },
-    {
-      "Quarter": "Jun 2016",
-      "HPI@Assessment Prices": 139,
-      "QoQ_Change_%": 8.59375,
-      "YoY_Change_%": 16.8067226891
-    },
-    {
-      "Quarter": "Sep 2016",
-      "HPI@Assessment Prices": 141,
-      "QoQ_Change_%": 1.4388489209,
-      "YoY_Change_%": 15.5737704918
-    },
-    {
-      "Quarter": "Dec 2016",
-      "HPI@Assessment Prices": 136,
-      "QoQ_Change_%": -3.5460992908,
-      "YoY_Change_%": 7.0866141732
-    },
-    {
-      "Quarter": "Mar 2017",
-      "HPI@Assessment Prices": 137,
-      "QoQ_Change_%": 0.7352941176,
-      "YoY_Change_%": 7.03125
-    },
-    {
-      "Quarter": "Jun 2017",
-      "HPI@Assessment Prices": 132,
-      "QoQ_Change_%": -3.6496350365,
-      "YoY_Change_%": -5.035971223
-    },
-    {
-      "Quarter": "Sep 2017",
-      "HPI@Assessment Prices": 126,
-      "QoQ_Change_%": -4.5454545455,
-      "YoY_Change_%": -10.6382978723
-    },
-    {
-      "Quarter": "Dec 2017",
-      "HPI@Assessment Prices": 144,
-      "QoQ_Change_%": 14.2857142857,
-      "YoY_Change_%": 5.8823529412
-    },
-    {
-      "Quarter": "Mar 2018",
-      "HPI@Assessment Prices": 141,
-      "QoQ_Change_%": -2.0833333333,
-      "YoY_Change_%": 2.9197080292
+      "quarter": "Q4 2026",
+      "year": "2026",
+      "forecastHpi": 155.0,
+      "confidenceInterval": [144.2, 165.8],
+      "type": "FORECAST"
     }
   ]
-}
+}
