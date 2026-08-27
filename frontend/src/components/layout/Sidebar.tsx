@@ -47,7 +47,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Brand Header */}
       <div>
         <div className="h-16 flex items-center px-5 border-b border-slate-200 dark:border-[#273449] gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 dark:bg-blue-600 flex items-center justify-center text-white font-mono font-bold text-xs tracking-wider shadow-sm">
+          <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-mono font-bold text-xs tracking-wider shadow-sm">
             RV
           </div>
           <div className="flex flex-col">
@@ -69,13 +69,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <button
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg font-medium text-xs transition-colors cursor-pointer ${
+                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium text-xs transition-colors cursor-pointer ${
                   isActive
-                    ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-medium'
+                    ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-semibold'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-[#172033]'
                 }`}
               >
-                <Icon size={16} className={isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400'} />
+                <Icon size={16} className={isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'} />
                 <span>{item.label}</span>
               </button>
             );
@@ -95,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => setLanguage(l)}
                 className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-medium uppercase transition-colors cursor-pointer ${
                   language === l
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-emerald-600 text-white'
                     : 'bg-slate-100 dark:bg-[#172033] text-slate-500 hover:text-slate-900 dark:hover:text-white border border-transparent dark:border-[#273449]'
                 }`}
               >
@@ -106,7 +106,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Database Status Pill */}
-        <div className="px-3 py-2 rounded-lg bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449]">
+        <div className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#172033] border border-slate-200 dark:border-[#273449]">
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             <span className="text-[10px] font-mono text-slate-700 dark:text-slate-300 font-medium">
@@ -118,5 +118,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </aside>
   );
 };
+
 
 

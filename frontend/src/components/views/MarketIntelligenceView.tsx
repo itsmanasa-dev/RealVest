@@ -52,17 +52,17 @@ export const MarketIntelligenceView: React.FC<MarketIntelligenceViewProps> = ({
         </p>
       </div>
 
-      {/* Card 1: Interactive Opportunity Heatmap */}
-      <div className="rounded-xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm p-4 sm:p-5 space-y-3">
+      {/* Card 1: Interactive Real Bengaluru Geographic Map */}
+      <div className="rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm p-4 sm:p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Map size={16} className="text-blue-600 dark:text-blue-400" />
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+            <Map size={18} className="text-emerald-600 dark:text-emerald-400" />
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
               {t.opportunity_heatmap}
             </h3>
           </div>
-          <span className="px-2 py-0.5 rounded text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-[#273449] font-mono text-[10px] font-medium">
-            BENGALURU GIS
+          <span className="px-3 py-1 rounded-full text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-500/30 font-mono text-[10px] font-bold">
+            BENGALURU GIS SATELLITE
           </span>
         </div>
 
@@ -77,7 +77,7 @@ export const MarketIntelligenceView: React.FC<MarketIntelligenceViewProps> = ({
       </div>
 
       {/* Card 2: Trend Velocity & Capital Appreciation: 2020-2024 Actual vs 2025-2026 Forecast */}
-      <div className="p-5 rounded-xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4">
+      <div className="p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-4">
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">

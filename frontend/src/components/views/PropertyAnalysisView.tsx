@@ -93,13 +93,13 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => onNavigate('simulator')}
-              className="px-3.5 py-2 rounded-lg border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#172033] text-slate-700 dark:text-slate-200 font-medium text-xs hover:bg-slate-50 dark:hover:bg-[#1e2c47] transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-2 rounded-full border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#172033] text-slate-700 dark:text-slate-200 font-medium text-xs hover:bg-slate-50 dark:hover:bg-[#1e2c47] transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
               <Sliders size={14} /> {t.open_simulator}
             </button>
             <button
               onClick={() => alert(`Initiating acquisition workflow for ${property.title}.`)}
-              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs transition-colors flex items-center gap-1.5 shadow-sm cursor-pointer"
+              className="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer"
             >
               <ShoppingCart size={14} /> {t.initiate_acquisition}
             </button>
@@ -110,13 +110,13 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
       {/* Grid: Decision Synthesis & Valuation Overview */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Left Column: Decision Synthesis Radial + Valuation Strip (5 Cols) */}
-        <div className="lg:col-span-5 p-5 rounded-xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm flex flex-col items-center justify-between text-center">
+        <div className="lg:col-span-5 p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm flex flex-col items-center justify-between text-center">
           <div className="w-full">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#273449]">
               <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 {t.decision_synthesis}
               </h3>
-              <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${
+              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${
                 property.recommendation === 'BUY'
                   ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                   : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
@@ -146,15 +146,15 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
                   strokeDasharray={circumference}
                   strokeDashoffset={strokeDashoffset}
                   strokeLinecap="round"
-                  className="text-blue-600 dark:text-blue-400 transition-all duration-700 ease-out"
+                  className="text-emerald-500 dark:text-emerald-400 transition-all duration-700 ease-out"
                   fill="transparent"
                 />
               </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className="font-mono text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
+              <div className="absolute flex flex-col items-center">
+                <span className="text-2xl font-extrabold font-mono text-slate-900 dark:text-white">
                   {property.confidenceScore}%
                 </span>
-                <span className="text-[9px] font-mono uppercase tracking-widest text-slate-400 font-medium">
+                <span className="text-[10px] font-mono text-slate-400 uppercase font-medium">
                   {t.confidence}
                 </span>
               </div>

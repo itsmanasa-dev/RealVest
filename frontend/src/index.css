@@ -9,7 +9,8 @@
     --text-secondary: #475569;
     --text-muted: #64748B;
     --border-color: #E2E8F0;
-    --color-brand: #2563EB;
+    --color-brand: #16A34A; /* Vibrant Emerald Green from Dribbble */
+    --color-accent-green: #22C55E;
     --color-success: #16A34A;
     --color-warning: #D97706;
     --color-danger: #DC2626;
@@ -23,7 +24,8 @@
     --text-secondary: #CBD5E1;
     --text-muted: #94A3B8;
     --border-color: #273449;
-    --color-brand: #3B82F6;
+    --color-brand: #22C55E;
+    --color-accent-green: #4ADE80;
     --color-success: #22C55E;
     --color-warning: #F59E0B;
     --color-danger: #EF4444;
@@ -57,17 +59,18 @@ body {
   background: rgba(148, 163, 184, 0.45);
 }
 
-/* Standardized Card & Panel Utilities */
+/* Dribbble Style Card Utilities */
 .rv-card {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: 0.75rem; /* 12px */
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  border-radius: 1.25rem; /* 20px smooth Dribbble radius */
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
 }
 
 .rv-card-secondary {
   background-color: var(--bg-surface-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
+  border-radius: 1.25rem;
 }
+
 

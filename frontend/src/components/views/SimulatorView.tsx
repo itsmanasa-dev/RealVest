@@ -68,13 +68,13 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
         <div className="flex items-center gap-2">
           <button
             onClick={handleReset}
-            className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#172033] text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#1e2c47] text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-full border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#172033] text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#1e2c47] text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
           >
             <RotateCcw size={13} /> {t.reset_base}
           </button>
           <button
             onClick={() => alert(`Scenario saved: ${formatInrLakhs(purchasePriceLakhs)} asset @ ${interestRate}% interest, projected ${dynamicResult.totalRoiPct}% ROI over ${holdingPeriod} years.`)}
-            className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition-colors flex items-center gap-1.5 shadow-sm cursor-pointer"
+            className="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer"
           >
             <Save size={13} /> {t.save_scenario}
           </button>
@@ -84,15 +84,15 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
       {/* Main 2-Column Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Scenario Controls (5 Cols) */}
-        <div className="lg:col-span-5 p-5 rounded-xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-5">
+        <div className="lg:col-span-5 p-6 rounded-3xl border border-slate-200 dark:border-[#273449] bg-white dark:bg-[#111827] shadow-sm space-y-5">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#273449]">
             <div className="flex items-center gap-2">
-              <Sliders size={16} className="text-blue-600 dark:text-blue-400" />
+              <Sliders size={16} className="text-emerald-600 dark:text-emerald-400" />
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
                 {t.scenario_variables}
               </h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-[#273449]">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
               {t.user_assumption}
             </span>
           </div>
@@ -101,7 +101,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-xs font-mono">
               <span className="text-slate-500 dark:text-slate-400 uppercase">{t.purchase_price}</span>
-              <span className="text-slate-900 dark:text-white font-semibold text-sm">
+              <span className="text-slate-900 dark:text-white font-extrabold text-sm">
                 {formatInrLakhs(purchasePriceLakhs)}
               </span>
             </div>
@@ -112,7 +112,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
               step={2.5}
               value={purchasePriceLakhs}
               onChange={(e) => setPurchasePriceLakhs(Number(e.target.value))}
-              className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg"
+              className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
             />
             <div className="flex justify-between text-[10px] font-mono text-slate-400">
               <span>₹20 L</span>
@@ -125,7 +125,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-xs font-mono">
               <span className="text-slate-500 dark:text-slate-400 uppercase">{t.down_payment}</span>
-              <span className="text-slate-900 dark:text-white font-semibold text-sm">
+              <span className="text-slate-900 dark:text-white font-extrabold text-sm">
                 {downPaymentPct}% ({formatInrLakhs((purchasePriceLakhs * downPaymentPct) / 100)})
               </span>
             </div>
@@ -136,7 +136,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
               step={5}
               value={downPaymentPct}
               onChange={(e) => setDownPaymentPct(Number(e.target.value))}
-              className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg"
+              className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
             />
           </div>
 
@@ -144,7 +144,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-xs font-mono">
               <span className="text-slate-500 dark:text-slate-400 uppercase">{t.interest_rate}</span>
-              <span className="text-slate-900 dark:text-white font-semibold text-sm">
+              <span className="text-slate-900 dark:text-white font-extrabold text-sm">
                 {interestRate}% p.a.
               </span>
             </div>
@@ -155,7 +155,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
               step={0.25}
               value={interestRate}
               onChange={(e) => setInterestRate(Number(e.target.value))}
-              className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg"
+              className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
             />
           </div>
 
@@ -163,7 +163,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-xs font-mono">
               <span className="text-slate-500 dark:text-slate-400 uppercase">{t.target_yield}</span>
-              <span className="text-slate-900 dark:text-white font-semibold text-sm">
+              <span className="text-slate-900 dark:text-white font-extrabold text-sm">
                 {targetYield}% ({formatInrRent(monthlyRent)})
               </span>
             </div>
@@ -174,7 +174,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
               step={0.2}
               value={targetYield}
               onChange={(e) => setTargetYield(Number(e.target.value))}
-              className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg"
+              className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
             />
           </div>
 
@@ -182,7 +182,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-xs font-mono">
               <span className="text-slate-500 dark:text-slate-400 uppercase">{t.holding_period}</span>
-              <span className="text-slate-900 dark:text-white font-semibold text-sm">
+              <span className="text-slate-900 dark:text-white font-extrabold text-sm">
                 {holdingPeriod} {t.years}
               </span>
             </div>
@@ -193,7 +193,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
               step={1}
               value={holdingPeriod}
               onChange={(e) => setHoldingPeriod(Number(e.target.value))}
-              className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg"
+              className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
             />
           </div>
         </div>

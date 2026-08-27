@@ -1,7 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import type { MarketHotZone, Property } from '../../types';
 import { mockProperties } from '../../data/mockProperties';
-import { MapPin, Plus, Minus, RotateCcw, TrendingUp, Navigation, ArrowUpRight, Building2, CheckCircle2 } from 'lucide-react';
+import { getPropertyCoordinate, getHotZoneCoordinate, BENGALURU_CENTER } from '../../services/geoService';
+import {
+  MapPin,
+  Plus,
+  Minus,
+  RotateCcw,
+  TrendingUp,
+  Navigation,
+  ArrowUpRight,
+  Building2,
+  Layers,
+  Flame,
+  Check,
+  Eye,
+} from 'lucide-react';
 import { formatPercent, formatInrLakhs, formatInrRent } from '../../utils/currency';
 import { useTranslation } from '../../context/LanguageContext';
 
@@ -21,301 +37,346 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
   onSelectProperty,
 }) => {
   const { t } = useTranslation();
-  const [zoomLevel, setZoomLevel] = useState<number>(1);
-  const [panOffset, setPanOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [selectedPropMarker, setSelectedPropMarker] = useState<Property | null>(null);
-  const [userLocation, setUserLocation] = useState<{ x: number; y: number } | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
+  const markersLayerRef = useRef<L.LayerGroup | null>(null);
+  const heatmapLayerRef = useRef<L.LayerGroup | null>(null);
+  const userMarkerRef = useRef<L.CircleMarker | null>(null);
+
+  const [mapStyle, setMapStyle] = useState<'satellite' | 'street'>('satellite');
+  const [showHeatmap, setShowHeatmap] = useState<boolean>(true);
+  const [selectedPropMarker, setSelectedPropMarker] = useState<Property | null>(properties[0] || null);
   const [locationStatus, setLocationStatus] = useState<string | null>(null);
   const [isLocating, setIsLocating] = useState<boolean>(false);
 
-  // Map coordinate mapping for Bengaluru verified properties
-  const propertyCoords: Record<string, { x: number; y: number }> = {
-    'prop-wf-001': { x: 76, y: 46 },
-    'prop-ind-002': { x: 54, y: 40 },
-    'prop-hsr-003': { x: 57, y: 70 },
-    'prop-ec-004': { x: 61, y: 88 },
-    'prop-sar-005': { x: 74, y: 68 },
-    'prop-kor-006': { x: 50, y: 60 },
-    'prop-bel-007': { x: 66, y: 56 },
-    'prop-heb-008': { x: 42, y: 20 },
-  };
+  const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
+
+  // Initialize Real Geographic Map (Leaflet)
+  useEffect(() => {
+    if (!mapContainerRef.current || mapInstanceRef.current) return;
+
+    const map = L.map(mapContainerRef.current, {
+      center: [BENGALURU_CENTER.lat, BENGALURU_CENTER.lng],
+      zoom: 11,
+      zoomControl: false,
+      attributionControl: false,
+    });
+
+    // Satellite Imagery Layer (ESRI World Imagery or Mapbox)
+    const satelliteUrl = mapboxToken
+      ? `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=${mapboxToken}`
+      : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+
+    const streetUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+
+    const baseLayer = L.tileLayer(mapStyle === 'satellite' ? satelliteUrl : streetUrl, {
+      maxZoom: 19,
+      subdomains: ['a', 'b', 'c', 'd'],
+    }).addTo(map);
+
+    const markersGroup = L.layerGroup().addTo(map);
+    const heatmapGroup = L.layerGroup().addTo(map);
+
+    mapInstanceRef.current = map;
+    markersLayerRef.current = markersGroup;
+    heatmapLayerRef.current = heatmapGroup;
+
+    return () => {
+      map.remove();
+      mapInstanceRef.current = null;
+    };
+  }, []);
+
+  // Update Base Tile Layer (Satellite vs Street)
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    // Find and remove current tile layer
+    map.eachLayer((layer) => {
+      if (layer instanceof L.TileLayer) {
+        map.removeLayer(layer);
+      }
+    });
+
+    const satelliteUrl = mapboxToken
+      ? `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=${mapboxToken}`
+      : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+
+    const streetUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+
+    L.tileLayer(mapStyle === 'satellite' ? satelliteUrl : streetUrl, {
+      maxZoom: 19,
+      subdomains: ['a', 'b', 'c', 'd'],
+    }).addTo(map);
+  }, [mapStyle, mapboxToken]);
+
+  // Render Real Property Markers on Geographic Coordinate Points
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    const markersGroup = markersLayerRef.current;
+    if (!map || !markersGroup) return;
+
+    markersGroup.clearLayers();
+
+    properties.forEach((prop) => {
+      const coord = getPropertyCoordinate(prop);
+      const isSelected = selectedPropMarker?.id === prop.id;
+
+      // Custom Clean RealVest Marker DivIcon
+      const iconHtml = `
+        <div class="relative flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group">
+          ${isSelected ? '<span class="animate-ping absolute inline-flex h-9 w-9 rounded-full bg-emerald-400 opacity-75"></span>' : ''}
+          <div class="relative px-2.5 py-1 rounded-full border-2 flex items-center gap-1.5 shadow-lg transition-all ${
+            isSelected
+              ? 'bg-emerald-600 border-white text-white font-mono text-xs font-bold scale-110 shadow-emerald-500/50'
+              : 'bg-[#0F172A]/90 border-emerald-400 text-white font-mono text-[11px] font-semibold hover:bg-emerald-600 hover:border-white'
+          }">
+            <span class="w-1.5 h-1.5 rounded-full ${prop.recommendation === 'BUY' ? 'bg-emerald-400' : 'bg-amber-400'}"></span>
+            <span>₹${prop.askingPriceLakhs} L</span>
+          </div>
+        </div>
+      `;
+
+      const customIcon = L.divIcon({
+        className: 'custom-realvest-marker',
+        html: iconHtml,
+        iconSize: [60, 30],
+        iconAnchor: [30, 15],
+      });
+
+      const marker = L.marker([coord.lat, coord.lng], { icon: customIcon });
+
+      marker.on('click', () => {
+        setSelectedPropMarker(prop);
+        map.flyTo([coord.lat, coord.lng], Math.max(map.getZoom(), 13), { duration: 0.8 });
+      });
+
+      marker.addTo(markersGroup);
+    });
+  }, [properties, selectedPropMarker]);
+
+  // Render Real Market Opportunity Heatmap Circles based on demandIndex and growth
+  useEffect(() => {
+    const heatmapGroup = heatmapLayerRef.current;
+    if (!heatmapGroup) return;
+
+    heatmapGroup.clearLayers();
+
+    if (!showHeatmap) return;
+
+    hotZones.forEach((zone) => {
+      const coord = getHotZoneCoordinate(zone);
+      const intensity = Math.min(Math.max((zone.demandIndex - 80) / 20, 0.2), 1.0);
+      const radiusMeters = 1800 + zone.growth30d * 80;
+
+      // Real Opportunity Heat Radius Circle
+      const heatCircle = L.circle([coord.lat, coord.lng], {
+        radius: radiusMeters,
+        color: zone.growth30d >= 12 ? '#10B981' : '#3B82F6',
+        weight: 1.5,
+        opacity: 0.6,
+        fillColor: zone.growth30d >= 12 ? '#10B981' : '#3B82F6',
+        fillOpacity: 0.18 + intensity * 0.12,
+      });
+
+      heatCircle.bindTooltip(
+        `<b>${zone.name}</b><br/>Demand Index: ${zone.demandIndex}/100<br/>30d Growth: +${zone.growth30d}%`,
+        { direction: 'top', className: 'bg-slate-900 text-white rounded-lg text-xs font-mono p-1 border-none shadow-lg' }
+      );
+
+      heatCircle.on('click', () => {
+        onSelectZone(zone);
+      });
+
+      heatCircle.addTo(heatmapGroup);
+    });
+  }, [hotZones, showHeatmap]);
 
   const handleZoomIn = () => {
-    setZoomLevel((prev) => Math.min(prev + 0.25, 2.25));
+    mapInstanceRef.current?.zoomIn();
   };
 
   const handleZoomOut = () => {
-    setZoomLevel((prev) => Math.max(prev - 0.25, 0.75));
+    mapInstanceRef.current?.zoomOut();
   };
 
-  const handleReset = () => {
-    setZoomLevel(1);
-    setPanOffset({ x: 0, y: 0 });
+  const handleRecenter = () => {
+    mapInstanceRef.current?.flyTo([BENGALURU_CENTER.lat, BENGALURU_CENTER.lng], 11, { duration: 0.8 });
     setSelectedPropMarker(null);
   };
 
   const handleLocateMe = () => {
     if (!navigator.geolocation) {
-      setLocationStatus(t.location_denied);
+      setLocationStatus('Location unavailable in browser');
+      setTimeout(() => setLocationStatus(null), 3500);
       return;
     }
 
     setIsLocating(true);
-    setLocationStatus(t.locating_user);
+    setLocationStatus('Locating your position...');
 
     navigator.geolocation.getCurrentPosition(
-      (position) => {
+      (pos) => {
         setIsLocating(false);
-        // Map latitude/longitude relative to Bengaluru bounding box
-        // Bengaluru bounding box approx: Lat 12.85 to 13.15, Lon 77.45 to 77.75
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
+        const { latitude, longitude } = pos.coords;
+        const map = mapInstanceRef.current;
+        if (!map) return;
 
-        const xPct = Math.min(Math.max(((lon - 77.45) / 0.3) * 100, 15), 85);
-        const yPct = Math.min(Math.max(((13.15 - lat) / 0.3) * 100, 15), 85);
+        if (userMarkerRef.current) {
+          map.removeLayer(userMarkerRef.current);
+        }
 
-        setUserLocation({ x: xPct, y: yPct });
-        setLocationStatus(t.location_found);
-        setTimeout(() => setLocationStatus(null), 4000);
+        const userMarker = L.circleMarker([latitude, longitude], {
+          radius: 8,
+          fillColor: '#3B82F6',
+          color: '#FFFFFF',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.9,
+        }).addTo(map);
+
+        userMarkerRef.current = userMarker;
+        map.flyTo([latitude, longitude], 13, { duration: 1 });
+        setLocationStatus('My Location located');
+        setTimeout(() => setLocationStatus(null), 3500);
       },
-      (error) => {
+      () => {
         setIsLocating(false);
-        setLocationStatus(t.location_denied);
-        setTimeout(() => setLocationStatus(null), 4000);
+        setLocationStatus('Location access denied');
+        setTimeout(() => setLocationStatus(null), 3500);
       },
-      { timeout: 8000, enableHighAccuracy: false }
+      { timeout: 8000, enableHighAccuracy: true }
     );
   };
 
   return (
-    <div className="relative h-80 sm:h-96 w-full rounded-xl border border-slate-200 dark:border-[#273449] bg-slate-900 overflow-hidden select-none">
-      {/* Bengaluru City Topology SVG Layer */}
-      <div
-        className="absolute inset-0 transition-transform duration-300 ease-out"
-        style={{
-          transform: `scale(${zoomLevel}) translate(${panOffset.x}px, ${panOffset.y}px)`,
-        }}
-      >
-        {/* Subtle grid background */}
-        <div className="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:20px_20px] opacity-40" />
+    <div className="relative w-full h-[460px] sm:h-[540px] rounded-3xl border border-slate-200 dark:border-[#273449] bg-slate-950 overflow-hidden shadow-sm select-none">
+      {/* Real Geographic Map Canvas */}
+      <div ref={mapContainerRef} className="w-full h-full z-0" />
 
-        {/* Vector Arterials & Ring Roads */}
-        <svg className="w-full h-full absolute inset-0 opacity-30 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-          {/* Outer Ring Road (ORR) Loop */}
-          <ellipse cx="56" cy="50" rx="28" ry="32" fill="none" stroke="#3b82f6" strokeWidth="0.8" strokeDasharray="2,2" />
-          {/* Peripheral Ring Road */}
-          <ellipse cx="55" cy="50" rx="42" ry="44" fill="none" stroke="#10b981" strokeWidth="0.6" strokeDasharray="3,3" />
-          {/* Main Highway Spines */}
-          <line x1="50" y1="10" x2="52" y2="90" stroke="#64748b" strokeWidth="0.6" />
-          <line x1="15" y1="52" x2="88" y2="48" stroke="#64748b" strokeWidth="0.6" />
-          <line x1="55" y1="50" x2="85" y2="85" stroke="#3b82f6" strokeWidth="0.8" />
-        </svg>
-
-        {/* Floating Micro-Market Hot Zone Polygons/Hubs */}
-        {hotZones.map((zone) => {
-          const isSelected = selectedZone.id === zone.id;
-          return (
-            <div
-              key={zone.id}
-              onClick={() => {
-                onSelectZone(zone);
-                setSelectedPropMarker(null);
-              }}
-              style={{
-                left: `${zone.coordinates.x}%`,
-                top: `${zone.coordinates.y}%`,
-              }}
-              className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-10 group"
-            >
-              <div className="relative flex items-center justify-center">
-                {isSelected && (
-                  <span className="animate-ping absolute inline-flex h-9 w-9 rounded-full bg-blue-400 opacity-60" />
-                )}
-                <div
-                  className={`relative w-7 h-7 rounded-full border-2 flex items-center justify-center shadow-md transition-all transform group-hover:scale-105 ${
-                    isSelected
-                      ? 'bg-blue-600 border-white text-white scale-105 shadow-blue-500/50'
-                      : 'bg-[#111827] border-blue-400/80 text-blue-400 hover:border-blue-300 hover:text-white'
-                  }`}
-                >
-                  <MapPin size={14} />
-                </div>
-
-                {/* Hover / Active Badge */}
-                <div
-                  className={`absolute top-8 left-1/2 transform -translate-x-1/2 px-2 py-0.5 rounded font-mono text-[10px] font-medium whitespace-nowrap shadow-md transition-opacity pointer-events-none ${
-                    isSelected
-                      ? 'bg-blue-600 text-white opacity-100'
-                      : 'bg-slate-900/90 text-slate-300 opacity-0 group-hover:opacity-100'
-                  }`}
-                >
-                  {zone.name.split(' ')[0]}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-
-        {/* Real Property Markers on Map (Connecting Map directly to Property Data) */}
-        {properties.map((prop) => {
-          const coords = propertyCoords[prop.id] || { x: 50 + (prop.investmentScore % 25) - 12, y: 50 + (prop.annualYield * 3) - 15 };
-          const isPropSelected = selectedPropMarker?.id === prop.id;
-
-          return (
-            <div
-              key={prop.id}
-              onClick={() => setSelectedPropMarker(prop)}
-              style={{
-                left: `${coords.x}%`,
-                top: `${coords.y}%`,
-              }}
-              className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 group"
-            >
-              <div className="relative flex items-center justify-center">
-                {isPropSelected && (
-                  <span className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-emerald-400 opacity-75" />
-                )}
-                <div
-                  className={`relative px-2 py-0.5 rounded-lg border flex items-center gap-1 shadow-sm transition-all transform group-hover:scale-105 ${
-                    isPropSelected
-                      ? 'bg-emerald-500 border-white text-white font-mono text-[10px] font-semibold scale-105 shadow-emerald-500/50'
-                      : 'bg-[#111827]/90 border-emerald-400/70 text-emerald-400 font-mono text-[9px] font-medium hover:bg-emerald-600 hover:text-white'
-                  }`}
-                >
-                  <Building2 size={11} />
-                  <span>{prop.code}</span>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-
-        {/* User Current Location Pin (Browser Geolocation) */}
-        {userLocation && (
-          <div
-            style={{
-              left: `${userLocation.x}%`,
-              top: `${userLocation.y}%`,
-            }}
-            className="absolute transform -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
-          >
-            <div className="relative flex items-center justify-center">
-              <span className="animate-ping absolute inline-flex h-6 w-6 rounded-full bg-blue-500 opacity-75" />
-              <div className="w-3.5 h-3.5 rounded-full bg-blue-600 border-2 border-white shadow-lg flex items-center justify-center text-[7px] text-white">
-                ●
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Top-Left Geographic Status Badge */}
+      <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
+        <div className="px-3 py-1.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/20 text-white text-xs font-medium flex items-center gap-2 shadow-lg">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Bengaluru Geographic Satellite</span>
+        </div>
       </div>
 
-      {/* Map Floating Controls Top-Right (Zoom In, Zoom Out, Center, Locate Me) */}
-      <div className="absolute top-3 right-3 z-30 flex flex-col gap-1.5">
-        <div className="flex flex-col rounded-lg bg-[#111827]/90 backdrop-blur-md border border-[#273449] shadow-lg overflow-hidden text-slate-200">
+      {/* Map Floating Controls Top-Right (Satellite/Street, Heatmap, Zoom, Locate, Recenter) */}
+      <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
+        {/* Style & Heatmap Switchers */}
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/20 shadow-xl text-white">
           <button
-            onClick={handleZoomIn}
-            className="p-1.5 hover:bg-slate-800 transition-colors border-b border-[#273449] cursor-pointer"
-            title="Zoom In"
+            onClick={() => setMapStyle(mapStyle === 'satellite' ? 'street' : 'satellite')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              mapStyle === 'satellite'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-300 hover:text-white hover:bg-white/10'
+            }`}
+            title="Toggle Satellite / Street Map"
           >
-            <Plus size={14} />
+            <Layers size={13} />
+            <span className="uppercase">{mapStyle}</span>
           </button>
+
           <button
-            onClick={handleZoomOut}
-            className="p-1.5 hover:bg-slate-800 transition-colors cursor-pointer"
-            title="Zoom Out"
+            onClick={() => setShowHeatmap(!showHeatmap)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              showHeatmap
+                ? 'bg-emerald-600/30 text-emerald-400 border border-emerald-500/40'
+                : 'text-slate-400 hover:text-white hover:bg-white/10'
+            }`}
+            title="Toggle Opportunity Heatmap"
           >
-            <Minus size={14} />
+            <Flame size={13} />
+            <span>Heatmap</span>
           </button>
         </div>
 
-        <button
-          onClick={handleLocateMe}
-          disabled={isLocating}
-          className={`p-1.5 rounded-lg bg-[#111827]/90 backdrop-blur-md border border-[#273449] shadow-lg transition-colors cursor-pointer flex items-center justify-center ${
-            isLocating ? 'text-blue-400 animate-pulse' : 'text-blue-400 hover:text-white hover:bg-slate-800'
-          }`}
-          title={t.locate_me}
-        >
-          <Navigation size={14} />
-        </button>
-
-        <button
-          onClick={handleReset}
-          className="p-1.5 rounded-lg bg-[#111827]/90 backdrop-blur-md border border-[#273449] shadow-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer flex items-center justify-center"
-          title="Center Bengaluru"
-        >
-          <RotateCcw size={14} />
-        </button>
+        {/* Navigation & Zoom Bar */}
+        <div className="flex flex-col rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/20 shadow-xl overflow-hidden text-slate-200 self-end">
+          <button
+            onClick={handleZoomIn}
+            className="p-2 hover:bg-white/15 transition-colors border-b border-white/10 cursor-pointer"
+            title="Zoom In"
+          >
+            <Plus size={15} />
+          </button>
+          <button
+            onClick={handleZoomOut}
+            className="p-2 hover:bg-white/15 transition-colors cursor-pointer"
+            title="Zoom Out"
+          >
+            <Minus size={15} />
+          </button>
+          <button
+            onClick={handleLocateMe}
+            disabled={isLocating}
+            className={`p-2 border-t border-white/10 transition-colors cursor-pointer flex items-center justify-center ${
+              isLocating ? 'text-emerald-400 animate-pulse' : 'text-emerald-400 hover:text-white hover:bg-white/15'
+            }`}
+            title="My Location"
+          >
+            <Navigation size={15} />
+          </button>
+          <button
+            onClick={handleRecenter}
+            className="p-2 border-t border-white/10 text-slate-300 hover:text-white hover:bg-white/15 transition-colors cursor-pointer flex items-center justify-center"
+            title="Recenter Bengaluru"
+          >
+            <RotateCcw size={15} />
+          </button>
+        </div>
       </div>
 
-      {/* Geolocation Status Toast Overlay */}
+      {/* Geolocation Status Toast */}
       {locationStatus && (
-        <div className="absolute top-3 left-3 z-30 px-2.5 py-1 rounded-lg bg-[#111827]/90 backdrop-blur-md border border-blue-500/40 text-blue-300 text-[10px] font-mono shadow-lg flex items-center gap-1.5">
+        <div className="absolute top-16 left-4 z-20 px-3 py-1.5 rounded-full bg-slate-950/90 backdrop-blur-md border border-emerald-500/40 text-emerald-300 text-xs font-mono shadow-xl flex items-center gap-1.5 animate-fadeIn">
           <span>{locationStatus}</span>
         </div>
       )}
 
-      {/* Selected Property Modal / Card Overlay */}
-      {selectedPropMarker ? (
-        <div className="absolute bottom-3 left-3 right-3 sm:right-auto z-30 p-3.5 rounded-xl bg-[#111827]/95 backdrop-blur-md border border-[#273449] shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 min-w-[280px] sm:min-w-[340px]">
-          <div>
+      {/* Selected Property Preview Sheet (Bottom-Left / Responsive Bottom) */}
+      {selectedPropMarker && (
+        <div className="absolute bottom-4 left-4 right-4 sm:right-auto z-20 p-4 rounded-3xl bg-slate-950/95 backdrop-blur-md border border-white/20 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 max-w-lg">
+          <div className="space-y-1 min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded bg-blue-600/30 text-blue-400 font-mono text-[10px] font-semibold border border-blue-500/30">
+              <span className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-200 font-mono text-[10px] font-bold border border-white/10">
                 {selectedPropMarker.code}
               </span>
-              <span className={`px-2 py-0.5 rounded text-white font-mono text-[10px] font-semibold ${
+              <span className={`px-2.5 py-0.5 rounded-full text-white font-mono text-[10px] font-bold ${
                 selectedPropMarker.recommendation === 'BUY' ? 'bg-emerald-600' : 'bg-amber-600'
               }`}>
                 {selectedPropMarker.recommendation}
               </span>
+              <span className="text-[11px] font-mono text-emerald-400 font-bold">
+                {selectedPropMarker.annualYield}% ROI
+              </span>
             </div>
-            <h4 className="text-xs sm:text-sm font-semibold text-white mt-1">
+
+            <h4 className="text-sm font-bold text-white tracking-tight truncate">
               {selectedPropMarker.title}
             </h4>
-            <div className="text-[11px] font-mono text-slate-300 mt-0.5 flex items-center gap-2">
+
+            <div className="text-xs text-slate-300 flex items-center gap-2 font-mono">
               <span>Asking: {formatInrLakhs(selectedPropMarker.askingPriceLakhs)}</span>
               <span>•</span>
-              <span className="text-blue-400">ML: {formatInrLakhs(selectedPropMarker.fairValueLakhs)}</span>
+              <span className="text-emerald-400">ML: {formatInrLakhs(selectedPropMarker.fairValueLakhs)}</span>
             </div>
           </div>
 
           {onSelectProperty && (
             <button
               onClick={() => onSelectProperty(selectedPropMarker)}
-              className="w-full sm:w-auto px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1 shadow-sm cursor-pointer shrink-0"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/25 cursor-pointer shrink-0 transition-all"
             >
-              <span>{t.inspect_btn}</span>
-              <ArrowUpRight size={13} />
+              <span>View Analysis</span>
+              <ArrowUpRight size={14} />
             </button>
           )}
-        </div>
-      ) : (
-        /* Default Bottom Information Card Overlay (Selected Zone) */
-        <div className="absolute bottom-3 left-3 right-3 sm:right-auto z-20 p-3 rounded-xl bg-[#111827]/95 backdrop-blur-md border border-[#273449] shadow-xl flex items-center justify-between sm:justify-start gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
-              <MapPin size={16} />
-            </div>
-            <div>
-              <div className="text-xs sm:text-sm font-semibold text-white">
-                {selectedZone.name}
-              </div>
-              <div className="text-[11px] font-mono text-blue-400 font-medium flex items-center gap-1">
-                <TrendingUp size={11} /> {formatPercent(selectedZone.growth30d, true)} 30d Velocity • ₹{selectedZone.avgPricePerSqft.toLocaleString('en-IN')}/sqft
-              </div>
-            </div>
-          </div>
-
-          <div className="hidden sm:block pl-3 border-l border-[#273449] text-right">
-            <div className="text-[10px] font-mono uppercase text-slate-400">Demand Index</div>
-            <div className="text-xs sm:text-sm font-semibold font-mono text-white">
-              {selectedZone.demandIndex}/100
-            </div>
-          </div>
         </div>
       )}
     </div>
   );
 };
-
-

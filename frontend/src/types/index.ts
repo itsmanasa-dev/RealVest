@@ -138,3 +138,68 @@ export interface MarketData {
   forecastModel: string;
 }
 
+export type InvestmentGoal = 'Capital Growth' | 'Rental Income' | 'Balanced' | 'Long-term Wealth';
+export type RiskTolerance = 'Conservative' | 'Moderate' | 'Aggressive';
+export type InvestmentHorizon = '1–3 years' | '3–5 years' | '5–10 years' | '10+ years';
+export type PropertyTypePreference = 'Any' | 'Residential' | 'Commercial' | 'Land';
+
+export interface AdvisorProfile {
+  budgetLakhs: number;
+  goal: InvestmentGoal;
+  riskTolerance: RiskTolerance;
+  horizon: InvestmentHorizon;
+  preferredLocation: string; // 'Any Bengaluru' or micro-market
+  propertyType: PropertyTypePreference;
+  minYieldRequired?: number;
+}
+
+export interface BudgetAllocation {
+  propertyCostLakhs: number;
+  stampDutyAndRegLakhs: number; // ~6.6% Karnataka statutory
+  improvementsLakhs: number;
+  cashReserveLakhs: number;
+  totalBudgetLakhs: number;
+}
+
+export interface RentVsBuyComparison {
+  monthlyRentInr: number;
+  fiveYearRentCostLakhs: number;
+  fiveYearOwnershipNetGainLakhs: number;
+  breakEvenHorizonYears: number;
+  verdict: 'BUY' | 'RENT';
+  summary: string;
+}
+
+export interface DecisionOption {
+  rank: 1 | 2 | 3;
+  rankLabel: '#1 BEST MATCH' | '#2 ALTERNATIVE STRATEGY' | '#3 LOWER-RISK OPTION';
+  property: Property;
+  corridor: string;
+  strategyTitle: string;
+  estimatedInvestmentLakhs: number;
+  projectedValueLakhs: number;
+  expectedAppreciationPct: number;
+  rentalYieldPct: number;
+  riskLevel: 'Low' | 'Moderate' | 'High';
+  confidenceScore: number;
+  reasons: string[];
+  whyRankedHere: string;
+  whyNotRankedHigher?: string;
+  decisionFlip: DecisionFlipResult;
+  budgetAllocation: BudgetAllocation;
+  rentVsBuy: RentVsBuyComparison;
+}
+
+export interface AdvisorEngineResult {
+  profile: AdvisorProfile;
+  bestMatch: DecisionOption;
+  alternative: DecisionOption;
+  lowerRiskOption: DecisionOption;
+  macroSignals: {
+    marketMomentum: string;
+    hpiGrowthRate: string;
+    bengaluruTopCorridor: string;
+  };
+  advisorExecutiveSummary: string;
+}
+
