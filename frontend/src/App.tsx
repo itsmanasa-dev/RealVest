@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { NavTab, Property } from './types';
 import { mockProperties } from './data/mockProperties';
+import { LanguageProvider } from './context/LanguageContext';
 
 import { Header } from './components/layout/Header';
 import { MobileNav } from './components/layout/MobileNav';
@@ -14,20 +15,25 @@ import { MarketIntelligenceView } from './components/views/MarketIntelligenceVie
 import { AIAdvisorView } from './components/views/AIAdvisorView';
 import { SettingsView } from './components/views/SettingsView';
 
-export function App() {
+function AppContent() {
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
   const [previousTab, setPreviousTab] = useState<NavTab>('explore');
   const [selectedProperty, setSelectedProperty] = useState<Property>(mockProperties[0]);
-  const [isDark, setIsDark] = useState<boolean>(false); // Start with clean light mode by default as per screenshots, easily toggleable
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    const savedTheme = localStorage.getItem('realvest_theme');
+    return savedTheme === 'dark';
+  });
 
-  // Sync dark/light class to root HTML element
+  // Sync dark/light class to root HTML element and localStorage
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
       document.documentElement.classList.remove('light');
+      localStorage.setItem('realvest_theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
       document.documentElement.classList.add('light');
+      localStorage.setItem('realvest_theme', 'light');
     }
   }, [isDark]);
 
@@ -39,10 +45,19 @@ export function App() {
     setPreviousTab(activeTab);
     setSelectedProperty(property);
     setActiveTab('analysis');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleBack = () => {
     setActiveTab(previousTab || 'explore');
+  };
+
+  const handleTabChange = (tab: NavTab) => {
+    if (tab !== activeTab) {
+      setPreviousTab(activeTab);
+      setActiveTab(tab);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -52,7 +67,7 @@ export function App() {
         activeTab={activeTab}
         isDark={isDark}
         onToggleTheme={handleToggleTheme}
-        onSearchClick={() => setActiveTab('explore')}
+        onSearchClick={() => handleTabChange('explore')}
         onBack={handleBack}
         showBack={activeTab === 'analysis'}
       />
@@ -63,7 +78,7 @@ export function App() {
           <DashboardView
             properties={mockProperties}
             onSelectProperty={handleSelectProperty}
-            onNavigate={setActiveTab}
+            onNavigate={handleTabChange}
           />
         )}
 
@@ -78,7 +93,7 @@ export function App() {
           <PropertyAnalysisView
             property={selectedProperty}
             onBack={handleBack}
-            onNavigate={setActiveTab}
+            onNavigate={handleTabChange}
           />
         )}
 
@@ -86,7 +101,7 @@ export function App() {
           <CompareView
             properties={mockProperties}
             onSelectProperty={handleSelectProperty}
-            onNavigate={setActiveTab}
+            onNavigate={handleTabChange}
           />
         )}
 
@@ -98,7 +113,7 @@ export function App() {
           <AIAdvisorView
             properties={mockProperties}
             onSelectProperty={handleSelectProperty}
-            onNavigate={setActiveTab}
+            onNavigate={handleTabChange}
           />
         )}
 
@@ -107,9 +122,17 @@ export function App() {
         )}
       </main>
 
-      {/* Bottom Navigation Dock matching screenshots */}
-      <MobileNav activeTab={activeTab} onTabChange={setActiveTab} />
+      {/* Bottom Navigation Dock */}
+      <MobileNav activeTab={activeTab} onTabChange={handleTabChange} />
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }
 

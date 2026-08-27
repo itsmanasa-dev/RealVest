@@ -8,7 +8,11 @@ import {
   ArrowUpRight,
   ChevronRight,
   Wallet,
+  Building,
+  Percent,
 } from 'lucide-react';
+import { useTranslation } from '../../context/LanguageContext';
+import { formatInrLakhs, formatPercent } from '../../utils/currency';
 
 interface DashboardViewProps {
   properties: Property[];
@@ -21,23 +25,25 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onSelectProperty,
   onNavigate,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-6 pb-20 max-w-5xl mx-auto">
       {/* Top Greeting Section */}
       <div>
         <span className="text-[11px] font-mono font-bold tracking-widest text-slate-400 uppercase">
-          PORTFOLIO OVERVIEW
+          {t.portfolio_overview}
         </span>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-0.5">
-          Good Morning, Investor.
+          {t.greeting_investor}
         </h1>
         <div className="flex items-center gap-2 mt-2">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            Live Market Data
+            {t.system_live_data}
           </span>
           <span className="text-xs font-mono text-slate-400">
-            Last synced: Just now
+            {t.last_synced}
           </span>
         </div>
       </div>
@@ -49,14 +55,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div>
             <div className="flex items-center justify-between gap-2">
               <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
-                Market Dynamics
+                {t.market_dynamics}
               </h3>
               <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold flex items-center gap-1">
-                <TrendingUp size={14} /> +4.2%
+                <TrendingUp size={14} /> +4.2% YoY
               </span>
             </div>
             <p className="text-xs font-mono text-slate-400 mt-0.5">
-              Aggregated Prime Real Estate Index
+              {t.hpi_index_label}
             </p>
           </div>
 
@@ -84,10 +90,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           <div className="flex justify-between font-mono text-[11px] text-slate-400 font-semibold pt-2 border-t border-slate-100 dark:border-slate-800/80">
-            <span>W1</span>
-            <span>W2</span>
-            <span>W3</span>
-            <span className="text-emerald-500 font-bold">W4</span>
+            <span>2021 Q4</span>
+            <span>2022 Q4</span>
+            <span>2023 Q4</span>
+            <span className="text-emerald-500 font-bold">2024 Q4 (141.0)</span>
           </div>
         </div>
 
@@ -96,30 +102,30 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div>
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                PORTFOLIO VALUE
+                {t.portfolio_value}
               </span>
               <Wallet size={18} className="text-slate-400" />
             </div>
 
             <div className="text-3xl sm:text-4xl font-extrabold font-mono text-slate-900 dark:text-white tracking-tight mt-2">
-              $4.2M
+              ₹1.85 Cr
             </div>
             <div className="text-xs font-mono text-emerald-500 font-semibold mt-1">
-              ↑ +$124,500 [YTD]
+              {t.ytd_gain}
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80">
             <div>
-              <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">Active Assets</div>
+              <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{t.active_assets}</div>
               <div className="text-sm sm:text-base font-bold font-mono text-slate-900 dark:text-white mt-0.5">
-                12 Properties
+                {properties.length} Properties
               </div>
             </div>
             <div>
-              <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">Avg Yield</div>
+              <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{t.avg_yield}</div>
               <div className="text-sm sm:text-base font-bold font-mono text-emerald-500 mt-0.5">
-                6.8% YoY
+                8.4% YoY
               </div>
             </div>
           </div>
@@ -138,10 +144,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
             <div>
               <span className="text-[10px] font-mono uppercase font-bold tracking-widest text-blue-600 dark:text-emerald-400">
-                AI ADVISOR PULSE
+                {t.ai_pulse_title}
               </span>
               <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 mt-0.5 leading-relaxed max-w-xl">
-                "Based on your portfolio, emerging tech hubs in Austin show a 94% match for your risk profile with projected 12.4% ROI."
+                {t.ai_pulse_desc}
               </p>
             </div>
           </div>
@@ -151,13 +157,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               onClick={() => onNavigate('advisor')}
               className="flex-1 md:flex-initial px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <MessageSquare size={14} /> Ask AI
+              <MessageSquare size={14} /> {t.ask_ai_btn}
             </button>
             <button
               onClick={() => onNavigate('simulator')}
               className="flex-1 md:flex-initial px-4 py-2.5 rounded-xl bg-blue-600 dark:bg-emerald-500 hover:bg-blue-700 dark:hover:bg-emerald-600 text-white font-semibold text-xs transition-all shadow-md shadow-blue-500/20 dark:shadow-emerald-500/20 flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <Plus size={14} /> New Analysis
+              <Plus size={14} /> {t.new_analysis_btn}
             </button>
           </div>
         </div>
@@ -167,13 +173,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <div>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Recent Property Analysis
+            {t.recent_analysis}
           </h3>
           <button
             onClick={() => onNavigate('explore')}
             className="text-xs font-mono font-bold text-blue-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
           >
-            VIEW ALL <ChevronRight size={14} />
+            {t.view_all} <ChevronRight size={14} />
           </button>
         </div>
 
@@ -198,8 +204,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <span className="px-2 py-0.5 rounded-md bg-slate-900/80 backdrop-blur-md text-white font-mono text-[10px] font-bold border border-white/10">
                     {prop.code}
                   </span>
-                  <span className="px-2 py-0.5 rounded-md bg-blue-600/90 dark:bg-emerald-600/90 text-white font-mono text-[10px] font-bold">
-                    {prop.category.toUpperCase()}
+                  <span className={`px-2 py-0.5 rounded-md text-white font-mono text-[10px] font-bold ${
+                    prop.recommendation === 'BUY' ? 'bg-emerald-600/90' : 'bg-amber-600/90'
+                  }`}>
+                    {prop.recommendation}
                   </span>
                 </div>
 
@@ -217,13 +225,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               {/* Card Body */}
               <div className="p-4 grid grid-cols-2 gap-2 border-t border-slate-100 dark:border-slate-800/80">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-slate-400">Est. Price</span>
+                  <span className="text-[10px] font-mono uppercase text-slate-400">{t.est_value}</span>
                   <div className="text-sm sm:text-base font-extrabold font-mono text-slate-900 dark:text-white">
-                    ${(prop.fairValueLakhs / 100).toFixed(1)}M
+                    {formatInrLakhs(prop.fairValueLakhs)}
                   </div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-slate-400">Proj. ROI</span>
+                  <span className="text-[10px] font-mono uppercase text-slate-400">{t.proj_roi}</span>
                   <div className="text-sm sm:text-base font-extrabold font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                     {prop.annualYield}% <ArrowUpRight size={14} />
                   </div>

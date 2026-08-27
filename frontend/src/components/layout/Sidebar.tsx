@@ -12,7 +12,9 @@ import {
   Sun,
   Moon,
   Building2,
+  Globe,
 } from 'lucide-react';
+import { useTranslation } from '../../context/LanguageContext';
 
 interface SidebarProps {
   activeTab: NavTab;
@@ -27,15 +29,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isDark,
   onToggleTheme,
 }) => {
+  const { language, setLanguage, t } = useTranslation();
+
   const navItems: { id: NavTab; label: string; icon: React.ElementType }[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'explore', label: 'Property Explorer', icon: Compass },
-    { id: 'analysis', label: 'Property Analysis', icon: LineChart },
-    { id: 'compare', label: 'Compare Properties', icon: Scale },
-    { id: 'simulator', label: 'Decision Simulator', icon: Sliders },
-    { id: 'markets', label: 'Market Intelligence', icon: TrendingUp },
-    { id: 'advisor', label: 'AI Advisor', icon: Brain },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'dashboard', label: t.nav_dashboard, icon: LayoutDashboard },
+    { id: 'explore', label: t.nav_explore, icon: Compass },
+    { id: 'analysis', label: t.nav_analysis, icon: LineChart },
+    { id: 'compare', label: t.nav_compare, icon: Scale },
+    { id: 'simulator', label: t.nav_simulator, icon: Sliders },
+    { id: 'markets', label: t.nav_markets, icon: TrendingUp },
+    { id: 'advisor', label: t.nav_advisor, icon: Brain },
+    { id: 'settings', label: t.nav_settings, icon: Settings },
   ];
 
   return (
@@ -43,7 +47,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Brand Header */}
       <div>
         <div className="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-800 gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white font-mono font-extrabold shadow-lg shadow-emerald-500/20">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-emerald-400 flex items-center justify-center text-white font-mono font-extrabold shadow-lg shadow-blue-500/20">
             RV
           </div>
           <div>
@@ -51,7 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               REALVEST
             </span>
             <div className="text-[10px] font-mono text-emerald-500 tracking-widest uppercase">
-              DECISION ENGINE
+              BENGALURU AI ENGINE
             </div>
           </div>
         </div>
@@ -67,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => onTabChange(item.id)}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-xs transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-emerald-500 text-white font-semibold shadow-md shadow-emerald-500/25 ring-1 ring-emerald-400/40'
+                    ? 'bg-blue-600 dark:bg-emerald-500 text-white font-semibold shadow-md shadow-blue-500/25 ring-1 ring-blue-400/40 dark:ring-emerald-400/40'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
                 }`}
               >
@@ -81,12 +85,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Footer Bottom Controls */}
       <div className="p-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
+        {/* Language Selection Quick Switcher */}
+        <div className="flex items-center justify-between px-2 text-[11px] font-mono text-slate-400">
+          <span className="flex items-center gap-1.5"><Globe size={13} /> Lang</span>
+          <div className="flex gap-1">
+            {(['en', 'hi', 'kn'] as const).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLanguage(l)}
+                className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase transition-colors cursor-pointer ${
+                  language === l
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="flex items-center justify-between px-2">
-          <span className="text-[11px] font-mono text-slate-400">Theme Mode</span>
+          <span className="text-[11px] font-mono text-slate-400">{t.visual_archetype}</span>
           <button
             onClick={onToggleTheme}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-emerald-500 transition-colors cursor-pointer"
-            title="Toggle theme mode"
+            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-emerald-400 transition-colors cursor-pointer"
+            title={t.toggle_theme}
           >
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
@@ -96,11 +120,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="flex items-center gap-2">
             <Building2 size={14} className="text-emerald-500" />
             <span className="text-[11px] font-mono text-slate-700 dark:text-slate-300 font-bold">
-              Bengaluru Market DB
+              {t.verified_bengaluru_db}
             </span>
           </div>
           <div className="text-[10px] text-slate-400 mt-0.5">
-            Verified ML Models Active
+            {t.verified_ml_models}
           </div>
         </div>
       </div>

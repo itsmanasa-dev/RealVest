@@ -1,60 +1,74 @@
 import React, { useState } from 'react';
-import { Sliders, RotateCcw, Lightbulb, Save, ArrowLeft } from 'lucide-react';
+import { Sliders, RotateCcw, Lightbulb, Save, ArrowLeft, Percent, Calculator, TrendingUp } from 'lucide-react';
+import { useTranslation } from '../../context/LanguageContext';
+import { formatInrLakhs, formatInrRent, formatPercent } from '../../utils/currency';
+import { simulatorService } from '../../services/simulatorService';
 
 interface SimulatorViewProps {
   onBack?: () => void;
 }
 
 export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
-  // Scenario Variables matching Screenshot 3
-  const [purchasePrice, setPurchasePrice] = useState<number>(1250000);
-  const [interestRate, setInterestRate] = useState<number>(6.5);
-  const [targetYield, setTargetYield] = useState<number>(5.8);
+  const { t } = useTranslation();
+
+  // Baseline Scenario Variables in INR
+  const [purchasePriceLakhs, setPurchasePriceLakhs] = useState<number>(75);
+  const [downPaymentPct, setDownPaymentPct] = useState<number>(20);
+  const [interestRate, setInterestRate] = useState<number>(8.5);
+  const [targetYield, setTargetYield] = useState<number>(6.5);
   const [holdingPeriod, setHoldingPeriod] = useState<number>(5);
 
-  // Dynamic Mathematical Simulation
-  const baseRoi = 8.2;
-  const baseCashFlow = 4500;
+  // Baseline Calculation (75L, 20% down, 8.5% interest, 6.5% yield, 5 years)
+  const baseResult = simulatorService.calculateScenario({
+    purchasePriceLakhs: 75,
+    downPaymentPct: 20,
+    interestRate: 8.5,
+    monthlyRent: Math.round((7500000 * 0.065) / 12),
+    holdingPeriod: 5,
+  });
 
-  // Rate impact
-  const rateDelta = (6.5 - interestRate) * 0.8;
-  const yieldDelta = (targetYield - 5.8) * 1.1;
-  const dynamicRoi = parseFloat((baseRoi + rateDelta + yieldDelta).toFixed(1));
+  // Dynamic User Scenario Calculation
+  const monthlyRent = Math.round((purchasePriceLakhs * 100000 * (targetYield / 100)) / 12);
+  const dynamicResult = simulatorService.calculateScenario({
+    purchasePriceLakhs,
+    downPaymentPct,
+    interestRate,
+    monthlyRent,
+    holdingPeriod,
+  });
 
-  // Dynamic Cash Flow Calculation
-  const loanAmount = purchasePrice * 0.8;
-  const monthlyRate = (interestRate / 100) / 12;
-  const numMonths = 240;
-  const emi = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, numMonths)) / (Math.pow(1 + monthlyRate, numMonths) - 1);
-  const monthlyRent = (purchasePrice * (targetYield / 100)) / 12;
-  const dynamicCashFlow = Math.round(monthlyRent - emi);
+  const flipResult = simulatorService.calculateDecisionFlip(
+    purchasePriceLakhs,
+    purchasePriceLakhs * 0.95,
+    monthlyRent,
+    interestRate
+  );
 
   const handleReset = () => {
-    setPurchasePrice(1250000);
-    setInterestRate(6.5);
-    setTargetYield(5.8);
+    setPurchasePriceLakhs(75);
+    setDownPaymentPct(20);
+    setInterestRate(8.5);
+    setTargetYield(6.5);
     setHoldingPeriod(5);
   };
-
-  const isHold = interestRate >= 6.5 || dynamicRoi < 7.0;
 
   return (
     <div className="space-y-5 pb-20 max-w-2xl mx-auto">
       {/* Title & Subhead */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Decision Simulator
+          {t.simulator_title}
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Adjust variables to see how they impact your investment strategy.
+          {t.simulator_subtitle}
         </p>
       </div>
 
-      {/* Card 1: Scenario Variables (Matching Screenshot 3) */}
+      {/* Card 1: Scenario Variables */}
       <div className="p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-5">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
           <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
-            Scenario Variables
+            {t.scenario_variables}
           </h3>
           <Sliders size={18} className="text-blue-600 dark:text-emerald-400" />
         </div>
@@ -62,72 +76,96 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
         {/* Slider 1: Purchase Price */}
         <div className="space-y-2">
           <div className="flex justify-between items-center text-xs font-mono font-semibold">
-            <span className="text-slate-600 dark:text-slate-300 uppercase">PURCHASE PRICE</span>
+            <span className="text-slate-600 dark:text-slate-300 uppercase">{t.purchase_price}</span>
             <span className="text-slate-900 dark:text-white font-extrabold text-sm sm:text-base">
-              ${purchasePrice.toLocaleString()}
+              {formatInrLakhs(purchasePriceLakhs)}
             </span>
           </div>
           <input
             type="range"
-            min={250000}
-            max={5000000}
-            step={25000}
-            value={purchasePrice}
-            onChange={(e) => setPurchasePrice(Number(e.target.value))}
+            min={20}
+            max={400}
+            step={2.5}
+            value={purchasePriceLakhs}
+            onChange={(e) => setPurchasePriceLakhs(Number(e.target.value))}
+            className="w-full accent-blue-600 dark:accent-emerald-400 cursor-pointer h-2 bg-blue-100 dark:bg-slate-800 rounded-lg"
+          />
+          <div className="flex justify-between text-[10px] font-mono text-slate-400">
+            <span>₹20 L</span>
+            <span>₹2 Cr</span>
+            <span>₹4 Cr</span>
+          </div>
+        </div>
+
+        {/* Slider 2: Down Payment */}
+        <div className="space-y-2">
+          <div className="flex justify-between items-center text-xs font-mono font-semibold">
+            <span className="text-slate-600 dark:text-slate-300 uppercase">{t.down_payment}</span>
+            <span className="text-slate-900 dark:text-white font-extrabold text-sm sm:text-base">
+              {downPaymentPct}% ({formatInrLakhs((purchasePriceLakhs * downPaymentPct) / 100)})
+            </span>
+          </div>
+          <input
+            type="range"
+            min={10}
+            max={50}
+            step={5}
+            value={downPaymentPct}
+            onChange={(e) => setDownPaymentPct(Number(e.target.value))}
             className="w-full accent-blue-600 dark:accent-emerald-400 cursor-pointer h-2 bg-blue-100 dark:bg-slate-800 rounded-lg"
           />
         </div>
 
-        {/* Slider 2: Interest Rate */}
+        {/* Slider 3: Interest Rate */}
         <div className="space-y-2">
           <div className="flex justify-between items-center text-xs font-mono font-semibold">
-            <span className="text-slate-600 dark:text-slate-300 uppercase">INTEREST RATE</span>
+            <span className="text-slate-600 dark:text-slate-300 uppercase">{t.interest_rate}</span>
             <span className="text-slate-900 dark:text-white font-extrabold text-sm sm:text-base">
-              {interestRate}%
+              {interestRate}% p.a.
             </span>
           </div>
           <input
             type="range"
-            min={3.0}
-            max={12.0}
-            step={0.1}
+            min={6.5}
+            max={13.0}
+            step={0.25}
             value={interestRate}
             onChange={(e) => setInterestRate(Number(e.target.value))}
             className="w-full accent-blue-600 dark:accent-emerald-400 cursor-pointer h-2 bg-blue-100 dark:bg-slate-800 rounded-lg"
           />
         </div>
 
-        {/* Slider 3: Target Yield */}
+        {/* Slider 4: Target Yield */}
         <div className="space-y-2">
           <div className="flex justify-between items-center text-xs font-mono font-semibold">
-            <span className="text-slate-600 dark:text-slate-300 uppercase">TARGET YIELD</span>
+            <span className="text-slate-600 dark:text-slate-300 uppercase">{t.target_yield}</span>
             <span className="text-slate-900 dark:text-white font-extrabold text-sm sm:text-base">
-              {targetYield}%
+              {targetYield}% ({formatInrRent(monthlyRent)})
             </span>
           </div>
           <input
             type="range"
-            min={2.0}
-            max={12.0}
-            step={0.1}
+            min={3.0}
+            max={14.0}
+            step={0.2}
             value={targetYield}
             onChange={(e) => setTargetYield(Number(e.target.value))}
             className="w-full accent-blue-600 dark:accent-emerald-400 cursor-pointer h-2 bg-blue-100 dark:bg-slate-800 rounded-lg"
           />
         </div>
 
-        {/* Slider 4: Holding Period */}
+        {/* Slider 5: Holding Period */}
         <div className="space-y-2">
           <div className="flex justify-between items-center text-xs font-mono font-semibold">
-            <span className="text-slate-600 dark:text-slate-300 uppercase">HOLDING PERIOD</span>
+            <span className="text-slate-600 dark:text-slate-300 uppercase">{t.holding_period}</span>
             <span className="text-slate-900 dark:text-white font-extrabold text-sm sm:text-base">
-              {holdingPeriod} Yrs
+              {holdingPeriod} {t.years}
             </span>
           </div>
           <input
             type="range"
             min={1}
-            max={20}
+            max={15}
             step={1}
             value={holdingPeriod}
             onChange={(e) => setHoldingPeriod(Number(e.target.value))}
@@ -140,50 +178,69 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
           onClick={handleReset}
           className="w-full py-2.5 rounded-2xl bg-blue-50 dark:bg-slate-800/80 hover:bg-blue-100 dark:hover:bg-slate-800 text-blue-700 dark:text-slate-200 font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
         >
-          <RotateCcw size={14} /> Reset to Base
+          <RotateCcw size={14} /> {t.reset_base}
         </button>
       </div>
 
       {/* Row: 2 Scenario Cards (Base Case vs Your Scenario) */}
       <div className="grid grid-cols-2 gap-4">
         {/* BASE CASE */}
-        <div className="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-4">
+        <div className="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] shadow-sm space-y-3">
           <div className="pb-2 border-b border-slate-100 dark:border-slate-800 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">
-            BASE CASE
+            {t.base_case} (₹75 L)
           </div>
 
           <div>
-            <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">EXPECTED ROI</div>
+            <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{t.projected_roi}</div>
             <div className="text-2xl sm:text-3xl font-extrabold font-mono text-slate-900 dark:text-white mt-0.5">
-              {baseRoi}%
+              {baseResult.totalRoiPct}%
             </div>
           </div>
 
           <div>
-            <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">NET CASH FLOW</div>
-            <div className="text-lg sm:text-xl font-bold font-mono text-slate-900 dark:text-white mt-0.5">
-              ${baseCashFlow.toLocaleString()}/mo
+            <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{t.monthly_emi}</div>
+            <div className="text-sm sm:text-base font-bold font-mono text-slate-700 dark:text-slate-300">
+              ₹{baseResult.monthlyEmi.toLocaleString('en-IN')}/mo
+            </div>
+          </div>
+
+          <div>
+            <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{t.net_cash_flow}</div>
+            <div className={`text-sm sm:text-base font-bold font-mono ${baseResult.netMonthlyCashFlow >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+              {baseResult.netMonthlyCashFlow >= 0 ? '+' : ''}₹{baseResult.netMonthlyCashFlow.toLocaleString('en-IN')}/mo
             </div>
           </div>
         </div>
 
-        {/* YOUR SCENARIO (Solid Blue Card in Light Mode / Vibrant Emerald in Dark Mode) */}
-        <div className="p-5 rounded-3xl bg-blue-600 dark:bg-blue-600 text-white shadow-md shadow-blue-600/20 space-y-4 relative overflow-hidden">
-          <div className="pb-2 border-b border-white/20 text-[11px] font-mono font-bold uppercase tracking-wider text-blue-100">
-            YOUR SCENARIO
+        {/* YOUR SCENARIO */}
+        <div className="p-5 rounded-3xl bg-blue-600 dark:bg-blue-600 text-white shadow-md shadow-blue-600/20 space-y-3 relative overflow-hidden">
+          <div className="pb-2 border-b border-white/20 flex items-center justify-between text-[11px] font-mono font-bold uppercase tracking-wider text-blue-100">
+            <span>{t.your_scenario}</span>
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+              dynamicResult.decision === 'BUY' ? 'bg-emerald-500 text-white' : (dynamicResult.decision === 'HOLD' ? 'bg-amber-400 text-slate-900' : 'bg-rose-500 text-white')
+            }`}>
+              {dynamicResult.decision}
+            </span>
           </div>
 
           <div>
-            <div className="text-[10px] font-mono uppercase text-blue-200 font-semibold">PROJECTED ROI</div>
+            <div className="text-[10px] font-mono uppercase text-blue-200 font-semibold">{t.projected_roi}</div>
             <div className="text-2xl sm:text-3xl font-extrabold font-mono text-white mt-0.5 flex items-center gap-1">
-              {dynamicRoi}% {dynamicRoi < baseRoi ? '↓' : '↑'}
+              {dynamicResult.totalRoiPct}% {dynamicResult.totalRoiPct >= baseResult.totalRoiPct ? '↑' : '↓'}
             </div>
           </div>
 
           <div>
-            <div className="text-[10px] font-mono uppercase text-blue-200 font-semibold">NET CASH FLOW</div>
-            <div className="text-lg sm:text-xl font-bold font-mono text-white mt-0.5 flex items-center gap-1">
-              ${dynamicCashFlow.toLocaleString()}/mo {dynamicCashFlow < baseCashFlow ? '↓' : '↑'}
+            <div className="text-[10px] font-mono uppercase text-blue-200 font-semibold">{t.monthly_emi}</div>
+            <div className="text-sm sm:text-base font-bold font-mono text-blue-100">
+              ₹{dynamicResult.monthlyEmi.toLocaleString('en-IN')}/mo
+            </div>
+          </div>
+
+          <div>
+            <div className="text-[10px] font-mono uppercase text-blue-200 font-semibold">{t.net_cash_flow}</div>
+            <div className="text-sm sm:text-base font-bold font-mono text-white">
+              {dynamicResult.netMonthlyCashFlow >= 0 ? '+' : ''}₹{dynamicResult.netMonthlyCashFlow.toLocaleString('en-IN')}/mo
             </div>
           </div>
         </div>
@@ -194,22 +251,25 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({ onBack }) => {
         <div className="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
           <Lightbulb size={18} />
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           <span className="text-[11px] font-mono uppercase font-bold tracking-wider text-blue-900 dark:text-blue-300">
-            Insight Engine
+            {t.insight_engine}
           </span>
           <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
-            Your recommendation changed from <b>Buy</b> to <b>{isHold ? 'Hold' : 'Buy'}</b>. The simulated <span className="bg-blue-100/80 dark:bg-blue-900/40 text-blue-800 dark:text-blue-200 px-1.5 py-0.5 rounded font-mono font-semibold">higher interest rates ({interestRate}%)</span> significantly reduce monthly net cash flow, breaking the required debt service coverage ratio.
+            {flipResult.priceFlipText} {flipResult.rentFlipText}
           </p>
+          <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+            {flipResult.rateFlipText}
+          </div>
         </div>
       </div>
 
       {/* Save Scenario Full-Width Button */}
       <button
-        onClick={() => alert(`Scenario saved with ${interestRate}% interest rate and $${purchasePrice.toLocaleString()} purchase price.`)}
+        onClick={() => alert(`Scenario saved: ${formatInrLakhs(purchasePriceLakhs)} asset @ ${interestRate}% interest, projected ${dynamicResult.totalRoiPct}% ROI over ${holdingPeriod} years.`)}
         className="w-full py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
       >
-        <Save size={18} /> Save Scenario
+        <Save size={18} /> {t.save_scenario}
       </button>
     </div>
   );

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import type { Property, NavTab } from '../../types';
 import { Bot, Send, ArrowUpRight, Sparkles } from 'lucide-react';
-import { queryAdvisor } from '../../services/analyticsService';
+import { advisorService } from '../../services/advisorService';
+import { useTranslation } from '../../context/LanguageContext';
+import { formatInrLakhs } from '../../utils/currency';
 
 interface AIAdvisorViewProps {
   properties: Property[];
@@ -13,39 +15,57 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
   properties,
   onSelectProperty,
 }) => {
+  const { language, t } = useTranslation();
   const [inputQuery, setInputQuery] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<
     { sender: 'user' | 'ai'; text: string; matchedProperty?: Property }[]
   >([
     {
       sender: 'ai',
-      text: 'Good day! I am RealVest AI Decision Advisor. Ask me anything about property valuations, projected ROIs, or market risks across target commercial and residential assets.',
+      text: t.advisor_greeting,
     },
   ]);
 
-  const suggestedPrompts = [
-    'Why is The Vertex Hub a high confidence buy?',
-    'Show commercial assets with projected ROI > 10%',
-    'What is the risk assessment for Aura Residences?',
-  ];
+  const suggestedPrompts = language === 'hi'
+    ? [
+        'व्हाइटफील्ड में 80 लाख के अंदर 2 बीएचके दिखाएं',
+        'उच्चतम रेंटल यील्ड वाली संपत्तियां कौन सी हैं?',
+        'क्या इंदिरानगर में निवेश करना सुरक्षित है?',
+      ]
+    : language === 'kn'
+    ? [
+        'ವೈಟ್‌ಫೀಲ್ಡ್‌ನಲ್ಲಿ 80 ಲಕ್ಷದೊಳಗಿನ ಮನೆಗಳನ್ನು ತೋರಿಸಿ',
+        'ಹೆಚ್ಚು ಬಾಡಿಗೆ ಆದಾಯ ನೀಡುವ ಆಸ್ತಿಗಳು ಯಾವುವು?',
+        'ಇಂದಿರಾನಗರದಲ್ಲಿ ಹೂಡಿಕೆ ಮಾಡುವುದು ಲಾಭದಾಯಕವೇ?',
+      ]
+    : [
+        'Show 2 BHK properties under ₹80 Lakhs in Whitefield',
+        'Which properties have the highest rental yield?',
+        'What is the risk assessment for Whitefield luxury apartment?',
+      ];
 
-  const handleSend = (textToSend?: string) => {
+  const handleSend = async (textToSend?: string) => {
     const query = textToSend || inputQuery;
     if (!query.trim()) return;
 
     const updated = [...messages, { sender: 'user' as const, text: query }];
-
-    const { answer, matchedProperties } = queryAdvisor(query, properties);
-    const matched = matchedProperties[0] || properties[0];
-
-    updated.push({
-      sender: 'ai',
-      text: answer,
-      matchedProperty: matched,
-    });
-
     setMessages(updated);
     if (!textToSend) setInputQuery('');
+    setIsTyping(true);
+
+    const { answer, matchedProperties } = await advisorService.query(query, language, properties);
+    const matched = matchedProperties[0] || properties[0];
+
+    setIsTyping(false);
+    setMessages([
+      ...updated,
+      {
+        sender: 'ai',
+        text: answer,
+        matchedProperty: matched,
+      },
+    ]);
   };
 
   return (
@@ -53,17 +73,17 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
       {/* Title & Subtitle */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          AI Decision Advisor
+          {t.advisor_title}
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Ask questions in natural language. Answers are strictly grounded in RealVest models.
+          {t.advisor_subtitle}
         </p>
       </div>
 
       {/* Suggested Prompts */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
         <span className="text-xs font-mono font-bold text-slate-400 shrink-0 flex items-center gap-1">
-          <Sparkles size={14} className="text-blue-600 dark:text-emerald-400" /> Prompts:
+          <Sparkles size={14} className="text-blue-600 dark:text-emerald-400" /> {t.suggested_prompts}
         </span>
         {suggestedPrompts.map((prompt, idx) => (
           <button
@@ -112,23 +132,30 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
                 >
                   <div>
                     <div className="text-[10px] font-mono font-bold uppercase text-blue-600 dark:text-emerald-400">
-                      {msg.matchedProperty.code} • {msg.matchedProperty.recommendation} ({msg.matchedProperty.confidenceScore}%)
+                      {msg.matchedProperty.code} • {msg.matchedProperty.recommendation} ({msg.matchedProperty.confidenceScore}% {t.confidence})
                     </div>
                     <div className="text-sm font-extrabold text-slate-900 dark:text-white mt-0.5">
                       {msg.matchedProperty.title}
                     </div>
                     <div className="text-xs text-slate-500 dark:text-slate-400">
-                      ${(msg.matchedProperty.fairValueLakhs / 100).toFixed(1)}M • {msg.matchedProperty.annualYield}% ROI
+                      {formatInrLakhs(msg.matchedProperty.fairValueLakhs)} • {msg.matchedProperty.annualYield}% ROI
                     </div>
                   </div>
-                  <button className="px-3 py-1.5 rounded-xl bg-blue-600 dark:bg-emerald-500 text-white font-mono text-xs font-bold flex items-center gap-1 shadow-sm">
-                    Inspect <ArrowUpRight size={13} />
+                  <button className="px-3 py-1.5 rounded-xl bg-blue-600 dark:bg-emerald-500 text-white font-mono text-xs font-bold flex items-center gap-1 shadow-sm shrink-0">
+                    {t.inspect_btn} <ArrowUpRight size={13} />
                   </button>
                 </div>
               )}
             </div>
           </div>
         ))}
+
+        {isTyping && (
+          <div className="flex items-center gap-2 text-slate-400 text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            Analyzing Bengaluru housing price models...
+          </div>
+        )}
       </div>
 
       {/* Query Input Box */}
@@ -138,14 +165,14 @@ export const AIAdvisorView: React.FC<AIAdvisorViewProps> = ({
           value={inputQuery}
           onChange={(e) => setInputQuery(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          placeholder="Ask AI Advisor about assets, valuations, or risks..."
+          placeholder={t.ask_advisor_placeholder}
           className="flex-1 px-4 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 dark:focus:ring-emerald-500/40 transition-all shadow-sm"
         />
         <button
           onClick={() => handleSend()}
           className="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-bold text-xs transition-all shadow-md shadow-blue-500/20 dark:shadow-emerald-500/20 flex items-center gap-1.5 cursor-pointer shrink-0"
         >
-          <Send size={15} /> Send
+          <Send size={15} /> {t.send_btn}
         </button>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import type { Property, AssetCategory } from '../../types';
-import { Search, MapPin, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Search, MapPin, ArrowUpRight, Sparkles, Filter } from 'lucide-react';
+import { useTranslation } from '../../context/LanguageContext';
+import { formatInrLakhs, formatInrRent } from '../../utils/currency';
 
 interface ExplorerViewProps {
   properties: Property[];
@@ -11,10 +13,17 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
   properties,
   onSelectProperty,
 }) => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All Assets');
+  const [selectedBhk, setSelectedBhk] = useState<number | 'all'>('all');
 
-  const categories = ['All Assets', 'Commercial', 'Residential'];
+  const categories = [
+    { key: 'All Assets', label: t.all_assets },
+    { key: 'Residential', label: t.residential },
+    { key: 'Commercial', label: t.commercial },
+    { key: 'Villa / Penthouse', label: t.villas },
+  ];
 
   const filteredProperties = properties.filter((prop) => {
     const matchesSearch =
@@ -27,7 +36,9 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
       selectedCategory === 'All Assets' ||
       prop.category.toLowerCase() === selectedCategory.toLowerCase();
 
-    return matchesSearch && matchesCategory;
+    const matchesBhk = selectedBhk === 'all' || prop.bhk === selectedBhk;
+
+    return matchesSearch && matchesCategory && matchesBhk;
   });
 
   return (
@@ -39,29 +50,49 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search markets, assets, or ZIP..."
+          placeholder={t.search_placeholder}
           className="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#102034] text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 dark:focus:ring-emerald-500/40 transition-all shadow-sm"
         />
       </div>
 
-      {/* Filter Chips Row */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1">
-        {categories.map((cat) => {
-          const isActive = selectedCategory === cat;
-          return (
+      {/* Filter Row: Category Chips + BHK Selector */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-x-auto pb-1">
+        <div className="flex items-center gap-2">
+          {categories.map((cat) => {
+            const isActive = selectedCategory === cat.key;
+            return (
+              <button
+                key={cat.key}
+                onClick={() => setSelectedCategory(cat.key)}
+                className={`px-3.5 py-1.5 rounded-2xl text-xs font-mono font-bold tracking-tight whitespace-nowrap transition-all cursor-pointer ${
+                  isActive
+                    ? 'bg-blue-600 dark:bg-emerald-500 text-white shadow-sm'
+                    : 'bg-white dark:bg-[#102034] text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* BHK Filter */}
+        <div className="flex items-center gap-1.5 text-xs font-mono shrink-0">
+          <span className="text-slate-400">BHK:</span>
+          {(['all', 2, 3, 4] as const).map((b) => (
             <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-2xl text-xs font-mono font-bold tracking-tight whitespace-nowrap transition-all cursor-pointer ${
-                isActive
-                  ? 'bg-blue-600 dark:bg-emerald-500/20 text-white dark:text-emerald-400 border border-blue-600 dark:border-emerald-500/40 shadow-sm'
-                  : 'bg-white dark:bg-[#102034] text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+              key={b}
+              onClick={() => setSelectedBhk(b)}
+              className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                selectedBhk === b
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
-              {cat}
+              {b === 'all' ? 'All' : `${b}BHK`}
             </button>
-          );
-        })}
+          ))}
+        </div>
       </div>
 
       {/* Property Cards Stack / Grid */}
@@ -69,7 +100,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
         {filteredProperties.length === 0 ? (
           <div className="col-span-full p-12 text-center rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#102034]">
             <p className="text-slate-400 font-mono text-sm">
-              No properties matched your search query. Try expanding your search terms.
+              {t.no_properties_found}
             </p>
           </div>
         ) : (
@@ -88,17 +119,22 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#031427]/70 via-transparent to-transparent" />
 
-                {/* Top-Right Match Badge (Matching Screenshot 5) */}
+                {/* Top-Right Match Badge */}
                 <div className="absolute top-3 right-3">
                   <span className="px-2.5 py-1 rounded-full bg-emerald-500/90 dark:bg-emerald-500/20 text-white dark:text-emerald-400 border border-emerald-400/40 backdrop-blur-md font-mono text-xs font-bold shadow-md flex items-center gap-1">
-                    <Sparkles size={13} /> Match {prop.matchPercentage}%
+                    <Sparkles size={13} /> {t.match_badge} {prop.matchPercentage}%
                   </span>
                 </div>
 
                 {/* Top-Left Code Badge */}
-                <div className="absolute top-3 left-3">
+                <div className="absolute top-3 left-3 flex items-center gap-1.5">
                   <span className="px-2 py-0.5 rounded-md bg-slate-900/80 text-white font-mono text-[10px] font-bold border border-white/10">
                     {prop.code}
+                  </span>
+                  <span className={`px-2 py-0.5 rounded-md text-white font-mono text-[10px] font-bold ${
+                    prop.recommendation === 'BUY' ? 'bg-emerald-600/90' : 'bg-amber-600/90'
+                  }`}>
+                    {prop.recommendation}
                   </span>
                 </div>
               </div>
@@ -106,28 +142,35 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
               {/* Card Body */}
               <div className="p-5 flex flex-col justify-between flex-1">
                 <div>
-                  <h3 className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight leading-snug">
+                  <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight leading-snug">
                     {prop.title}
                   </h3>
 
                   <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">
                     <MapPin size={14} className="text-slate-400 shrink-0" />
                     <span>{prop.location}, {prop.city}</span>
+                    {prop.bhk > 0 && <span className="ml-1 px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold">{prop.bhk} BHK</span>}
                   </div>
                 </div>
 
                 {/* Numbers Grid */}
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 grid grid-cols-2 gap-2">
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 grid grid-cols-3 gap-2">
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold">EST. VALUE</span>
-                    <div className="text-base sm:text-lg font-extrabold font-mono text-emerald-600 dark:text-emerald-400">
-                      ${(prop.fairValueLakhs / 100).toFixed(1)}M
+                    <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{t.asking_price}</span>
+                    <div className="text-sm sm:text-base font-extrabold font-mono text-slate-900 dark:text-white">
+                      {formatInrLakhs(prop.askingPriceLakhs)}
                     </div>
                   </div>
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold">PROJ. ROI</span>
-                    <div className="text-base sm:text-lg font-extrabold font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                      ↗ ~{prop.annualYield}%
+                    <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{t.est_value}</span>
+                    <div className="text-sm sm:text-base font-extrabold font-mono text-blue-600 dark:text-emerald-400">
+                      {formatInrLakhs(prop.fairValueLakhs)}
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{t.proj_roi}</span>
+                    <div className="text-sm sm:text-base font-extrabold font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
+                      {prop.annualYield}% <ArrowUpRight size={13} />
                     </div>
                   </div>
                 </div>
