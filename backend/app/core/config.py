@@ -20,6 +20,11 @@ class Settings:
         "mysql+pymysql://root:password@localhost:3306/realvest"
     )
     
+    # Official xAI Grok API Configuration
+    XAI_API_KEY: str = os.getenv("XAI_API_KEY", "")
+    GROK_MODEL: str = os.getenv("GROK_MODEL", "grok-4.6")
+
+    
     # Configurable CORS Origins for Vercel and local development
     _default_origins = [
         "http://localhost:5173",
