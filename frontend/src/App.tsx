@@ -15,7 +15,6 @@ import { SavedComparisonsView } from './components/views/SavedComparisonsView';
 import { SimulatorView } from './components/views/SimulatorView';
 import { MarketIntelligenceView } from './components/views/MarketIntelligenceView';
 import { AIAdvisorView } from './components/views/AIAdvisorView';
-import { SettingsView } from './components/views/SettingsView';
 
 import { Sidebar } from './components/layout/Sidebar';
 
@@ -158,10 +157,6 @@ function AppContent() {
               onSelectProperty={handleSelectProperty}
               onNavigate={handleTabChange}
             />
-          )}
-
-          {activeTab === 'settings' && (
-            <SettingsView isDark={isDark} onToggleTheme={handleToggleTheme} />
           )}
         </main>
       </div>

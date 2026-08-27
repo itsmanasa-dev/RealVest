@@ -8,7 +8,6 @@ import {
   Sliders,
   TrendingUp,
   Brain,
-  Settings,
   Sun,
   Moon,
   Building2,
@@ -41,7 +40,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'simulator', label: t.nav_simulator, icon: Sliders },
     { id: 'markets', label: t.nav_markets, icon: TrendingUp },
     { id: 'advisor', label: t.nav_advisor, icon: Brain },
-    { id: 'settings', label: t.nav_settings, icon: Settings },
   ];
 
   return (

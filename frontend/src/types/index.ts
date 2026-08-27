@@ -6,8 +6,7 @@ export type NavTab =
   | 'saved-comparisons'
   | 'simulator' 
   | 'markets' 
-  | 'advisor' 
-  | 'settings';
+  | 'advisor';
 
 export type AssetCategory = 'All Assets' | 'Residential' | 'Commercial' | 'Villa / Penthouse';
 

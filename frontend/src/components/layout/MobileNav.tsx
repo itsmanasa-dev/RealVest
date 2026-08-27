@@ -22,7 +22,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ activeTab, onTabChange }) 
     { id: 'explore', label: 'Explore', icon: Compass },
     { id: 'analysis', label: 'Portfolio', icon: LineChart },
     { id: 'markets', label: 'Market', icon: TrendingUp },
-    { id: 'settings', label: 'Profile', icon: Bot },
+    { id: 'advisor', label: 'Advisor', icon: Bot },
   ];
 
   return (
