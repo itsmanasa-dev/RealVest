@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Sun, Moon, ArrowLeft, Globe, Home, Check, Brain } from 'lucide-react';
+import { Sun, Moon, ArrowLeft, Globe, Home, Check, Brain, LogOut, User as UserIcon } from 'lucide-react';
 import type { NavTab } from '../../types';
 import { useTranslation } from '../../context/LanguageContext';
 import type { Language } from '../../i18n/translations';
+import { useAuth } from '../../context/AuthContext';
 import { clsx } from 'clsx';
 
 interface HeaderProps {
@@ -52,6 +53,25 @@ export const Header: React.FC<HeaderProps> = ({
     activeTab === 'markets' ? t.nav_markets :
     'Settings';
 
+
+  const { user, logout } = useAuth();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    setIsUserMenuOpen(false);
+    await logout();
+  };
 
   return (
     <header className="sticky top-0 z-30 bg-canvas/90 backdrop-blur-md border-b border-line">
@@ -103,7 +123,6 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </div>
 
-
           {/* Theme toggle */}
           <button
             onClick={onToggleTheme}
@@ -124,6 +143,44 @@ export const Header: React.FC<HeaderProps> = ({
               <Brain size={14} />
               <span className="hidden sm:inline">Advisor</span>
             </button>
+          )}
+
+          {/* User Profile & Sign Out Button */}
+          {user && (
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="h-9 px-2.5 rounded-md bg-surface border border-line hover:border-brand/40 text-ink flex items-center gap-2 cursor-pointer transition-colors"
+                title={user.email || 'User Account'}
+              >
+                <div className="w-5 h-5 rounded-full bg-brand text-white flex items-center justify-center text-[10px] font-bold">
+                  {(user.displayName?.[0] || user.email?.[0] || 'U').toUpperCase()}
+                </div>
+                <span className="text-xs font-medium max-w-[120px] truncate hidden md:inline">
+                  {user.displayName || user.email?.split('@')[0]}
+                </span>
+              </button>
+
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-xl bg-surface border border-line shadow-pop p-2 z-50 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="px-3 py-2 border-b border-line mb-1">
+                    <p className="text-xs font-semibold text-ink truncate">
+                      {user.displayName || 'RealVest User'}
+                    </p>
+                    <p className="text-[11px] text-ink-3 truncate mt-0.5">
+                      {user.email}
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full px-3 py-2 rounded-lg text-xs font-medium text-neg hover:bg-neg-soft flex items-center gap-2 cursor-pointer transition-colors"
+                  >
+                    <LogOut size={14} />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
 

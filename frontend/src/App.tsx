@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { NavTab, Property } from './types';
 import { mockProperties } from './data/mockProperties';
 import { LanguageProvider } from './context/LanguageContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { propertyApi } from './services/api/propertyApi';
 
 import { Header } from './components/layout/Header';
@@ -16,10 +17,13 @@ import { SimulatorView } from './components/views/SimulatorView';
 import { MarketIntelligenceView } from './components/views/MarketIntelligenceView';
 import { GlobalAdvisorDrawer } from './components/common/GlobalAdvisorDrawer';
 import { IntroExperience } from './components/intro/IntroExperience';
+import { AuthView } from './components/auth/AuthView';
+import { Building2, Loader2 } from 'lucide-react';
 
 const INTRO_SEEN_KEY = 'realvest_intro_seen';
 
 function AppContent() {
+  const { user, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
   const [previousTab, setPreviousTab] = useState<NavTab>('explore');
   const [properties, setProperties] = useState<Property[]>(mockProperties);
@@ -96,6 +100,28 @@ function AppContent() {
     setActiveTab('dashboard');
     setShowIntro(true);
   };
+
+  // Auth Loading Screen
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-canvas text-ink flex flex-col items-center justify-center font-sans">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-brand text-white flex items-center justify-center shadow-lg shadow-brand/20 animate-pulse">
+            <Building2 size={24} strokeWidth={2.2} />
+          </div>
+          <div className="flex items-center gap-2 text-xs font-semibold text-ink-2">
+            <Loader2 size={16} className="animate-spin text-brand" />
+            <span>Verifying session...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Unauthenticated Route Guard
+  if (!user) {
+    return <AuthView isDark={isDark} />;
+  }
 
   return (
     <div className="min-h-screen bg-canvas text-ink flex font-sans">
@@ -195,7 +221,9 @@ function AppContent() {
 export function App() {
   return (
     <LanguageProvider>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </LanguageProvider>
   );
 }
