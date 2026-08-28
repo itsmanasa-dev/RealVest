@@ -29,21 +29,21 @@ export const Stat: React.FC<StatProps> = ({
   };
 
   return (
-    <div className={clsx('rv-card p-5', className)}>
-      <div className="flex items-center justify-between">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-3">
+    <div className={clsx('rv-card p-4 sm:p-5 overflow-hidden flex flex-col justify-between min-w-0', className)}>
+      <div className="flex items-center justify-between gap-2 min-w-0">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-3 truncate min-w-0">
           {label}
         </span>
         {Icon && (
-          <span className={clsx('w-8 h-8 rounded-lg flex items-center justify-center', tones[iconTone])}>
+          <span className={clsx('w-8 h-8 rounded-lg flex items-center justify-center shrink-0', tones[iconTone])}>
             <Icon size={16} strokeWidth={2.2} />
           </span>
         )}
       </div>
-      <div className={clsx('mt-2 text-2xl font-semibold tracking-tight text-ink', valueClassName)}>
+      <div className={clsx('mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-ink truncate min-w-0', valueClassName)}>
         {value}
       </div>
-      {hint && <div className="mt-1 text-xs text-ink-2">{hint}</div>}
+      {hint && <div className="mt-1 text-xs text-ink-2 truncate min-w-0 max-w-full">{hint}</div>}
     </div>
   );
 };

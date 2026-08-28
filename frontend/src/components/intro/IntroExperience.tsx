@@ -3,7 +3,7 @@ import type { Property, MarketHotZone } from '../../types';
 import { mockHotZones, mockProperties } from '../../data/mockProperties';
 import { MICRO_MARKET_COORDS, BENGALURU_CENTER } from '../../services/geoService';
 import { formatInrLakhs } from '../../utils/currency';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Building2 } from 'lucide-react';
 
 // Scene progression ids
 type Scene = 'logo' | 'tagline' | 'map' | 'question' | 'journey' | 'property';
@@ -63,6 +63,7 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
   const [showAnswer, setShowAnswer] = useState(false);
   const [exit, setExit] = useState(false);
   const [mobile, setMobile] = useState(false);
+  const [started, setStarted] = useState(false);
   // property reveal + journey indexes stagger in
   const [stepIdx, setStepIdx] = useState(0);
   const [mapIdx, setMapIdx] = useState(0);
@@ -70,12 +71,16 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
 
   const hero = properties[0] || mockProperties[0];
 
+  const handleContinue = () => setStarted(true);
+
   useEffect(() => {
     setMobile(typeof window !== 'undefined' && window.innerWidth < 640);
   }, []);
 
   // Primary scene timeline (auto-advance). Mobile runs a reduced sequence.
+  // The timeline only begins once the user chooses "Continue".
   useEffect(() => {
+    if (!started) return;
     const t: ReturnType<typeof setTimeout>[] = [];
     const schedule = (ms: number, fn: () => void) => t.push(setTimeout(fn, ms));
 
@@ -95,7 +100,7 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
     }
 
     return () => t.forEach(clearTimeout);
-  }, [mobile]);
+  }, [mobile, started]);
 
   // When the property reveal (final scene) leads the timeline, hold the reveal
   // for a beat, then fade out and hand off to the workspace.
@@ -160,7 +165,8 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
 
   const handleSkip = () => {
     if (doneRef.current) return;
-    doneRef.current = true;
+    // Note: do NOT set doneRef here — the outro effect above finalizes
+    // once the fade completes, so "Skip intro" reliably completes onboarding.
     setExit(true);
   };
 
@@ -200,8 +206,44 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
         }}
       />
 
-      {/* Skip */}
-      {scene !== 'property' && (
+      {/* ENTRY CHOICE: Welcome + Continue / Skip */}
+      {!started && !exit && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+          <div className="rv-intro-zoom flex flex-col items-center">
+            <div className="w-16 h-16 rounded-2xl bg-brand text-white flex items-center justify-center shadow-lg shadow-brand/20 mb-6">
+              <Building2 size={30} strokeWidth={2.2} />
+            </div>
+            <h1 className="rv-intro-logo font-display text-4xl sm:text-5xl font-extrabold tracking-[0.18em] text-ink uppercase">
+              RealVest
+            </h1>
+            <p className="rv-intro-sub mt-4 text-[11px] sm:text-xs font-semibold tracking-[0.3em] uppercase text-ink-3">
+              Bengaluru Investment Intelligence
+            </p>
+            <p className="rv-intro-rise mt-6 max-w-md text-sm sm:text-base text-ink-2 leading-relaxed">
+              RealVest turns real estate data into clear investment decisions — explore
+              properties, analyze markets, simulate returns, and get AI guidance, all in one place.
+            </p>
+          </div>
+
+          <div className="rv-intro-rise mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-sm">
+            <button
+              onClick={handleContinue}
+              className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-brand hover:bg-brand-hover text-white font-semibold text-sm px-6 py-3 shadow-sm transition-all cursor-pointer"
+            >
+              Continue / Next <ArrowRight size={16} />
+            </button>
+            <button
+              onClick={handleSkip}
+              className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-surface border border-line text-ink font-semibold text-sm px-6 py-3 transition-colors hover:bg-surface-soft cursor-pointer"
+            >
+              Skip intro
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Skip (during the walkthrough) */}
+      {started && !exit && scene !== 'property' && (
         <button
           onClick={handleSkip}
           className="absolute top-6 right-6 z-20 inline-flex items-center gap-1.5 text-sm font-medium text-ink-3 hover:text-ink transition-colors cursor-pointer"
@@ -211,7 +253,7 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
       )}
 
       {/* SCENE: LOGO */}
-      {scene === 'logo' && (
+      {started && scene === 'logo' && (
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
           <h1 className="rv-intro-logo font-display text-4xl sm:text-6xl font-extrabold tracking-[0.18em] text-ink uppercase">
             RealVest
@@ -223,7 +265,7 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
       )}
 
       {/* SCENE: TAGLINE */}
-      {scene === 'tagline' && (
+      {started && scene === 'tagline' && (
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
           <p className="rv-intro-rise max-w-xl text-lg sm:text-2xl font-medium text-ink leading-snug">
             Understand the market.
@@ -236,7 +278,7 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
       )}
 
       {/* SCENE: BENGALURU EMERGES */}
-      {scene === 'map' && (
+      {started && scene === 'map' && (
         <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
           <p className="rv-intro-sub mb-2 text-[11px] font-semibold tracking-[0.3em] uppercase text-ink-3">
             Bengaluru emerges
@@ -304,7 +346,7 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
       )}
 
       {/* SCENE: QUESTION */}
-      {scene === 'question' && (
+      {started && scene === 'question' && (
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
           <p className="rv-intro-rise text-3xl sm:text-5xl font-display font-semibold tracking-tight text-ink">
             Where should your
@@ -320,7 +362,7 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
       )}
 
       {/* SCENE: JOURNEY */}
-      {scene === 'journey' && (
+      {started && scene === 'journey' && (
         <div className="absolute inset-0 flex items-center justify-center px-6">
           <div className="w-full max-w-md">
             <p className="rv-intro-sub mb-5 text-center text-[11px] font-semibold tracking-[0.3em] uppercase text-ink-3">
@@ -364,7 +406,7 @@ export const IntroExperience: React.FC<IntroExperienceProps> = ({
       )}
 
       {/* SCENE: PROPERTY REVEAL */}
-      {scene === 'property' && (
+      {started && scene === 'property' && (
         <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-6">
           <div className="rv-intro-zoom relative w-full max-w-lg overflow-hidden rounded-2xl border border-line shadow-pop">
             <img

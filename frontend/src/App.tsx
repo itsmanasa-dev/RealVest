@@ -18,9 +18,8 @@ import { MarketIntelligenceView } from './components/views/MarketIntelligenceVie
 import { GlobalAdvisorDrawer } from './components/common/GlobalAdvisorDrawer';
 import { IntroExperience } from './components/intro/IntroExperience';
 import { AuthView } from './components/auth/AuthView';
+import { hasOnboarded, markOnboarded } from './utils/onboarding';
 import { Building2, Loader2 } from 'lucide-react';
-
-const INTRO_SEEN_KEY = 'realvest_intro_seen';
 
 function AppContent() {
   const { user, loading: authLoading } = useAuth();
@@ -29,9 +28,7 @@ function AppContent() {
   const [properties, setProperties] = useState<Property[]>(mockProperties);
   const [selectedProperty, setSelectedProperty] = useState<Property>(mockProperties[0]);
   const [isAdvisorOpen, setIsAdvisorOpen] = useState<boolean>(false);
-  const [showIntro, setShowIntro] = useState<boolean>(() => {
-    return localStorage.getItem(INTRO_SEEN_KEY) !== 'true';
-  });
+  const [isReplaying, setIsReplaying] = useState<boolean>(false);
   const [isDark, setIsDark] = useState<boolean>(() => {
     const savedTheme = localStorage.getItem('realvest_theme');
     return savedTheme === 'dark';
@@ -90,15 +87,14 @@ function AppContent() {
   };
 
   const handleIntroComplete = () => {
-    localStorage.setItem(INTRO_SEEN_KEY, 'true');
-    setShowIntro(false);
+    if (user) markOnboarded(user.uid);
+    setIsReplaying(false);
     window.scrollTo({ top: 0 });
   };
 
   const handleReplayIntro = () => {
-    localStorage.removeItem(INTRO_SEEN_KEY);
     setActiveTab('dashboard');
-    setShowIntro(true);
+    setIsReplaying(true);
   };
 
   // Auth Loading Screen
@@ -122,6 +118,9 @@ function AppContent() {
   if (!user) {
     return <AuthView isDark={isDark} />;
   }
+
+  // Show the intro for users who haven't completed onboarding, or when replaying.
+  const showIntro = isReplaying || !hasOnboarded(user.uid);
 
   return (
     <div className="min-h-screen bg-canvas text-ink flex font-sans">

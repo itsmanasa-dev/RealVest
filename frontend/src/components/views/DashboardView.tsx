@@ -76,7 +76,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <Stat
           label={t.est_value}
           value={bestDeal ? formatInrLakhs(bestDeal.fairValueLakhs - bestDeal.askingPriceLakhs) : '—'}
-          hint={bestDeal ? `${bestDeal.title}` : undefined}
+          hint={bestDeal ? <span className="truncate block" title={bestDeal.title}>{bestDeal.title}</span> : undefined}
           icon={Scale}
           iconTone="pos"
         />
