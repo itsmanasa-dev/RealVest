@@ -9,6 +9,7 @@ import {
   type AuthError,
 } from 'firebase/auth';
 import { auth, isFirebaseConfigured } from '../lib/firebase';
+import { clearOnboarding } from '../utils/onboarding';
 
 interface AuthContextType {
   user: User | null;
@@ -111,6 +112,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = async () => {
     setAuthError(null);
     try {
+      if (user?.uid) {
+        clearOnboarding(user.uid);
+      } else {
+        clearOnboarding();
+      }
       await signOut(auth);
       setUser(null);
     } catch (err: unknown) {

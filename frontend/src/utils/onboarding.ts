@@ -17,3 +17,20 @@ export function markOnboarded(uid: string): void {
     // ignore storage failures
   }
 }
+
+export function clearOnboarding(uid?: string): void {
+  try {
+    if (uid) {
+      localStorage.removeItem(ONBOARDING_PREFIX + uid);
+    }
+    // Clear all user onboarding records
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith(ONBOARDING_PREFIX)) {
+        localStorage.removeItem(key);
+      }
+    });
+  } catch {
+    // ignore storage failures
+  }
+}
+

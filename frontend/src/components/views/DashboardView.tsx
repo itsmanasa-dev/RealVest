@@ -118,15 +118,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <button
               key={idx}
               onClick={a.action}
-              className="rv-card rv-card-hover p-4 flex flex-col items-start gap-3 text-left cursor-pointer group"
+              className="rv-card rv-card-hover p-4 flex flex-col items-start justify-between gap-3 text-left cursor-pointer group w-full min-w-0 overflow-hidden"
             >
-              <span className="w-9 h-9 rounded-lg bg-brand-soft text-brand flex items-center justify-center group-hover:bg-brand group-hover:text-white transition-colors">
+              <span className="w-9 h-9 rounded-lg bg-brand-soft text-brand flex items-center justify-center group-hover:bg-brand group-hover:text-white transition-colors shrink-0">
                 <Icon size={18} />
               </span>
-              <span className="min-w-0">
+              <div className="w-full min-w-0">
                 <span className="block text-sm font-semibold text-ink truncate">{a.label}</span>
-                <span className="block text-xs text-ink-3 mt-0.5 truncate">{a.desc}</span>
-              </span>
+                <span className="block text-xs text-ink-3 mt-0.5 truncate" title={a.desc}>{a.desc}</span>
+              </div>
             </button>
           );
         })}
