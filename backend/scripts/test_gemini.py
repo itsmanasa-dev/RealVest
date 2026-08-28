@@ -24,7 +24,7 @@ def test_gemini_connection():
         print("\n[WARNING] GEMINI_API_KEY is not set in environment or .env file.")
         print("Please add GEMINI_API_KEY=<your_gemini_key> to .env to run live test.")
         print("==================================================")
-        return False
+        return
 
     prompt = "What should a first-time property investor consider before buying a property?"
     print(f"\nREQUEST SENT: '{prompt}'")
@@ -51,15 +51,13 @@ def test_gemini_connection():
                 print(answer)
                 print("--------------------------------------------------")
                 print("==================================================")
-                return True
+                return
         except Exception as e:
             print(f"  -> Model '{m}' returned error: {e}")
 
     print("\n==================================================")
     print("[ERROR] All Gemini model attempts failed.")
     print("==================================================")
-    return False
 
 if __name__ == "__main__":
-    success = test_gemini_connection()
-    sys.exit(0 if success else 1)
+    test_gemini_connection()

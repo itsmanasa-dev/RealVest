@@ -91,6 +91,8 @@ class PropertyService:
 
     @classmethod
     def ensure_seeded(cls, db: Session):
+        from backend.app.core.database import ensure_tables_created
+        ensure_tables_created(db.get_bind())
         count = db.query(PropertyModel).count()
         if count > 0:
             return

@@ -17,22 +17,32 @@ def get_price_model():
     global _price_model_cache
     if _price_model_cache is None:
         path = os.path.join(MODELS_DIR, 'price_model.joblib')
-        if not os.path.exists(path):
+        loaded = False
+        if os.path.exists(path):
+            try:
+                _price_model_cache = joblib.load(path)
+                loaded = True
+            except Exception:
+                loaded = False
+        if not loaded:
             from src.models.train_models import train_price_model
             _price_model_cache = train_price_model()
-        else:
-            _price_model_cache = joblib.load(path)
     return _price_model_cache
 
 def get_rent_model():
     global _rent_model_cache
     if _rent_model_cache is None:
         path = os.path.join(MODELS_DIR, 'rent_model.joblib')
-        if not os.path.exists(path):
+        loaded = False
+        if os.path.exists(path):
+            try:
+                _rent_model_cache = joblib.load(path)
+                loaded = True
+            except Exception:
+                loaded = False
+        if not loaded:
             from src.models.train_models import train_rent_model
             _rent_model_cache = train_rent_model()
-        else:
-            _rent_model_cache = joblib.load(path)
     return _rent_model_cache
 
 def predict_property_price(location, total_sqft, bhk, bath=None, balcony=None, area_type='Super built-up Area', is_ready=1):
