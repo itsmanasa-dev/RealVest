@@ -9,14 +9,16 @@ import {
   User,
   AlertCircle,
   Building2,
-  ChevronDown,
   Minimize2,
   Maximize2,
-  MessageSquare,
+  RotateCcw,
+  RefreshCw,
+  Loader2,
 } from 'lucide-react';
 import { useTranslation } from '../../context/LanguageContext';
 import { advisorApi } from '../../services/api/advisorApi';
 import { advisorService } from '../../services/advisorService';
+import { ChatMarkdown } from './ChatMarkdown';
 import { clsx } from 'clsx';
 
 interface Message {
@@ -48,34 +50,36 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
 
   const getInitialGreeting = () => {
     if (language === 'kn') {
-      return "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ **ರಿಯಲ್‌ವೆಸ್ಟ್ ಎಐ ಹೂಡಿಕೆ ಸಲಹೆಗಾರ**. ಬೆಂಗಳೂರಿನ ಆಸ್ತಿಗಳ ಬೆಲೆ, ಬಾಡಿಗೆ ಇಳುವರಿ, ಅಪಾಯಗಳು ಅಥವಾ ಹೂಡಿಕೆ ಅವಕಾಶಗಳ ಬಗ್ಗೆ ನನ್ನನ್ನು ಕೇಳಿ.";
+      return "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ **ರಿಯಲ್‌ವೆಸ್ಟ್ ಎಐ ಹೂಡಿಕೆ ಸಲಹೆಗಾರ**. ಬೆಂಗಳೂರಿನ ಆಸ್ತಿಗಳ ಬೆಲೆ, ಬಾಡಿಗೆ ಇಳುವರಿ, ಮಾರುಕಟ್ಟೆ ಅಪಾಯಗಳು ಅಥವಾ ಹೂಡಿಕೆ ಅವಕಾಶಗಳ ಬಗ್ಗೆ ನನ್ನನ್ನು ಕೇಳಿ.";
     }
     if (language === 'hi') {
-      return "नमस्ते! मैं आपका **रियलवेस्ट एआई निवेश सलाहकार** हूँ। बेंगलुरु की संपत्तियों, मूल्यांकन, किराये की आय, जोखिम या निवेश अवसरों के बारे में पूछें।";
+      return "नमस्ते! मैं आपका **रियलवेस्ट एआई निवेश सलाहकार** हूँ। बेंगलुरु की संपत्तियों, बाजार मूल्यांकन, किराये की आय या निवेश जोखिमों के बारे में पूछें।";
     }
-    return "Hello! I am your **RealVest AI Investment Advisor**. Ask me about Bengaluru localities, valuations, rental yields, risks, or scenario planning.";
+    return "Hello! I am your **RealVest AI Investment Advisor** powered by Gemini. Ask me about Bengaluru micro-markets, ML fair valuations, rental yields, investment risks, or buy vs. rent decisions.";
   };
 
-  const [messages, setMessages] = useState<Message[]>([]);
+  const createInitialMessage = (): Message => ({
+    id: 'welcome',
+    sender: 'advisor',
+    text: getInitialGreeting(),
+    sources: [
+      language === 'kn'
+        ? 'ರಿಯಲ್‌ವೆಸ್ಟ್ ಬೆಂಗಳೂರು ಇಂಟೆಲಿಜೆನ್ಸ್'
+        : language === 'hi'
+        ? 'रियलवेस्ट बेंगलुरु इंटेलिजेंस'
+        : 'RealVest Intelligence Engine',
+    ],
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+  });
 
-  useEffect(() => {
-    setMessages([
-      {
-        id: 'welcome',
-        sender: 'advisor',
-        text: getInitialGreeting(),
-        sources: [language === 'kn' ? "ರಿಯಲ್‌ವೆಸ್ಟ್ ಬೆಂಗಳೂರು ಇಂಟೆಲಿಜೆನ್ಸ್" : language === 'hi' ? "रियलवेस्ट बेंगलुरु इंटेलिजेंस" : "RealVest Bengaluru Intelligence"],
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      },
-    ]);
-  }, [language]);
-
+  const [messages, setMessages] = useState<Message[]>([createInitialMessage()]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -87,91 +91,46 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
     }
   }, [messages, isLoading, isOpen]);
 
-  // Contextual suggested questions based on current workspace and language
+  // Contextual suggested questions based on current workspace
   const getSuggestedQuestions = () => {
-    if (language === 'kn') {
-      if (activeTab === 'analysis' && selectedProperty) {
-        return [
-          `ಈ ಆಸ್ತಿಯನ್ನು ಏಕೆ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ?`,
-          "ಕೇಳಲಾದ ಬೆಲೆ ನ್ಯಾಯಯುತವಾಗಿದೆಯೇ?",
-          "ಪ್ರಮುಖ ಅಪಾಯದ ಅಂಶಗಳು ಯಾವುವು?",
-          "ನಿರೀಕ್ಷಿತ ಬಾಡಿಗೆ ಇಳುವರಿ ಎಷ್ಟು?",
-        ];
-      }
-      if (activeTab === 'markets') {
-        return [
-          "ಬೆಂಗಳೂರಿನಲ್ಲಿ ಅತಿ ಹೆಚ್ಚು ಬೆಳವಣಿಗೆಯಾಗುತ್ತಿರುವ ಪ್ರದೇಶ ಯಾವುದು?",
-          "ವೈಟ್‌ಫೀಲ್ಡ್ ಬಾಡಿಗೆ ಆದಾಯಕ್ಕೆ ಉತ್ತಮವೇ?",
-          "2025-2026 HPI ಮುನ್ಸೂಚನೆ ವಿವರಿಸಿ.",
-        ];
-      }
-      return [
-        "₹50 ಲಕ್ಷ ಬಜೆಟ್‌ಗೆ ಎಲ್ಲಿ ಹೂಡಿಕೆ ಮಾಡಬೇಕು?",
-        "ವೈಟ್‌ಫೀಲ್ಡ್ ಬಾಡಿಗೆಗೆ ಸೂಕ್ತವೇ?",
-        "ಖರೀದಿಸಬೇಕೆ ಅಥವಾ ಬಾಡಿಗೆಗೆ ಇರಬೇಕೆ?",
-      ];
-    }
-    if (language === 'hi') {
-      if (activeTab === 'analysis' && selectedProperty) {
-        return [
-          `इस संपत्ति की सिफारिश क्यों की गई?`,
-          "क्या मांगी गई कीमत उचित है?",
-          "सबसे बड़े जोखिम कारक क्या हैं?",
-        ];
-      }
-      if (activeTab === 'markets') {
-        return [
-          "बेंगलुरु में सबसे तेज विकास किस क्षेत्र में है?",
-          "क्या व्हाइटफील्ड किराये के लिए अच्छा है?",
-          "2025-2026 HPI पूर्वानुमान समझाएं।",
-        ];
-      }
-      return [
-        "₹50 लाख के बजट में कहाँ निवेश करें?",
-        "क्या व्हाइटफील्ड किराये के लिए अच्छा है?",
-        "खरीदें या किराये पर रहें?",
-      ];
-    }
     if (activeTab === 'analysis' && selectedProperty) {
       return [
-        `Why was ${selectedProperty.title} recommended?`,
-        "Is the asking price below fair market value?",
-        "What are the biggest risk factors for this property?",
-        "What is the expected rental yield?",
-      ];
-    }
-    if (activeTab === 'markets') {
-      return [
-        "Which Bengaluru corridor has the strongest capital growth?",
-        "Is Whitefield good for rental income?",
-        "Explain the 2025-2026 Bengaluru HPI forecast.",
+        `Why is ${selectedProperty.title} recommended?`,
+        'Is the asking price below fair market value?',
+        'What are the key investment risks for this property?',
+        'What is the estimated monthly cash flow after loan EMI?',
       ];
     }
     if (activeTab === 'simulator') {
       return [
-        "Should I buy or rent in Bengaluru?",
-        "How does a 0.5% interest rate hike impact my net yield?",
-        "What is the recommended holding horizon for tax efficiency?",
+        'Should I buy or rent in Bengaluru?',
+        'How does a 0.5% interest rate hike impact my net yield?',
+        'What is the recommended holding horizon for tax efficiency?',
       ];
     }
     if (activeTab === 'explore') {
       return [
-        "Where should I invest ₹50 lakh in Bengaluru?",
-        "Which verified listings offer above 5% gross yield?",
-        "What can I afford with ₹30 lakh?",
+        'Where should I invest ₹50 lakh in Bengaluru?',
+        'Which verified listings offer above 5% gross yield?',
+        'Is Whitefield suitable for rental income?',
       ];
     }
     return [
-      "Where should I invest ₹50L?",
-      "Is Whitefield good for rental income?",
-      "Should I buy or rent?",
-      "What are the biggest real estate risks in Bengaluru?",
+      'Where should I invest ₹50 lakh in Bengaluru?',
+      'Is Whitefield suitable for rental income?',
+      'Should I buy or rent a property?',
+      'What are the main risks of investing in Bengaluru?',
     ];
   };
 
+  const handleClearChat = () => {
+    setMessages([createInitialMessage()]);
+    setErrorMessage(null);
+    setInputText('');
+  };
 
   const handleSendMessage = async (textToSend?: string) => {
-    const query = textToSend || inputText.trim();
+    const query = (textToSend || inputText).trim();
     if (!query || isLoading) return;
 
     const userMsg: Message = {
@@ -186,7 +145,7 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
     setIsLoading(true);
     setErrorMessage(null);
 
-    // Build rich context payload based on current workspace
+    // Build rich context payload
     const contextPayload: Record<string, any> = {
       active_tab: activeTab,
     };
@@ -203,11 +162,14 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
       contextPayload.location = selectedProperty.location;
     }
 
-    // Build history payload (last 6 messages)
-    const historyPayload = messages.slice(-6).map((m) => ({
-      role: m.sender === 'user' ? ('user' as const) : ('assistant' as const),
-      content: m.text,
-    }));
+    // Filter out initial canned welcome message from conversational history
+    const historyPayload = messages
+      .filter((m) => m.id !== 'welcome')
+      .slice(-8)
+      .map((m) => ({
+        role: m.sender === 'user' ? ('user' as const) : ('assistant' as const),
+        content: m.text,
+      }));
 
     try {
       const response = await advisorApi.sendMessage(query, contextPayload, historyPayload);
@@ -215,7 +177,9 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
         id: `advisor-${Date.now()}`,
         sender: 'advisor',
         text: response.reply,
-        sources: response.sources || ["RealVest Dataset"],
+        sources: response.sources && response.sources.length > 0
+          ? response.sources
+          : ['RealVest Bengaluru Housing Database', 'Google Gemini Intelligence Engine'],
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, advisorMsg]);
@@ -227,46 +191,45 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
           id: `advisor-${Date.now()}`,
           sender: 'advisor',
           text: fallbackRes.answer,
-          sources: fallbackRes.sources || ["RealVest Built-in Intelligence"],
+          sources: fallbackRes.sources || ['RealVest Built-in Intelligence Engine'],
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         };
         setMessages((prev) => [...prev, fallbackMsg]);
       } catch (fallbackErr: any) {
-        setErrorMessage("RealVest Advisor is temporarily unavailable. Please try again.");
+        setErrorMessage('Advisor is temporarily unreachable. Please verify your connection or try again.');
       }
     } finally {
       setIsLoading(false);
+      if (textareaRef.current) {
+        textareaRef.current.focus();
+      }
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
   };
 
+  const hasUserMessages = messages.some((m) => m.sender === 'user');
+
   return (
     <>
-      {/* Floating Trigger Button (Bottom-Right across all pages) */}
+      {/* Floating Pill Trigger (when closed) */}
       {!isOpen && (
         <button
           onClick={onOpen}
-          className="fixed bottom-6 right-6 z-40 px-4 py-3 rounded-2xl bg-brand hover:bg-brand-strong text-white shadow-pop flex items-center gap-2.5 transition-all transform hover:scale-105 cursor-pointer select-none group"
+          className="fixed bottom-6 right-6 z-40 px-3.5 py-2.5 rounded-full bg-brand hover:bg-brand-hover text-white shadow-lg flex items-center gap-2 cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95 group border border-white/20"
           title="Open RealVest AI Advisor"
-          aria-label="Open AI Advisor"
+          aria-label="Open RealVest AI Advisor"
         >
-          <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-white" />
-          </span>
-          <Brain size={18} className="shrink-0" />
+          <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+            <Sparkles size={12} className="text-white" />
+          </div>
           <span className="font-semibold text-xs tracking-tight">AI Advisor</span>
-          {activeTab === 'analysis' && selectedProperty && (
-            <span className="hidden sm:inline-block px-1.5 py-0.5 rounded bg-white/20 text-[10px] font-mono truncate max-w-[100px]">
-              {selectedProperty.title}
-            </span>
-          )}
+          <span className="w-2 h-2 rounded-full bg-pos animate-pulse" />
         </button>
       )}
 
@@ -274,23 +237,26 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
       {isOpen && (
         <div
           className={clsx(
-            'fixed z-50 bg-surface border border-line shadow-pop flex flex-col transition-all duration-300 rv-fade-in',
+            'fixed z-50 bg-surface border border-line shadow-pop flex flex-col transition-all duration-300 rv-fade-in font-sans',
             isExpanded
-              ? 'bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[560px] h-[90vh] sm:h-[680px] sm:rounded-2xl rounded-t-2xl'
-              : 'bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[410px] h-[85vh] sm:h-[580px] sm:rounded-2xl rounded-t-2xl'
+              ? 'bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[620px] h-[92vh] sm:h-[720px] sm:rounded-2xl rounded-t-2xl'
+              : 'bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[440px] h-[86vh] sm:h-[620px] sm:rounded-2xl rounded-t-2xl'
           )}
         >
           {/* Header */}
-          <div className="p-3.5 border-b border-line flex items-center justify-between gap-2 bg-surface-soft/80 shrink-0">
+          <div className="p-3.5 border-b border-line flex items-center justify-between gap-2 bg-surface-soft/90 backdrop-blur-sm shrink-0 rounded-t-2xl">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-brand text-white flex items-center justify-center shrink-0 shadow-sm">
+              <div className="w-8 h-8 rounded-xl bg-brand text-white flex items-center justify-center shrink-0 shadow-sm shadow-brand/20">
                 <Brain size={17} />
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <h3 className="font-semibold text-xs text-ink tracking-tight">RealVest AI Advisor</h3>
-                  <span className="px-1.5 py-0.2 rounded-full bg-brand-soft text-brand text-[9px] font-mono font-bold">
-                    ONLINE
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-xs sm:text-sm text-ink tracking-tight font-display">
+                    RealVest AI Advisor
+                  </h3>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-soft text-brand text-[10px] font-medium border border-brand/20">
+                    <span className="w-1.5 h-1.5 rounded-full bg-pos animate-pulse" />
+                    Gemini Live
                   </span>
                 </div>
                 <p className="text-[10px] text-ink-3 truncate">
@@ -302,9 +268,18 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
 
             <div className="flex items-center gap-1">
               <button
+                onClick={handleClearChat}
+                className="w-7 h-7 rounded-lg text-ink-3 hover:text-ink hover:bg-surface flex items-center justify-center cursor-pointer transition-colors"
+                title="New Chat (Reset conversation)"
+                aria-label="New Chat"
+              >
+                <RotateCcw size={13} />
+              </button>
+              <button
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="w-7 h-7 rounded-lg text-ink-3 hover:text-ink hover:bg-surface flex items-center justify-center cursor-pointer transition-colors"
                 title={isExpanded ? 'Collapse' : 'Expand'}
+                aria-label={isExpanded ? 'Collapse drawer' : 'Expand drawer'}
               >
                 {isExpanded ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
               </button>
@@ -312,6 +287,7 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
                 onClick={onClose}
                 className="w-7 h-7 rounded-lg text-ink-3 hover:text-ink hover:bg-surface flex items-center justify-center cursor-pointer transition-colors"
                 title="Close Advisor"
+                aria-label="Close Advisor"
               >
                 <X size={15} />
               </button>
@@ -320,17 +296,49 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
 
           {/* Active Context Banner */}
           {activeTab === 'analysis' && selectedProperty && (
-            <div className="px-3.5 py-1.5 bg-brand-soft/50 border-b border-line text-[11px] text-ink-2 flex items-center justify-between gap-2 shrink-0">
+            <div className="px-3.5 py-1.5 bg-brand-soft/40 border-b border-line text-[11px] text-ink-2 flex items-center justify-between gap-2 shrink-0">
               <div className="flex items-center gap-1.5 truncate">
                 <Building2 size={12} className="text-brand shrink-0" />
                 <span className="font-semibold truncate">{selectedProperty.title}</span>
-                <span className="text-ink-3 font-mono">({selectedProperty.annualYield}% Yield)</span>
+                <span className="text-ink-3 font-mono text-[10px]">
+                  (₹{selectedProperty.askingPriceLakhs}L · {selectedProperty.annualYield}% Yield)
+                </span>
               </div>
             </div>
           )}
 
-          {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs">
+          {/* Chat Messages Container */}
+          <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-4 text-xs">
+            {/* Empty Welcome Card if conversation hasn't started */}
+            {!hasUserMessages && (
+              <div className="p-4 rounded-xl bg-surface-soft/60 border border-line text-ink space-y-3 mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-lg bg-brand text-white flex items-center justify-center text-xs">
+                    <Sparkles size={13} />
+                  </div>
+                  <span className="font-semibold text-xs text-ink">Bengaluru Decision Intelligence</span>
+                </div>
+                <p className="text-xs text-ink-2 leading-relaxed">
+                  Ask questions about micro-markets, rental potential, valuation discounts, or buy vs. rent comparisons.
+                </p>
+                <div className="pt-1 flex flex-col gap-1.5">
+                  <span className="text-[10px] uppercase font-semibold tracking-wider text-ink-3">Suggested Prompts</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    {getSuggestedQuestions().slice(0, 4).map((q, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleSendMessage(q)}
+                        className="text-left p-2 rounded-lg bg-surface border border-line hover:border-brand/40 hover:bg-surface-soft text-[11px] text-ink-2 transition-all cursor-pointer font-medium leading-snug"
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Message Bubble List */}
             {messages.map((msg) => (
               <div
                 key={msg.id}
@@ -339,51 +347,42 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
                   msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
                 )}
               >
+                {/* Avatar */}
                 <div
                   className={clsx(
-                    'w-7 h-7 rounded-xl flex items-center justify-center shrink-0 text-white shadow-xs',
-                    msg.sender === 'user' ? 'bg-ink' : 'bg-brand'
+                    'w-7 h-7 rounded-xl flex items-center justify-center shrink-0 shadow-xs text-xs',
+                    msg.sender === 'user'
+                      ? 'bg-ink text-canvas font-semibold'
+                      : 'bg-brand text-white shadow-brand/20'
                   )}
                 >
                   {msg.sender === 'user' ? <User size={13} /> : <Bot size={14} />}
                 </div>
 
+                {/* Message Body */}
                 <div
                   className={clsx(
-                    'max-w-[85%] rounded-2xl p-3.5 space-y-1.5 text-xs leading-relaxed shadow-xs',
+                    'max-w-[85%] rounded-2xl p-3.5 space-y-2 text-xs leading-relaxed shadow-xs',
                     msg.sender === 'user'
-                      ? 'bg-brand text-white rounded-tr-xs'
-                      : 'bg-surface-soft border border-line text-ink rounded-tl-xs'
+                      ? 'bg-brand text-white rounded-tr-xs font-medium'
+                      : 'bg-surface border border-line text-ink rounded-tl-xs'
                   )}
                 >
-                  <div className="whitespace-pre-line font-sans">
-                    {msg.text.split('\n').map((line, i) => {
-                      if (line.startsWith('• ') || line.startsWith('* ')) {
-                        return (
-                          <div key={i} className="flex items-start gap-1.5 my-0.5">
-                            <span className={msg.sender === 'user' ? 'text-white' : 'text-brand font-bold'}>•</span>
-                            <span>{line.replace(/^[•*]\s*/, '')}</span>
-                          </div>
-                        );
-                      }
-                      if (line.startsWith('**') && line.endsWith('**')) {
-                        return (
-                          <div key={i} className="font-bold text-ink mt-1">
-                            {line.replace(/\*\*/g, '')}
-                          </div>
-                        );
-                      }
-                      return <p key={i}>{line}</p>;
-                    })}
-                  </div>
+                  {/* Markdown Renderer for Advisor / Pre-line for User */}
+                  {msg.sender === 'advisor' ? (
+                    <ChatMarkdown content={msg.text} />
+                  ) : (
+                    <p className="whitespace-pre-wrap">{msg.text}</p>
+                  )}
 
-                  {msg.sources && msg.sources.length > 0 && (
-                    <div className="pt-1.5 border-t border-line/60 flex flex-wrap items-center gap-1">
-                      <span className="text-[9px] font-mono text-ink-3 uppercase">Source:</span>
+                  {/* Sources Tag Section */}
+                  {msg.sources && msg.sources.length > 0 && msg.sender === 'advisor' && (
+                    <div className="pt-2 mt-2 border-t border-line flex flex-wrap items-center gap-1.5">
+                      <span className="text-[9px] uppercase font-semibold tracking-wider text-ink-3">Sources:</span>
                       {msg.sources.map((s, idx) => (
                         <span
                           key={idx}
-                          className="px-1.5 py-0.2 rounded bg-surface text-[9px] font-mono text-ink-3 border border-line"
+                          className="px-2 py-0.5 rounded-full bg-surface-soft text-[10px] font-medium text-ink-2 border border-line"
                         >
                           {s}
                         </span>
@@ -391,47 +390,59 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
                     </div>
                   )}
 
-                  <div className={clsx('text-[9px] font-mono text-right', msg.sender === 'user' ? 'text-white/70' : 'text-ink-3')}>
+                  {/* Timestamp */}
+                  <div
+                    className={clsx(
+                      'text-[9px] font-mono text-right',
+                      msg.sender === 'user' ? 'text-white/70' : 'text-ink-3'
+                    )}
+                  >
                     {msg.timestamp}
                   </div>
                 </div>
               </div>
             ))}
 
+            {/* Loading Indicator */}
             {isLoading && (
-              <div className="flex items-start gap-2.5">
+              <div className="flex items-start gap-2.5 rv-fade-in">
                 <div className="w-7 h-7 rounded-xl bg-brand text-white flex items-center justify-center shrink-0 shadow-xs">
                   <Bot size={14} />
                 </div>
-                <div className="p-3 rounded-2xl bg-surface-soft border border-line text-ink-3 text-xs flex items-center gap-2">
-                  <div className="flex gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-brand animate-bounce" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-brand animate-bounce [animation-delay:0.2s]" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-brand animate-bounce [animation-delay:0.4s]" />
-                  </div>
-                  <span className="font-mono text-xs text-ink-2">RealVest is thinking…</span>
+                <div className="px-4 py-3 rounded-2xl bg-surface border border-line text-ink-3 text-xs flex items-center gap-2.5 shadow-xs">
+                  <Loader2 size={14} className="animate-spin text-brand" />
+                  <span className="font-medium text-ink-2">Analyzing your question with Gemini…</span>
                 </div>
               </div>
             )}
 
+            {/* Error Message */}
             {errorMessage && (
-              <div className="p-3 rounded-xl bg-warn-soft text-warn text-xs flex items-center gap-2">
-                <AlertCircle size={14} className="shrink-0" />
-                <span>{errorMessage}</span>
+              <div className="p-3 rounded-xl bg-neg-soft/80 border border-neg/20 text-neg text-xs flex items-center justify-between gap-2 rv-fade-in">
+                <div className="flex items-center gap-2">
+                  <AlertCircle size={14} className="shrink-0" />
+                  <span>{errorMessage}</span>
+                </div>
+                <button
+                  onClick={() => setErrorMessage(null)}
+                  className="text-neg font-bold cursor-pointer hover:underline text-[11px]"
+                >
+                  Dismiss
+                </button>
               </div>
             )}
 
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Contextual Suggested Questions */}
+          {/* Quick Contextual Suggested Chips (Horizontal Scroll) */}
           <div className="px-3 py-1.5 border-t border-line bg-surface shrink-0 overflow-x-auto no-scrollbar flex items-center gap-1.5">
             {getSuggestedQuestions().map((q, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSendMessage(q)}
                 disabled={isLoading}
-                className="px-2.5 py-1 rounded-full bg-surface-soft hover:bg-brand-soft hover:text-brand border border-line text-ink-2 text-[11px] font-medium whitespace-nowrap transition-colors cursor-pointer shrink-0"
+                className="px-2.5 py-1 rounded-full bg-surface-soft hover:bg-brand-soft hover:text-brand border border-line text-ink-2 text-[11px] font-medium whitespace-nowrap transition-colors cursor-pointer shrink-0 disabled:opacity-40"
               >
                 {q}
               </button>
@@ -439,26 +450,31 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
           </div>
 
           {/* Input Area */}
-          <div className="p-3 border-t border-line bg-surface shrink-0">
-            <div className="flex items-center gap-2 p-1 rounded-xl border border-line bg-surface-soft focus-within:border-brand transition-colors">
-              <input
-                type="text"
+          <div className="p-3 border-t border-line bg-surface shrink-0 rounded-b-2xl">
+            <div className="flex items-end gap-2 p-1.5 rounded-xl border border-line bg-surface-soft focus-within:border-brand focus-within:ring-1 focus-within:ring-brand/20 transition-all shadow-xs">
+              <textarea
+                ref={textareaRef}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={t.ask_advisor_placeholder}
-                className="flex-1 px-2.5 py-1.5 text-xs text-ink bg-transparent focus:outline-none placeholder:text-ink-3"
+                placeholder={t.ask_advisor_placeholder || 'Ask about properties, valuations, or investment decisions…'}
+                className="flex-1 px-2.5 py-1.5 text-xs sm:text-sm text-ink bg-transparent focus:outline-none placeholder:text-ink-3 resize-none max-h-24 min-h-[36px]"
+                rows={1}
                 disabled={isLoading}
+                aria-label="Ask RealVest Advisor"
               />
               <button
                 onClick={() => handleSendMessage()}
                 disabled={!inputText.trim() || isLoading}
-                className="px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-strong disabled:opacity-40 text-white font-semibold text-xs transition-colors flex items-center gap-1 cursor-pointer"
+                className="p-2 rounded-lg bg-brand hover:bg-brand-hover active:scale-95 disabled:opacity-40 text-white font-semibold transition-all flex items-center justify-center cursor-pointer shrink-0"
+                title="Send message (Enter)"
+                aria-label="Send message"
               >
-                <span>{t.send_btn}</span>
-                <Send size={12} />
+                {isLoading ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
               </button>
-
+            </div>
+            <div className="mt-1 px-1 flex items-center justify-between text-[10px] text-ink-3">
+              <span>Press <kbd className="px-1 py-0.5 rounded bg-surface border border-line font-mono text-[9px]">Enter</kbd> to send, <kbd className="px-1 py-0.5 rounded bg-surface border border-line font-mono text-[9px]">Shift+Enter</kbd> for new line</span>
             </div>
           </div>
         </div>

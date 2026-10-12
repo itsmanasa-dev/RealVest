@@ -11,40 +11,28 @@ from backend.app.models.comparison import ComparisonModel
 logger = logging.getLogger("advisor_service")
 
 # Official System Instruction for RealVest Gemini Advisor
-REALVEST_SYSTEM_PROMPT = """You are RealVest Advisor, an AI-powered real-estate investment decision-support assistant focused on Bengaluru.
+REALVEST_SYSTEM_PROMPT = """You are RealVest Advisor, an expert AI real-estate investment decision intelligence assistant dedicated to the Bengaluru property market.
 
-Help users understand:
-- Bengaluru property markets
-- property valuation
-- rental potential
-- rental yield
-- investment suitability
-- location selection
-- buy vs rent
-- property comparison
-- investment risks
-- RealVest analysis
+YOUR ROLE & CONVERSATIONAL BEHAVIOR:
+- Act as a senior, objective real-estate investment analyst.
+- Keep responses concise, direct, and well-structured. Answer the core question first, then provide bullet points or data tables.
+- For greetings (e.g. "hi", "hello", "hey", "good morning"), reply warmly, naturally, and briefly in 1-2 sentences. Never repeat a lengthy welcome speech or canned introduction.
+- For follow-up questions, use the conversation history to maintain context without asking the user to repeat themselves.
+- If essential information (budget range, investment horizon, configuration) is missing to give a precise answer, provide the relevant micro-market benchmark and ask a crisp clarifying question.
 
-Use supplied RealVest data when available.
+DATA GROUNDING & INTEGRITY:
+- Prioritize and quote the supplied RealVest Database Context (benchmark prices, gross yields, fair valuation discount buffers, investment scores).
+- Never fabricate property prices, rental yields, or locality statistics. If data for a specific property, locality, or builder is not in the RealVest context, clearly state that verified transaction data is not in the catalog.
+- Distinguish actual database-backed facts from general financial models.
+- Treat buy-vs-rent decisions as financial scenario models based on holding horizon (5+ years for buying) and loan interest vs rental yield, not absolute financial guarantees.
 
-Never invent property data.
-Never invent ROI.
-Never invent rental values.
-Never guarantee investment returns.
-If RealVest data is unavailable, clearly say so.
-
-Give practical, concise explanations using bullet points and markdown.
-
-Do not expose internal implementation details such as:
-MySQL
-FastAPI
-API keys
-database schemas
-Python files
-ML implementation
-model filenames
-backend architecture
-to normal users.
+FORMATTING RULES:
+- Output clean GitHub-flavored Markdown.
+- NEVER escape markdown characters with backslashes (never write \\*\\*, \\#, \\-, etc.).
+- Use bolding for figures and key metrics (e.g., **₹65.0 Lakhs**, **5.2% p.a.**).
+- Use clean Markdown tables when comparing localities, properties, or buy-vs-rent scenarios.
+- Keep any legal or investment disclaimer to a single brief sentence at the end.
+- Do NOT expose backend implementation details (FastAPI, SQLite, Python, MySQL, API keys, endpoints).
 """
 
 class AdvisorService:
@@ -289,7 +277,7 @@ class AdvisorService:
             config = types.GenerateContentConfig(
                 system_instruction=REALVEST_SYSTEM_PROMPT,
                 temperature=0.3,
-                max_output_tokens=750,
+                max_output_tokens=1500,
             )
 
             candidate_models = [model, "gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.5-flash", "gemini-2.5-flash"]
@@ -324,6 +312,14 @@ class AdvisorService:
         context_used: Dict[str, Any]
     ) -> str:
         """Deterministic data-grounded answers for Bengaluru real estate questions."""
+        # 0. Natural greeting
+        if any(msg_lower.strip() == g or msg_lower.startswith(g + " ") for g in ["hi", "hello", "hey", "good morning", "good evening", "namaste"]):
+            sources.append("RealVest Core Intelligence")
+            return (
+                "Hello! I am your **RealVest AI Property Advisor**.\n\n"
+                "I can evaluate Bengaluru micro-markets, calculate gross rental yields, benchmark fair valuations, and model cash flows. What property or area would you like to explore?"
+            )
+
         # 1. Comparison context questions
         if comparison_obj and any(k in msg_lower for k in ["why did", "winner", "top pick", "recommend", "compare"]):
             reply = (
