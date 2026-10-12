@@ -29,7 +29,7 @@ def test_gemini_connection():
     prompt = "What should a first-time property investor consider before buying a property?"
     print(f"\nREQUEST SENT: '{prompt}'")
 
-    candidate_models = [req_model, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
+    candidate_models = ["gemini-3.5-flash-lite", "gemini-3.8-flash", req_model, "gemini-2.5-flash", "gemini-1.5-flash"]
     candidate_models = list(dict.fromkeys(candidate_models))
 
     from google import genai
