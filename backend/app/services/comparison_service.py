@@ -19,24 +19,46 @@ from backend.app.schemas.comparison import (
 class ComparisonService:
     @classmethod
     def search_candidates(cls, db: Session, req: RequirementSearchRequest) -> List[PropertyBase]:
+        loc = req.locality if req.locality not in [None, "", "Any Bengaluru", "Any"] else None
+        p_type = req.property_type if req.property_type not in [None, "", "Any", "Any Type"] else None
+        if p_type and "commerci" in p_type.lower():
+            p_type = "Commercial"
+        elif p_type and "residenti" in p_type.lower():
+            p_type = "Residential"
+
         properties = property_service.get_all(
             db,
-            location=req.locality if req.locality != "Any Bengaluru" else None,
-            property_type=req.property_type if req.property_type != "Any" else None,
-            bhk=req.bhk,
+            location=loc,
+            property_type=p_type,
+            bhk=req.bhk if req.bhk and req.bhk > 0 else None,
             min_budget=req.min_budget * 0.85 if req.min_budget else None,
             max_budget=req.max_budget * 1.15 if req.max_budget else None,
             min_area=req.min_sqft,
             max_area=req.max_sqft
         )
 
+        # If user explicitly chose a locality, ALWAYS prioritize matching that locality
+        if not properties and loc:
+            properties = property_service.get_all(
+                db,
+                location=loc,
+                property_type=p_type,
+                bhk=req.bhk if req.bhk and req.bhk > 0 else None
+            )
+            if not properties:
+                properties = property_service.get_all(db, location=loc)
+
         if not properties:
             # Fallback to general Bengaluru properties within budget
             properties = property_service.get_all(
                 db,
+                property_type=p_type,
                 min_budget=req.min_budget * 0.7 if req.min_budget else None,
                 max_budget=req.max_budget * 1.3 if req.max_budget else None
             )
+
+        if not properties:
+            properties = property_service.get_all(db)
 
         # Enhance with ML dynamic valuation and score ranking
         scored = []

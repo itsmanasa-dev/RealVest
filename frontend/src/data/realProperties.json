@@ -6,7 +6,7 @@
     "location": "Whitefield",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "2 BHK \u2022 Super built-up  Area",
+    "subCategory": "2 BHK • Super built-up  Area",
     "bhk": 2,
     "bathrooms": 2,
     "sqft": 1170,
@@ -22,7 +22,7 @@
     "matchPercentage": 99,
     "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Property is priced 33.5% below ML-estimated fair value of \u20b957.15 Lakhs.",
+      "Property is priced 33.5% below ML-estimated fair value of ₹57.15 Lakhs.",
       "Attractive rental yield (21.96%) exceeds city average baseline.",
       "Located in established micro-market 'Whitefield' with steady demand."
     ],
@@ -38,7 +38,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b957.15 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹57.15 L).",
           "metric_label": "Price Premium",
           "metric_value": "-33.5%"
         },
@@ -116,7 +116,7 @@
     "location": "Whitefield",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "subCategory": "3 BHK • Super built-up  Area",
     "bhk": 3,
     "bathrooms": 2,
     "sqft": 1800,
@@ -132,7 +132,7 @@
     "matchPercentage": 99,
     "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Property is priced 37.3% below ML-estimated fair value of \u20b9111.62 Lakhs.",
+      "Property is priced 37.3% below ML-estimated fair value of ₹111.62 Lakhs.",
       "Attractive rental yield (11.11%) exceeds city average baseline.",
       "Located in established micro-market 'Whitefield' with steady demand."
     ],
@@ -148,7 +148,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b9111.62 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹111.62 L).",
           "metric_label": "Price Premium",
           "metric_value": "-37.3%"
         },
@@ -227,7 +227,7 @@
     "location": "Electronic City",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "2 BHK \u2022 Super built-up  Area",
+    "subCategory": "2 BHK • Super built-up  Area",
     "bhk": 2,
     "bathrooms": 1,
     "sqft": 660,
@@ -243,7 +243,7 @@
     "matchPercentage": 97,
     "imageUrl": "https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Property is priced 10.0% below ML-estimated fair value of \u20b925.67 Lakhs.",
+      "Property is priced 10.0% below ML-estimated fair value of ₹25.67 Lakhs.",
       "Attractive rental yield (6.61%) exceeds city average baseline.",
       "Located in established micro-market 'Electronic City' with steady demand."
     ],
@@ -259,7 +259,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b925.67 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹25.67 L).",
           "metric_label": "Price Premium",
           "metric_value": "-10.0%"
         },
@@ -337,7 +337,7 @@
     "location": "Electronic City",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "subCategory": "3 BHK • Super built-up  Area",
     "bhk": 3,
     "bathrooms": 2,
     "sqft": 1025,
@@ -447,7 +447,7 @@
     "location": "HSR Layout",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "subCategory": "3 BHK • Super built-up  Area",
     "bhk": 3,
     "bathrooms": 3,
     "sqft": 1400,
@@ -463,7 +463,7 @@
     "matchPercentage": 99,
     "imageUrl": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Property is priced 17.8% below ML-estimated fair value of \u20b968.15 Lakhs.",
+      "Property is priced 17.8% below ML-estimated fair value of ₹68.15 Lakhs.",
       "Attractive rental yield (14.32%) exceeds city average baseline.",
       "Located in established micro-market 'HSR Layout' with steady demand."
     ],
@@ -479,7 +479,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b968.15 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹68.15 L).",
           "metric_label": "Price Premium",
           "metric_value": "-17.8%"
         },
@@ -558,7 +558,7 @@
     "location": "HSR Layout",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "2 BHK \u2022 Super built-up  Area",
+    "subCategory": "2 BHK • Super built-up  Area",
     "bhk": 2,
     "bathrooms": 2,
     "sqft": 1372,
@@ -574,7 +574,7 @@
     "matchPercentage": 98,
     "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Property is priced 11.1% below ML-estimated fair value of \u20b976.48 Lakhs.",
+      "Property is priced 11.1% below ML-estimated fair value of ₹76.48 Lakhs.",
       "Attractive rental yield (8.98%) exceeds city average baseline.",
       "Located in established micro-market 'HSR Layout' with steady demand."
     ],
@@ -590,7 +590,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b976.48 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹76.48 L).",
           "metric_label": "Price Premium",
           "metric_value": "-11.1%"
         },
@@ -668,7 +668,7 @@
     "location": "Marathahalli",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "subCategory": "3 BHK • Super built-up  Area",
     "bhk": 3,
     "bathrooms": 3,
     "sqft": 1310,
@@ -684,7 +684,7 @@
     "matchPercentage": 95,
     "imageUrl": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Property is priced 7.3% below ML-estimated fair value of \u20b968.26 Lakhs.",
+      "Property is priced 7.3% below ML-estimated fair value of ₹68.26 Lakhs.",
       "Attractive rental yield (11.64%) exceeds city average baseline.",
       "Located in established micro-market 'Marathahalli' with steady demand."
     ],
@@ -700,7 +700,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b968.26 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹68.26 L).",
           "metric_label": "Price Premium",
           "metric_value": "-7.3%"
         },
@@ -779,7 +779,7 @@
     "location": "Marathahalli",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "2 BHK \u2022 Super built-up  Area",
+    "subCategory": "2 BHK • Super built-up  Area",
     "bhk": 2,
     "bathrooms": 2,
     "sqft": 1220,
@@ -795,7 +795,7 @@
     "matchPercentage": 96,
     "imageUrl": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Property is priced 8.8% below ML-estimated fair value of \u20b962.50 Lakhs.",
+      "Property is priced 8.8% below ML-estimated fair value of ₹62.50 Lakhs.",
       "Attractive rental yield (7.36%) exceeds city average baseline.",
       "Located in established micro-market 'Marathahalli' with steady demand."
     ],
@@ -811,7 +811,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b962.50 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹62.50 L).",
           "metric_label": "Price Premium",
           "metric_value": "-8.8%"
         },
@@ -889,7 +889,7 @@
     "location": "Bellandur",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "subCategory": "3 BHK • Super built-up  Area",
     "bhk": 3,
     "bathrooms": 3,
     "sqft": 1767,
@@ -905,7 +905,7 @@
     "matchPercentage": 97,
     "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Property is priced 9.4% below ML-estimated fair value of \u20b9113.74 Lakhs.",
+      "Property is priced 9.4% below ML-estimated fair value of ₹113.74 Lakhs.",
       "Attractive rental yield (7.58%) exceeds city average baseline.",
       "Located in established micro-market 'Bellandur' with steady demand."
     ],
@@ -921,7 +921,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b9113.74 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹113.74 L).",
           "metric_label": "Price Premium",
           "metric_value": "-9.4%"
         },
@@ -1000,7 +1000,7 @@
     "location": "Bellandur",
     "city": "Bengaluru",
     "category": "Commercial",
-    "subCategory": "4 BHK \u2022 Plot  Area",
+    "subCategory": "4 BHK • Plot  Area",
     "bhk": 4,
     "bathrooms": 5,
     "sqft": 1200,
@@ -1032,7 +1032,7 @@
           "category": "Price Risk",
           "level": "HIGH",
           "color": "#EF4444",
-          "why": "Asking price is 87.2% above estimated ML fair value (\u20b9173.60 L). Premium valuation risk.",
+          "why": "Asking price is 87.2% above estimated ML fair value (₹173.60 L). Premium valuation risk.",
           "metric_label": "Price Premium",
           "metric_value": "+87.2%"
         },
@@ -1040,7 +1040,7 @@
           "category": "Rental Risk",
           "level": "HIGH",
           "color": "#EF4444",
-          "why": "Rental yield of 2.08% is below Bengaluru urban benchmark (3.5\u20134.5%). Low cash-flow protection.",
+          "why": "Rental yield of 2.08% is below Bengaluru urban benchmark (3.5–4.5%). Low cash-flow protection.",
           "metric_label": "Rental Yield",
           "metric_value": "2.08%"
         },
@@ -1111,7 +1111,7 @@
     "location": "Hebbal",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "3 BHK \u2022 Super built-up  Area",
+    "subCategory": "3 BHK • Super built-up  Area",
     "bhk": 3,
     "bathrooms": 2,
     "sqft": 1760,
@@ -1127,7 +1127,7 @@
     "matchPercentage": 88,
     "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Asking price (\u20b9123.00 L) is fairly aligned with ML estimated valuation (\u20b9121.53 L).",
+      "Asking price (₹123.00 L) is fairly aligned with ML estimated valuation (₹121.53 L).",
       "Stable rental return (5.64%) provides predictable cash flow."
     ],
     "risks": [
@@ -1142,7 +1142,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b9121.53 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹121.53 L).",
           "metric_label": "Price Premium",
           "metric_value": "+1.2%"
         },
@@ -1221,7 +1221,7 @@
     "location": "Hebbal",
     "city": "Bengaluru",
     "category": "Commercial",
-    "subCategory": "4 BHK \u2022 Super built-up  Area",
+    "subCategory": "4 BHK • Super built-up  Area",
     "bhk": 4,
     "bathrooms": 4,
     "sqft": 5611,
@@ -1237,7 +1237,7 @@
     "matchPercentage": 89,
     "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Property is priced 5.5% below ML-estimated fair value of \u20b9504.50 Lakhs.",
+      "Property is priced 5.5% below ML-estimated fair value of ₹504.50 Lakhs.",
       "Attractive rental yield (4.85%) exceeds city average baseline.",
       "Located in established micro-market 'Hebbal' with steady demand."
     ],
@@ -1253,7 +1253,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b9504.50 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹504.50 L).",
           "metric_label": "Price Premium",
           "metric_value": "-5.5%"
         },
@@ -1332,7 +1332,7 @@
     "location": "Thanisandra",
     "city": "Bengaluru",
     "category": "Commercial",
-    "subCategory": "4 BHK \u2022 Plot  Area",
+    "subCategory": "4 BHK • Plot  Area",
     "bhk": 4,
     "bathrooms": 5,
     "sqft": 2800,
@@ -1363,7 +1363,7 @@
           "category": "Price Risk",
           "level": "HIGH",
           "color": "#EF4444",
-          "why": "Asking price is 39.6% above estimated ML fair value (\u20b9272.26 L). Premium valuation risk.",
+          "why": "Asking price is 39.6% above estimated ML fair value (₹272.26 L). Premium valuation risk.",
           "metric_label": "Price Premium",
           "metric_value": "+39.6%"
         },
@@ -1442,7 +1442,7 @@
     "location": "Thanisandra",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "1 BHK \u2022 Super built-up  Area",
+    "subCategory": "1 BHK • Super built-up  Area",
     "bhk": 1,
     "bathrooms": 1,
     "sqft": 510,
@@ -1458,7 +1458,7 @@
     "matchPercentage": 88,
     "imageUrl": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Asking price (\u20b925.25 L) is fairly aligned with ML estimated valuation (\u20b924.97 L).",
+      "Asking price (₹25.25 L) is fairly aligned with ML estimated valuation (₹24.97 L).",
       "Stable rental return (11.74%) provides predictable cash flow."
     ],
     "risks": [
@@ -1473,7 +1473,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b924.97 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹24.97 L).",
           "metric_label": "Price Premium",
           "metric_value": "+1.1%"
         },
@@ -1551,7 +1551,7 @@
     "location": "Bannerghatta Road",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "1 BHK \u2022 Built-up  Area",
+    "subCategory": "1 BHK • Built-up  Area",
     "bhk": 1,
     "bathrooms": 1,
     "sqft": 500,
@@ -1567,7 +1567,7 @@
     "matchPercentage": 99,
     "imageUrl": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Property is priced 24.6% below ML-estimated fair value of \u20b924.55 Lakhs.",
+      "Property is priced 24.6% below ML-estimated fair value of ₹24.55 Lakhs.",
       "Attractive rental yield (9.73%) exceeds city average baseline.",
       "Located in established micro-market 'Bannerghatta Road' with steady demand."
     ],
@@ -1583,7 +1583,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b924.55 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹24.55 L).",
           "metric_label": "Price Premium",
           "metric_value": "-24.6%"
         },
@@ -1661,7 +1661,7 @@
     "location": "Bannerghatta Road",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "2 BHK \u2022 Super built-up  Area",
+    "subCategory": "2 BHK • Super built-up  Area",
     "bhk": 2,
     "bathrooms": 2,
     "sqft": 1050,
@@ -1692,7 +1692,7 @@
           "category": "Price Risk",
           "level": "HIGH",
           "color": "#EF4444",
-          "why": "Asking price is 31.3% above estimated ML fair value (\u20b949.52 L). Premium valuation risk.",
+          "why": "Asking price is 31.3% above estimated ML fair value (₹49.52 L). Premium valuation risk.",
           "metric_label": "Price Premium",
           "metric_value": "+31.3%"
         },
@@ -1770,7 +1770,7 @@
     "location": "Yelahanka",
     "city": "Bengaluru",
     "category": "Commercial",
-    "subCategory": "4 BHK \u2022 Super built-up  Area",
+    "subCategory": "4 BHK • Super built-up  Area",
     "bhk": 4,
     "bathrooms": 4,
     "sqft": 2475,
@@ -1801,7 +1801,7 @@
           "category": "Price Risk",
           "level": "HIGH",
           "color": "#EF4444",
-          "why": "Asking price is 21.4% above estimated ML fair value (\u20b9153.18 L). Premium valuation risk.",
+          "why": "Asking price is 21.4% above estimated ML fair value (₹153.18 L). Premium valuation risk.",
           "metric_label": "Price Premium",
           "metric_value": "+21.4%"
         },
@@ -1880,7 +1880,7 @@
     "location": "Yelahanka",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "1 BHK \u2022 Plot  Area",
+    "subCategory": "1 BHK • Plot  Area",
     "bhk": 1,
     "bathrooms": 1,
     "sqft": 660,
@@ -1896,7 +1896,7 @@
     "matchPercentage": 88,
     "imageUrl": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80",
     "reasons": [
-      "Asking price (\u20b948.00 L) is fairly aligned with ML estimated valuation (\u20b948.37 L).",
+      "Asking price (₹48.00 L) is fairly aligned with ML estimated valuation (₹48.37 L).",
       "Stable rental return (5.29%) provides predictable cash flow."
     ],
     "risks": [
@@ -1911,7 +1911,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b948.37 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹48.37 L).",
           "metric_label": "Price Premium",
           "metric_value": "-0.8%"
         },
@@ -1989,7 +1989,7 @@
     "location": "Rajaji Nagar",
     "city": "Bengaluru",
     "category": "Commercial",
-    "subCategory": "4 BHK \u2022 Super built-up  Area",
+    "subCategory": "4 BHK • Super built-up  Area",
     "bhk": 4,
     "bathrooms": 4,
     "sqft": 3300,
@@ -2020,7 +2020,7 @@
           "category": "Price Risk",
           "level": "HIGH",
           "color": "#EF4444",
-          "why": "Asking price is 20.9% above estimated ML fair value (\u20b9496.37 L). Premium valuation risk.",
+          "why": "Asking price is 20.9% above estimated ML fair value (₹496.37 L). Premium valuation risk.",
           "metric_label": "Price Premium",
           "metric_value": "+20.9%"
         },
@@ -2099,7 +2099,7 @@
     "location": "Rajaji Nagar",
     "city": "Bengaluru",
     "category": "Residential",
-    "subCategory": "3 BHK \u2022 Built-up  Area",
+    "subCategory": "3 BHK • Built-up  Area",
     "bhk": 3,
     "bathrooms": 3,
     "sqft": 1640,
@@ -2130,7 +2130,7 @@
           "category": "Price Risk",
           "level": "LOW",
           "color": "#10B981",
-          "why": "Asking price is well-aligned or discounted relative to ML fair value (\u20b9271.97 L).",
+          "why": "Asking price is well-aligned or discounted relative to ML fair value (₹271.97 L).",
           "metric_label": "Price Premium",
           "metric_value": "-15.8%"
         },
@@ -2138,7 +2138,7 @@
           "category": "Rental Risk",
           "level": "HIGH",
           "color": "#EF4444",
-          "why": "Rental yield of 2.85% is below Bengaluru urban benchmark (3.5\u20134.5%). Low cash-flow protection.",
+          "why": "Rental yield of 2.85% is below Bengaluru urban benchmark (3.5–4.5%). Low cash-flow protection.",
           "metric_label": "Rental Yield",
           "metric_value": "2.85%"
         },
@@ -2200,6 +2200,881 @@
       "Micro-market 'Rajaji Nagar' carries strong demand weight based on historical transaction density.",
       "Family-sized 3 BHK configuration increases appeal for long-term buyers.",
       "Immediate availability ('Ready To Move') carries zero construction delay risk premium."
+    ]
+  },
+  {
+    "id": "blr-21",
+    "code": "BLR-120",
+    "title": "2 BHK Modern Apartment in Hebbal",
+    "location": "Hebbal",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK • Super built-up Area",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1120,
+    "askingPriceLakhs": 48.0,
+    "fairValueLakhs": 54.5,
+    "monthlyRent": 26000,
+    "annualYield": 6.5,
+    "investmentScore": 91,
+    "recommendation": "BUY",
+    "confidenceScore": 84,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -11.9,
+    "matchPercentage": 96,
+    "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Priced 11.9% below ML fair valuation of ₹54.5 Lakhs.",
+      "Strong 6.5% gross yield driven by airport corridor professionals.",
+      "Proximity to Manyata Tech Park and Outer Ring Road."
+    ],
+    "risks": [
+      "Upcoming road expansion could cause short-term traffic noise."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 88.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Asking price discounted by 11.9% below market valuation.",
+          "metric_label": "Discount",
+          "metric_value": "-11.9%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Consistent tenant demand near Manyata Tech Park.",
+          "metric_label": "Gross Yield",
+          "metric_value": "6.50%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "City Base (1,000 sqft)",
+        "contribution_lakhs": 45.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Location Premium (Hebbal)",
+        "contribution_lakhs": 6.5,
+        "sign": "+"
+      },
+      {
+        "factor": "Quality & Amenities",
+        "contribution_lakhs": 3.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Prime airport corridor location with steady rental appreciation."
+    ]
+  },
+  {
+    "id": "blr-22",
+    "code": "BLR-121",
+    "title": "2 BHK Boutique Residence in Indiranagar",
+    "location": "Indiranagar",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK • Luxury Low-Rise",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1250,
+    "askingPriceLakhs": 145.0,
+    "fairValueLakhs": 158.0,
+    "monthlyRent": 58000,
+    "annualYield": 4.8,
+    "investmentScore": 89,
+    "recommendation": "BUY",
+    "confidenceScore": 88,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -8.2,
+    "matchPercentage": 94,
+    "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Prime Central Bengaluru locality with perpetual land scarcity.",
+      "High rental demand from corporate executives and founders.",
+      "Metro connectivity and walking distance to 100ft Road."
+    ],
+    "risks": [
+      "High capital entry ticket size."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 92.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Established prime central asset.",
+          "metric_label": "Discount",
+          "metric_value": "-8.2%"
+        },
+        {
+          "category": "Rental Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Ultra-low vacancy rate (<2%).",
+          "metric_label": "Yield",
+          "metric_value": "4.80%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "City Base",
+        "contribution_lakhs": 60.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Indiranagar Central Tier-1",
+        "contribution_lakhs": 85.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Metro Walking Distance",
+        "contribution_lakhs": 13.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Highest capital preservation profile across all Bengaluru sub-markets."
+    ]
+  },
+  {
+    "id": "blr-23",
+    "code": "BLR-122",
+    "title": "3 BHK Luxury Penthouse in Indiranagar",
+    "location": "Indiranagar",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "3 BHK • Signature Penthouse",
+    "bhk": 3,
+    "bathrooms": 3,
+    "sqft": 2100,
+    "askingPriceLakhs": 280.0,
+    "fairValueLakhs": 298.0,
+    "monthlyRent": 95000,
+    "annualYield": 4.1,
+    "investmentScore": 87,
+    "recommendation": "BUY",
+    "confidenceScore": 86,
+    "dealStatus": "Fair Market Value",
+    "dealDiffPct": -6.0,
+    "matchPercentage": 91,
+    "imageUrl": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Exclusive private terrace garden with 360-degree city skyline views.",
+      "Trophy residential asset in Bangalore's premier lifestyle hub."
+    ],
+    "risks": [
+      "Niche buyer pool upon eventual secondary resale."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 89.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Strong historic resilience during down-cycles.",
+          "metric_label": "Discount",
+          "metric_value": "-6.0%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "City Base",
+        "contribution_lakhs": 90.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Penthouse Spec & Terrace",
+        "contribution_lakhs": 120.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Indiranagar Prime",
+        "contribution_lakhs": 88.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Ultra-luxury footprint with generational asset appreciation."
+    ]
+  },
+  {
+    "id": "blr-24",
+    "code": "BLR-123",
+    "title": "Prime Commercial Office Suite on 100ft Road",
+    "location": "Indiranagar",
+    "city": "Bengaluru",
+    "category": "Commercial",
+    "subCategory": "Commercial Office / Retail",
+    "bhk": 0,
+    "bathrooms": 2,
+    "sqft": 1400,
+    "askingPriceLakhs": 195.0,
+    "fairValueLakhs": 215.0,
+    "monthlyRent": 115000,
+    "annualYield": 7.1,
+    "investmentScore": 93,
+    "recommendation": "BUY",
+    "confidenceScore": 90,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -9.3,
+    "matchPercentage": 98,
+    "imageUrl": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "High commercial gross yield of 7.1% p.a. with long lock-in corporate tenant.",
+      "Main road frontage on high-footfall 100ft Road corridor.",
+      "Fully fitted Grade-A interiors with dedicated elevator access."
+    ],
+    "risks": [
+      "Tenant lease renewal renegotiation at year 3."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 91.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Commercial Yield",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Excellent 7.1% cash yield.",
+          "metric_label": "Yield",
+          "metric_value": "7.10%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Commercial Base Value",
+        "contribution_lakhs": 100.0,
+        "sign": "base"
+      },
+      {
+        "factor": "High Footfall 100ft Rd Frontage",
+        "contribution_lakhs": 85.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Grade-A Fitout",
+        "contribution_lakhs": 30.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Institutional cash flow profile with high corporate lease stability."
+    ]
+  },
+  {
+    "id": "blr-25",
+    "code": "BLR-124",
+    "title": "2 BHK Premium Residence in Koramangala",
+    "location": "Koramangala",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK • Gated Community",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1180,
+    "askingPriceLakhs": 125.0,
+    "fairValueLakhs": 138.0,
+    "monthlyRent": 52000,
+    "annualYield": 5.0,
+    "investmentScore": 90,
+    "recommendation": "BUY",
+    "confidenceScore": 87,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -9.4,
+    "matchPercentage": 95,
+    "imageUrl": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Located in startup capital of India with rapid tenant absorption.",
+      "₹52,000 monthly rent produces 5.0% gross yield.",
+      "Priced 9.4% below ML-modeled benchmark."
+    ],
+    "risks": [
+      "Older building age in surrounding block."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 90.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Strong discount buffer.",
+          "metric_label": "Discount",
+          "metric_value": "-9.4%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Base City Value",
+        "contribution_lakhs": 55.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Koramangala Startup Hub Factor",
+        "contribution_lakhs": 70.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Gated Amenities",
+        "contribution_lakhs": 13.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Consistent high-velocity rental demand from venture-backed tech talent."
+    ]
+  },
+  {
+    "id": "blr-26",
+    "code": "BLR-125",
+    "title": "3 BHK Designer Home in Koramangala 4th Block",
+    "location": "Koramangala",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "3 BHK • Builder Floor",
+    "bhk": 3,
+    "bathrooms": 3,
+    "sqft": 1850,
+    "askingPriceLakhs": 235.0,
+    "fairValueLakhs": 252.0,
+    "monthlyRent": 85000,
+    "annualYield": 4.3,
+    "investmentScore": 88,
+    "recommendation": "BUY",
+    "confidenceScore": 85,
+    "dealStatus": "Fair Market Value",
+    "dealDiffPct": -6.7,
+    "matchPercentage": 93,
+    "imageUrl": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Koramangala 4th Block is Bengaluru's most sought-after upscale residential enclave.",
+      "Walking distance to top dining, parks, and club facilities."
+    ],
+    "risks": [
+      "High absolute capital requirement."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 89.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Stability",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Premier residential enclave.",
+          "metric_label": "Discount",
+          "metric_value": "-6.7%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Base City Value",
+        "contribution_lakhs": 80.0,
+        "sign": "base"
+      },
+      {
+        "factor": "4th Block Enclave Premium",
+        "contribution_lakhs": 140.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Designer Interior Fitment",
+        "contribution_lakhs": 32.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Prime blue-chip real estate asset with zero speculative volatility."
+    ]
+  },
+  {
+    "id": "blr-27",
+    "code": "BLR-126",
+    "title": "Commercial Co-working Studio in Koramangala",
+    "location": "Koramangala",
+    "city": "Bengaluru",
+    "category": "Commercial",
+    "subCategory": "Commercial Tech Office",
+    "bhk": 0,
+    "bathrooms": 2,
+    "sqft": 1600,
+    "askingPriceLakhs": 180.0,
+    "fairValueLakhs": 198.0,
+    "monthlyRent": 110000,
+    "annualYield": 7.3,
+    "investmentScore": 94,
+    "recommendation": "BUY",
+    "confidenceScore": 89,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -9.1,
+    "matchPercentage": 97,
+    "imageUrl": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Strong 7.3% commercial gross yield in high-demand startup corridor.",
+      "Pre-leased to profitable fintech company with 3-year lock-in."
+    ],
+    "risks": [
+      "Commercial property tax rates."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 92.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Cash Flow Yield",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "7.3% cash yield exceeds residential by 300 bps.",
+          "metric_label": "Yield",
+          "metric_value": "7.30%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Base Footprint",
+        "contribution_lakhs": 85.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Commercial Zoning & Tech Park",
+        "contribution_lakhs": 90.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Active Pre-Lease Premium",
+        "contribution_lakhs": 23.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Outstanding recurring cash yield asset with secured corporate backing."
+    ]
+  },
+  {
+    "id": "blr-28",
+    "code": "BLR-127",
+    "title": "2 BHK Gated Community Home in Sarjapur Road",
+    "location": "Sarjapur Road",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK • Township",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1050,
+    "askingPriceLakhs": 42.0,
+    "fairValueLakhs": 49.0,
+    "monthlyRent": 24000,
+    "annualYield": 6.8,
+    "investmentScore": 93,
+    "recommendation": "BUY",
+    "confidenceScore": 86,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -14.3,
+    "matchPercentage": 97,
+    "imageUrl": "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "High 6.8% gross rental yield in high-growth IT tech corridor.",
+      "14.3% discount relative to ML fair market benchmark.",
+      "Direct connectivity to Wipro SEZ and RGA Tech Park."
+    ],
+    "risks": [
+      "Peak-hour traffic during ongoing metro construction."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 89.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "14.3% discount buffer.",
+          "metric_label": "Discount",
+          "metric_value": "-14.3%"
+        },
+        {
+          "category": "Rental Yield",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Strong tech workforce demand.",
+          "metric_label": "Yield",
+          "metric_value": "6.80%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Base City Value",
+        "contribution_lakhs": 40.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Sarjapur Tech Growth Corridor",
+        "contribution_lakhs": 6.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Modern Clubhouse Amenities",
+        "contribution_lakhs": 3.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "High-yield asset ideal for capital appreciation over 3-5 years."
+    ]
+  },
+  {
+    "id": "blr-29",
+    "code": "BLR-128",
+    "title": "3 BHK Lake-View Villa in Sarjapur Road",
+    "location": "Sarjapur Road",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "3 BHK • Row Villa",
+    "bhk": 3,
+    "bathrooms": 3,
+    "sqft": 1750,
+    "askingPriceLakhs": 92.0,
+    "fairValueLakhs": 104.0,
+    "monthlyRent": 44000,
+    "annualYield": 5.7,
+    "investmentScore": 91,
+    "recommendation": "BUY",
+    "confidenceScore": 84,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -11.5,
+    "matchPercentage": 95,
+    "imageUrl": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Independent row villa with private garden space.",
+      "Substantial appreciation upside from upcoming Sarjapur Metro Phase."
+    ],
+    "risks": [
+      "Higher society monthly maintenance fees."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 88.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "11.5% discount.",
+          "metric_label": "Discount",
+          "metric_value": "-11.5%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Base City Value",
+        "contribution_lakhs": 65.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Villa Land Ownership Share",
+        "contribution_lakhs": 27.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Lake Frontage View",
+        "contribution_lakhs": 12.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Combines land equity appreciation with strong family tenant profile."
+    ]
+  },
+  {
+    "id": "blr-30",
+    "code": "BLR-129",
+    "title": "2 BHK Elegant Flat in Jayanagar",
+    "location": "Jayanagar",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK • Prime Residential",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1100,
+    "askingPriceLakhs": 98.0,
+    "fairValueLakhs": 108.0,
+    "monthlyRent": 38000,
+    "annualYield": 4.6,
+    "investmentScore": 90,
+    "recommendation": "BUY",
+    "confidenceScore": 87,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -9.3,
+    "matchPercentage": 93,
+    "imageUrl": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Historic prime South Bengaluru location with wide tree-lined avenues.",
+      "Zero new supply in core residential sectors protects capital value."
+    ],
+    "risks": [
+      "Limited modern multi-story amenities."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 92.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Capital Preservation",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Historic stability in South Bangalore.",
+          "metric_label": "Discount",
+          "metric_value": "-9.3%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Base City Value",
+        "contribution_lakhs": 50.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Jayanagar Tier-1 Heritage",
+        "contribution_lakhs": 48.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Metro Line Green Proximity",
+        "contribution_lakhs": 10.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "High-stability residential profile favored by high-net-worth investors."
+    ]
+  },
+  {
+    "id": "blr-31",
+    "code": "BLR-130",
+    "title": "2 BHK Urban High-Rise in JP Nagar Phase 7",
+    "location": "JP Nagar",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK • High-Rise Apartment",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1080,
+    "askingPriceLakhs": 52.0,
+    "fairValueLakhs": 58.5,
+    "monthlyRent": 26500,
+    "annualYield": 6.1,
+    "investmentScore": 92,
+    "recommendation": "BUY",
+    "confidenceScore": 85,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -11.1,
+    "matchPercentage": 96,
+    "imageUrl": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Excellent 6.1% gross yield in well-connected South Bengaluru.",
+      "Close proximity to Kanakapura Road Metro and commercial zones."
+    ],
+    "risks": [
+      "Water supply reliance on tanker during peak summer."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 88.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Price Risk",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "11.1% discount buffer.",
+          "metric_label": "Discount",
+          "metric_value": "-11.1%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Base City Value",
+        "contribution_lakhs": 42.0,
+        "sign": "base"
+      },
+      {
+        "factor": "JP Nagar South Demand",
+        "contribution_lakhs": 11.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Metro Proximity",
+        "contribution_lakhs": 5.5,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Balanced growth corridor offering strong mid-market yield and appreciation."
+    ]
+  },
+  {
+    "id": "blr-32",
+    "code": "BLR-131",
+    "title": "2 BHK Classic Residence in Malleshwaram",
+    "location": "Malleshwaram",
+    "city": "Bengaluru",
+    "category": "Residential",
+    "subCategory": "2 BHK • Traditional Apartment",
+    "bhk": 2,
+    "bathrooms": 2,
+    "sqft": 1150,
+    "askingPriceLakhs": 115.0,
+    "fairValueLakhs": 126.0,
+    "monthlyRent": 42000,
+    "annualYield": 4.4,
+    "investmentScore": 89,
+    "recommendation": "BUY",
+    "confidenceScore": 86,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -8.7,
+    "matchPercentage": 92,
+    "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Historic landmark corridor in North-West Bengaluru.",
+      "Strong family tenancy with minimal turnover."
+    ],
+    "risks": [
+      "Strict parking constraints in older streets."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 90.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Value Stability",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "Consistent land values in heritage hub.",
+          "metric_label": "Discount",
+          "metric_value": "-8.7%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Base City Value",
+        "contribution_lakhs": 52.0,
+        "sign": "base"
+      },
+      {
+        "factor": "Malleshwaram Landmark Heritage",
+        "contribution_lakhs": 62.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Metro Connectivity",
+        "contribution_lakhs": 12.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Core city asset offering defensive security against market volatility."
+    ]
+  },
+  {
+    "id": "blr-33",
+    "code": "BLR-132",
+    "title": "Grade-A Commercial Tech Park Suite in Whitefield",
+    "location": "Whitefield",
+    "city": "Bengaluru",
+    "category": "Commercial",
+    "subCategory": "Commercial Tech Park Office",
+    "bhk": 0,
+    "bathrooms": 2,
+    "sqft": 2200,
+    "askingPriceLakhs": 165.0,
+    "fairValueLakhs": 185.0,
+    "monthlyRent": 120000,
+    "annualYield": 8.7,
+    "investmentScore": 96,
+    "recommendation": "BUY",
+    "confidenceScore": 91,
+    "dealStatus": "Potentially Undervalued",
+    "dealDiffPct": -10.8,
+    "matchPercentage": 99,
+    "imageUrl": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
+    "reasons": [
+      "Outstanding 8.7% commercial yield with high institutional grade tenants.",
+      "Walking distance to ITPL and Metro station.",
+      "Pre-leased to multinational cloud consultancy on 5-year lease."
+    ],
+    "risks": [
+      "Corporate lease renewal risk."
+    ],
+    "riskRadar": {
+      "overallRisk": "LOW RISK",
+      "riskScore": 94.0,
+      "overallColor": "#10B981",
+      "breakdown": [
+        {
+          "category": "Commercial Cash Flow",
+          "level": "LOW",
+          "color": "#10B981",
+          "why": "8.7% gross yield offers top-tier cash generation.",
+          "metric_label": "Yield",
+          "metric_value": "8.70%"
+        }
+      ]
+    },
+    "waterfallFactors": [
+      {
+        "factor": "Commercial Base Footprint",
+        "contribution_lakhs": 90.0,
+        "sign": "base"
+      },
+      {
+        "factor": "ITPL Tech Corridor Premium",
+        "contribution_lakhs": 72.0,
+        "sign": "+"
+      },
+      {
+        "factor": "Grade-A LEED Certified Building",
+        "contribution_lakhs": 23.0,
+        "sign": "+"
+      }
+    ],
+    "explanations": [
+      "Highest cash-flowing commercial investment in Bengaluru East."
     ]
   }
 ]

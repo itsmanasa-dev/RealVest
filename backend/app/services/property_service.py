@@ -93,9 +93,6 @@ class PropertyService:
     def ensure_seeded(cls, db: Session):
         from backend.app.core.database import ensure_tables_created
         ensure_tables_created(db.get_bind())
-        count = db.query(PropertyModel).count()
-        if count > 0:
-            return
 
         json_path = os.path.join(ROOT_DIR, "frontend", "src", "data", "realProperties.json")
         if not os.path.exists(json_path):
@@ -105,9 +102,16 @@ class PropertyService:
         with open(json_path, "r", encoding="utf-8") as f:
             raw_props = json.load(f)
 
+        existing_ids = {p.id for p in db.query(PropertyModel.id).all()}
+        added = 0
+
         for p in raw_props:
+            pid = p.get("id")
+            if pid in existing_ids:
+                continue
+
             prop_model = PropertyModel(
-                id=p.get("id"),
+                id=pid,
                 code=p.get("code"),
                 title=p.get("title"),
                 location=p.get("location"),
@@ -134,8 +138,10 @@ class PropertyService:
                 explanations=p.get("explanations", [])
             )
             db.add(prop_model)
+            added += 1
 
-        db.commit()
-        logger.info("Successfully seeded %d Bengaluru properties into database", len(raw_props))
+        if added > 0:
+            db.commit()
+            logger.info("Successfully seeded %d new Bengaluru properties into database", added)
 
 property_service = PropertyService()
