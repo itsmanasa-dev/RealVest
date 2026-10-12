@@ -12,7 +12,6 @@ import {
   Minimize2,
   Maximize2,
   RotateCcw,
-  RefreshCw,
   Loader2,
 } from 'lucide-react';
 import { useTranslation } from '../../context/LanguageContext';
@@ -46,16 +45,16 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
   onClose,
   onOpen,
 }) => {
-  const { language, t } = useTranslation();
+  const { language } = useTranslation();
 
   const getInitialGreeting = () => {
     if (language === 'kn') {
-      return "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ **ರಿಯಲ್‌ವೆಸ್ಟ್ ಎಐ ಹೂಡಿಕೆ ಸಲಹೆಗಾರ**. ಬೆಂಗಳೂರಿನ ಆಸ್ತಿಗಳ ಬೆಲೆ, ಬಾಡಿಗೆ ಇಳುವರಿ, ಮಾರುಕಟ್ಟೆ ಅಪಾಯಗಳು ಅಥವಾ ಹೂಡಿಕೆ ಅವಕಾಶಗಳ ಬಗ್ಗೆ ನನ್ನನ್ನು ಕೇಳಿ.";
+      return "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ **ರಿಯಲ್‌ವೆಸ್ಟ್ ಎಐ ಹೂಡಿಕೆ ಸಲಹೆಗಾರ**. ಬೆಂಗಳೂರಿನ ಆಸ್ತಿಗಳ ಬೆಲೆ, ಬಾಡಿಗೆ ಇಳುವರಿ ಅಥವಾ ಹೂಡಿಕೆ ಅವಕಾಶಗಳ ಬಗ್ಗೆ ನನ್ನನ್ನು ಕೇಳಿ.";
     }
     if (language === 'hi') {
-      return "नमस्ते! मैं आपका **रियलवेस्ट एआई निवेश सलाहकार** हूँ। बेंगलुरु की संपत्तियों, बाजार मूल्यांकन, किराये की आय या निवेश जोखिमों के बारे में पूछें।";
+      return "नमस्ते! मैं आपका **रियलवेस्ट एआई निवेश सलाहकार** हूँ। बेंगलुरु की संपत्तियों, बाजार मूल्यांकन या किराये की आय के बारे में पूछें।";
     }
-    return "Hello! I am your **RealVest AI Investment Advisor** powered by Gemini. Ask me about Bengaluru micro-markets, ML fair valuations, rental yields, investment risks, or buy vs. rent decisions.";
+    return "Hello! I am your **RealVest AI Investment Advisor**. Ask me about Bengaluru micro-markets, fair valuations, rental yields, investment risks, or buy vs. rent decisions.";
   };
 
   const createInitialMessage = (): Message => ({
@@ -98,7 +97,7 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
         `Why is ${selectedProperty.title} recommended?`,
         'Is the asking price below fair market value?',
         'What are the key investment risks for this property?',
-        'What is the estimated monthly cash flow after loan EMI?',
+        'What is the estimated monthly cash flow after EMI?',
       ];
     }
     if (activeTab === 'simulator') {
@@ -118,7 +117,7 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
     return [
       'Where should I invest ₹50 lakh in Bengaluru?',
       'Is Whitefield suitable for rental income?',
-      'Should I buy or rent a property?',
+      'Should I buy or rent a property in Bengaluru?',
       'What are the main risks of investing in Bengaluru?',
     ];
   };
@@ -165,7 +164,7 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
     // Filter out initial canned welcome message from conversational history
     const historyPayload = messages
       .filter((m) => m.id !== 'welcome')
-      .slice(-8)
+      .slice(-6)
       .map((m) => ({
         role: m.sender === 'user' ? ('user' as const) : ('assistant' as const),
         content: m.text,
@@ -196,7 +195,7 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
         };
         setMessages((prev) => [...prev, fallbackMsg]);
       } catch (fallbackErr: any) {
-        setErrorMessage('Advisor is temporarily unreachable. Please verify your connection or try again.');
+        setErrorMessage('Advisor is temporarily unreachable. Please check connection or try again.');
       }
     } finally {
       setIsLoading(false);
@@ -221,7 +220,7 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
       {!isOpen && (
         <button
           onClick={onOpen}
-          className="fixed bottom-6 right-6 z-40 px-3.5 py-2.5 rounded-full bg-brand hover:bg-brand-hover text-white shadow-lg flex items-center gap-2 cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95 group border border-white/20"
+          className="fixed bottom-6 right-6 z-40 px-4 py-2.5 rounded-full bg-brand hover:bg-brand-hover text-white shadow-lg flex items-center gap-2.5 cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95 group border border-white/20 font-chat"
           title="Open RealVest AI Advisor"
           aria-label="Open RealVest AI Advisor"
         >
@@ -237,29 +236,29 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
       {isOpen && (
         <div
           className={clsx(
-            'fixed z-50 bg-surface border border-line shadow-pop flex flex-col transition-all duration-300 rv-fade-in font-sans',
+            'fixed z-50 bg-surface border border-line shadow-pop flex flex-col transition-all duration-300 rv-fade-in font-chat text-ink',
             isExpanded
               ? 'bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[620px] h-[92vh] sm:h-[720px] sm:rounded-2xl rounded-t-2xl'
               : 'bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[440px] h-[86vh] sm:h-[620px] sm:rounded-2xl rounded-t-2xl'
           )}
         >
           {/* Header */}
-          <div className="p-3.5 border-b border-line flex items-center justify-between gap-2 bg-surface-soft/90 backdrop-blur-sm shrink-0 rounded-t-2xl">
+          <div className="px-4 py-3 border-b border-line/80 flex items-center justify-between gap-2 bg-surface/90 backdrop-blur-md shrink-0 rounded-t-2xl">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-brand text-white flex items-center justify-center shrink-0 shadow-sm shadow-brand/20">
-                <Brain size={17} />
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand to-indigo-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <Brain size={16} />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-xs sm:text-sm text-ink tracking-tight font-display">
+                  <h3 className="font-bold text-xs sm:text-sm text-ink tracking-tight font-chat">
                     RealVest AI Advisor
                   </h3>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-soft text-brand text-[10px] font-medium border border-brand/20">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-pos/10 text-pos text-[10px] font-semibold border border-pos/20">
                     <span className="w-1.5 h-1.5 rounded-full bg-pos animate-pulse" />
-                    Gemini Live
+                    Live
                   </span>
                 </div>
-                <p className="text-[10px] text-ink-3 truncate">
+                <p className="text-[10.5px] text-ink-3 truncate">
                   Context: <span className="capitalize font-medium text-ink-2">{activeTab}</span>
                   {activeTab === 'analysis' && selectedProperty && ` · ${selectedProperty.title}`}
                 </p>
@@ -269,23 +268,23 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
             <div className="flex items-center gap-1">
               <button
                 onClick={handleClearChat}
-                className="w-7 h-7 rounded-lg text-ink-3 hover:text-ink hover:bg-surface flex items-center justify-center cursor-pointer transition-colors"
+                className="w-7 h-7 rounded-lg text-ink-3 hover:text-ink hover:bg-surface-soft flex items-center justify-center cursor-pointer transition-colors"
                 title="New Chat (Reset conversation)"
                 aria-label="New Chat"
               >
-                <RotateCcw size={13} />
+                <RotateCcw size={14} />
               </button>
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="w-7 h-7 rounded-lg text-ink-3 hover:text-ink hover:bg-surface flex items-center justify-center cursor-pointer transition-colors"
+                className="w-7 h-7 rounded-lg text-ink-3 hover:text-ink hover:bg-surface-soft flex items-center justify-center cursor-pointer transition-colors"
                 title={isExpanded ? 'Collapse' : 'Expand'}
                 aria-label={isExpanded ? 'Collapse drawer' : 'Expand drawer'}
               >
-                {isExpanded ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+                {isExpanded ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
               </button>
               <button
                 onClick={onClose}
-                className="w-7 h-7 rounded-lg text-ink-3 hover:text-ink hover:bg-surface flex items-center justify-center cursor-pointer transition-colors"
+                className="w-7 h-7 rounded-lg text-ink-3 hover:text-ink hover:bg-surface-soft flex items-center justify-center cursor-pointer transition-colors"
                 title="Close Advisor"
                 aria-label="Close Advisor"
               >
@@ -296,10 +295,10 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
 
           {/* Active Context Banner */}
           {activeTab === 'analysis' && selectedProperty && (
-            <div className="px-3.5 py-1.5 bg-brand-soft/40 border-b border-line text-[11px] text-ink-2 flex items-center justify-between gap-2 shrink-0">
+            <div className="px-4 py-1.5 bg-brand-soft/50 border-b border-line/60 text-[11px] text-ink-2 flex items-center justify-between gap-2 shrink-0">
               <div className="flex items-center gap-1.5 truncate">
-                <Building2 size={12} className="text-brand shrink-0" />
-                <span className="font-semibold truncate">{selectedProperty.title}</span>
+                <Building2 size={13} className="text-brand shrink-0" />
+                <span className="font-medium text-ink truncate">{selectedProperty.title}</span>
                 <span className="text-ink-3 font-mono text-[10px]">
                   (₹{selectedProperty.askingPriceLakhs}L · {selectedProperty.annualYield}% Yield)
                 </span>
@@ -308,110 +307,122 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
           )}
 
           {/* Chat Messages Container */}
-          <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-4 text-xs">
-            {/* Empty Welcome Card if conversation hasn't started */}
+          <div className="flex-1 overflow-y-auto px-4 py-3.5 space-y-3.5 text-xs sm:text-sm">
+            {/* Initial Welcome & Suggested Prompts (shown cleanly ONCE when chat hasn't started) */}
             {!hasUserMessages && (
-              <div className="p-4 rounded-xl bg-surface-soft/60 border border-line text-ink space-y-3 mb-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-lg bg-brand text-white flex items-center justify-center text-xs">
-                    <Sparkles size={13} />
+              <div className="space-y-3.5 pt-1 rv-fade-in">
+                {/* Assistant greeting bubble */}
+                <div className="flex items-start gap-2.5">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-brand to-indigo-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Bot size={15} />
                   </div>
-                  <span className="font-semibold text-xs text-ink">Bengaluru Decision Intelligence</span>
-                </div>
-                <p className="text-xs text-ink-2 leading-relaxed">
-                  Ask questions about micro-markets, rental potential, valuation discounts, or buy vs. rent comparisons.
-                </p>
-                <div className="pt-1 flex flex-col gap-1.5">
-                  <span className="text-[10px] uppercase font-semibold tracking-wider text-ink-3">Suggested Prompts</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                    {getSuggestedQuestions().slice(0, 4).map((q, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => handleSendMessage(q)}
-                        className="text-left p-2 rounded-lg bg-surface border border-line hover:border-brand/40 hover:bg-surface-soft text-[11px] text-ink-2 transition-all cursor-pointer font-medium leading-snug"
-                      >
-                        {q}
-                      </button>
-                    ))}
+                  <div className="flex-1 space-y-2">
+                    <div className="bg-surface-soft/80 border border-line/70 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs">
+                      <p className="text-[13.5px] leading-relaxed text-ink/90 font-chat">
+                        {getInitialGreeting().replace(/\*\*/g, '')}
+                      </p>
+                      <div className="mt-2 text-[10.5px] text-ink-3 flex items-center gap-1.5 font-medium">
+                        <span>RealVest Intelligence · Bengaluru</span>
+                      </div>
+                    </div>
+
+                    {/* Single Clean Set of Suggested Prompt Cards */}
+                    <div className="space-y-1.5 pt-1.5">
+                      <span className="text-[10.5px] font-semibold text-ink-3 uppercase tracking-wider block">
+                        Suggested questions
+                      </span>
+                      <div className="flex flex-col gap-1.5">
+                        {getSuggestedQuestions().slice(0, 4).map((q, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleSendMessage(q)}
+                            className="w-full text-left px-3.5 py-2.5 rounded-xl bg-surface border border-line/80 hover:border-brand/40 hover:bg-brand-soft/20 hover:text-brand text-[12.5px] text-ink-2 font-medium transition-all cursor-pointer shadow-xs leading-snug font-chat"
+                          >
+                            {q}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Message Bubble List */}
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={clsx(
-                  'flex items-start gap-2.5',
-                  msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
-                )}
-              >
-                {/* Avatar */}
+            {/* Active Conversation Messages */}
+            {hasUserMessages &&
+              messages.map((msg) => (
                 <div
+                  key={msg.id}
                   className={clsx(
-                    'w-7 h-7 rounded-xl flex items-center justify-center shrink-0 shadow-xs text-xs',
-                    msg.sender === 'user'
-                      ? 'bg-ink text-canvas font-semibold'
-                      : 'bg-brand text-white shadow-brand/20'
+                    'flex items-start gap-2.5',
+                    msg.sender === 'user' ? 'justify-end' : 'justify-start'
                   )}
                 >
-                  {msg.sender === 'user' ? <User size={13} /> : <Bot size={14} />}
-                </div>
-
-                {/* Message Body */}
-                <div
-                  className={clsx(
-                    'max-w-[85%] rounded-2xl p-3.5 space-y-2 text-xs leading-relaxed shadow-xs',
-                    msg.sender === 'user'
-                      ? 'bg-brand text-white rounded-tr-xs font-medium'
-                      : 'bg-surface border border-line text-ink rounded-tl-xs'
-                  )}
-                >
-                  {/* Markdown Renderer for Advisor / Pre-line for User */}
-                  {msg.sender === 'advisor' ? (
-                    <ChatMarkdown content={msg.text} />
-                  ) : (
-                    <p className="whitespace-pre-wrap">{msg.text}</p>
-                  )}
-
-                  {/* Sources Tag Section */}
-                  {msg.sources && msg.sources.length > 0 && msg.sender === 'advisor' && (
-                    <div className="pt-2 mt-2 border-t border-line flex flex-wrap items-center gap-1.5">
-                      <span className="text-[9px] uppercase font-semibold tracking-wider text-ink-3">Sources:</span>
-                      {msg.sources.map((s, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2 py-0.5 rounded-full bg-surface-soft text-[10px] font-medium text-ink-2 border border-line"
-                        >
-                          {s}
-                        </span>
-                      ))}
+                  {/* Advisor Avatar */}
+                  {msg.sender === 'advisor' && (
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-brand to-indigo-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                      <Bot size={15} />
                     </div>
                   )}
 
-                  {/* Timestamp */}
+                  {/* Message Bubble */}
                   <div
                     className={clsx(
-                      'text-[9px] font-mono text-right',
-                      msg.sender === 'user' ? 'text-white/70' : 'text-ink-3'
+                      'space-y-1.5 leading-relaxed shadow-xs',
+                      msg.sender === 'user'
+                        ? 'max-w-[85%] sm:max-w-[80%] bg-brand text-white rounded-2xl rounded-tr-sm px-4 py-2.5'
+                        : 'max-w-[90%] sm:max-w-[85%] bg-surface-soft/80 border border-line/70 text-ink rounded-2xl rounded-tl-sm px-4 py-3'
                     )}
                   >
-                    {msg.timestamp}
+                    {/* Content */}
+                    {msg.sender === 'advisor' ? (
+                      <ChatMarkdown content={msg.text} />
+                    ) : (
+                      <p className="text-[13.5px] leading-relaxed whitespace-pre-wrap font-chat font-normal">
+                        {msg.text}
+                      </p>
+                    )}
+
+                    {/* Metadata Footer */}
+                    <div
+                      className={clsx(
+                        'flex items-center justify-between gap-2 pt-1 text-[10px]',
+                        msg.sender === 'user'
+                          ? 'text-white/70 justify-end'
+                          : 'border-t border-line/40 text-ink-3'
+                      )}
+                    >
+                      {msg.sender === 'advisor' && (
+                        <div className="flex flex-wrap items-center gap-1 truncate text-[10.5px]">
+                          {msg.sources && msg.sources.length > 0 ? (
+                            <span className="truncate">Sources: {msg.sources.join(' · ')}</span>
+                          ) : (
+                            <span>RealVest Intelligence</span>
+                          )}
+                        </div>
+                      )}
+                      <span className="font-mono shrink-0">{msg.timestamp}</span>
+                    </div>
                   </div>
+
+                  {/* User Avatar */}
+                  {msg.sender === 'user' && (
+                    <div className="w-7 h-7 rounded-full bg-ink text-canvas flex items-center justify-center shrink-0 shadow-xs text-xs font-semibold">
+                      <User size={13} />
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              ))}
 
             {/* Loading Indicator */}
             {isLoading && (
               <div className="flex items-start gap-2.5 rv-fade-in">
-                <div className="w-7 h-7 rounded-xl bg-brand text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <Bot size={14} />
+                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-brand to-indigo-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <Bot size={15} />
                 </div>
-                <div className="px-4 py-3 rounded-2xl bg-surface border border-line text-ink-3 text-xs flex items-center gap-2.5 shadow-xs">
+                <div className="px-4 py-2.5 rounded-2xl rounded-tl-sm bg-surface-soft/80 border border-line/70 text-ink-2 text-[13px] flex items-center gap-2.5 shadow-xs font-chat">
                   <Loader2 size={14} className="animate-spin text-brand" />
-                  <span className="font-medium text-ink-2">Analyzing your question with Gemini…</span>
+                  <span>Analyzing with RealVest & Gemini…</span>
                 </div>
               </div>
             )}
@@ -435,30 +446,16 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Contextual Suggested Chips (Horizontal Scroll) */}
-          <div className="px-3 py-1.5 border-t border-line bg-surface shrink-0 overflow-x-auto no-scrollbar flex items-center gap-1.5">
-            {getSuggestedQuestions().map((q, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleSendMessage(q)}
-                disabled={isLoading}
-                className="px-2.5 py-1 rounded-full bg-surface-soft hover:bg-brand-soft hover:text-brand border border-line text-ink-2 text-[11px] font-medium whitespace-nowrap transition-colors cursor-pointer shrink-0 disabled:opacity-40"
-              >
-                {q}
-              </button>
-            ))}
-          </div>
-
-          {/* Input Area */}
-          <div className="p-3 border-t border-line bg-surface shrink-0 rounded-b-2xl">
-            <div className="flex items-end gap-2 p-1.5 rounded-xl border border-line bg-surface-soft focus-within:border-brand focus-within:ring-1 focus-within:ring-brand/20 transition-all shadow-xs">
+          {/* Input Area (Clean Capsule with no clipped placeholder) */}
+          <div className="p-3 border-t border-line/80 bg-surface shrink-0 rounded-b-2xl">
+            <div className="relative flex items-center bg-surface-soft/70 border border-line/90 focus-within:border-brand focus-within:bg-surface focus-within:ring-2 focus-within:ring-brand/15 rounded-2xl transition-all shadow-xs pl-3.5 pr-11 py-1.5">
               <textarea
                 ref={textareaRef}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={t.ask_advisor_placeholder || 'Ask about properties, valuations, or investment decisions…'}
-                className="flex-1 px-2.5 py-1.5 text-xs sm:text-sm text-ink bg-transparent focus:outline-none placeholder:text-ink-3 resize-none max-h-24 min-h-[36px]"
+                placeholder="Ask RealVest about Bengaluru property..."
+                className="w-full text-[13.5px] text-ink bg-transparent focus:outline-none placeholder:text-ink-3 resize-none max-h-24 min-h-[34px] py-1 leading-normal font-chat"
                 rows={1}
                 disabled={isLoading}
                 aria-label="Ask RealVest Advisor"
@@ -466,15 +463,15 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
               <button
                 onClick={() => handleSendMessage()}
                 disabled={!inputText.trim() || isLoading}
-                className="p-2 rounded-lg bg-brand hover:bg-brand-hover active:scale-95 disabled:opacity-40 text-white font-semibold transition-all flex items-center justify-center cursor-pointer shrink-0"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl bg-brand hover:bg-brand-hover active:scale-95 disabled:opacity-30 text-white transition-all flex items-center justify-center cursor-pointer shrink-0 shadow-xs"
                 title="Send message (Enter)"
                 aria-label="Send message"
               >
                 {isLoading ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
               </button>
             </div>
-            <div className="mt-1 px-1 flex items-center justify-between text-[10px] text-ink-3">
-              <span>Press <kbd className="px-1 py-0.5 rounded bg-surface border border-line font-mono text-[9px]">Enter</kbd> to send, <kbd className="px-1 py-0.5 rounded bg-surface border border-line font-mono text-[9px]">Shift+Enter</kbd> for new line</span>
+            <div className="mt-1.5 px-1 flex items-center justify-between text-[10.5px] text-ink-3 font-chat">
+              <span>Press <kbd className="px-1 py-0.5 rounded bg-surface border border-line font-mono text-[9px]">Enter</kbd> to send · <kbd className="px-1 py-0.5 rounded bg-surface border border-line font-mono text-[9px]">Shift+Enter</kbd> for newline</span>
             </div>
           </div>
         </div>
@@ -482,3 +479,4 @@ export const GlobalAdvisorDrawer: React.FC<GlobalAdvisorDrawerProps> = ({
     </>
   );
 };
+
