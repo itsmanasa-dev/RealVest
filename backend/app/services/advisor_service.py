@@ -199,10 +199,12 @@ class AdvisorService:
                 break
 
         # ----------------------------------------------------
-        # 2. Try Calling Official Google Gemini API (gemini-3.7-flash)
+        # 2. Try Calling Official Google Gemini API (gemini-2.5-flash / gemini-2.0-flash)
         # ----------------------------------------------------
-        api_key = settings.GEMINI_API_KEY or os.getenv("GEMINI_API_KEY", "")
-        gemini_model = settings.GEMINI_MODEL or "gemini-3.7-flash"
+        from dotenv import load_dotenv
+        load_dotenv(override=True)
+        api_key = os.getenv("GEMINI_API_KEY", "") or settings.GEMINI_API_KEY
+        gemini_model = os.getenv("GEMINI_MODEL", "") or settings.GEMINI_MODEL or "gemini-2.5-flash"
 
         if api_key:
             gemini_response = cls._call_gemini_api(
@@ -290,7 +292,7 @@ class AdvisorService:
                 max_output_tokens=750,
             )
 
-            candidate_models = [model, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
+            candidate_models = [model, "gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.5-flash", "gemini-2.5-flash"]
             candidate_models = list(dict.fromkeys(candidate_models))
 
             for m in candidate_models:
