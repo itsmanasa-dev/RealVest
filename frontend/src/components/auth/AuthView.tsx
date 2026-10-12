@@ -21,7 +21,7 @@ interface AuthViewProps {
 }
 
 export const AuthView: React.FC<AuthViewProps> = () => {
-  const { login, signup, authError, clearError, isConfigured } = useAuth();
+  const { login, signup, loginAsGuest, authError, clearError, isConfigured } = useAuth();
 
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [email, setEmail] = useState('');
@@ -123,10 +123,10 @@ export const AuthView: React.FC<AuthViewProps> = () => {
           <div className="mb-6 p-4 rounded-xl bg-warn-soft/60 border border-warn/30 text-ink text-xs space-y-1.5 shadow-sm">
             <div className="flex items-center gap-2 font-semibold text-warn">
               <AlertCircle size={16} />
-              <span>Firebase Environment Configuration Required</span>
+              <span>Firebase Credentials Optional for Testing</span>
             </div>
             <p className="text-ink-2 leading-relaxed">
-              To connect your real Firebase project, add your credentials to <code className="px-1.5 py-0.5 rounded bg-surface border border-line font-mono text-[11px]">frontend/.env</code>.
+              You can click <strong>Explore as Guest</strong> below for instant full access, or add credentials to <code className="px-1.5 py-0.5 rounded bg-surface border border-line font-mono text-[11px]">frontend/.env</code> for persistent user accounts.
             </p>
           </div>
         )}
@@ -314,6 +314,23 @@ export const AuthView: React.FC<AuthViewProps> = () => {
               )}
             </button>
           </form>
+
+          {/* 1-Click Guest / Demo Access Button */}
+          <div className="relative my-4 flex items-center justify-center">
+            <div className="w-full border-t border-line" />
+            <span className="absolute bg-surface px-3 text-[11px] font-medium text-ink-3 uppercase tracking-wider">
+              or
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={loginAsGuest}
+            className="w-full py-2.5 px-4 rounded-lg bg-surface-soft hover:bg-surface-soft/80 border border-line hover:border-brand/40 text-ink font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.99]"
+          >
+            <Sparkles size={15} className="text-brand" />
+            <span>Explore as Guest (Instant Access)</span>
+          </button>
 
           {/* Quick toggle at bottom */}
           <div className="mt-6 pt-5 border-t border-line text-center text-xs text-ink-3">

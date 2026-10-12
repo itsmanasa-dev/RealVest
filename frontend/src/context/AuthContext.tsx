@@ -18,9 +18,19 @@ interface AuthContextType {
   isConfigured: boolean;
   login: (email: string, pass: string) => Promise<void>;
   signup: (email: string, pass: string, displayName?: string) => Promise<void>;
+  loginAsGuest: () => void;
   logout: () => Promise<void>;
   clearError: () => void;
 }
+
+const GUEST_STORAGE_KEY = 'realvest_guest_session';
+
+const MOCK_GUEST_USER = {
+  uid: 'guest_investor_001',
+  email: 'investor@realvest.ai',
+  displayName: 'RealVest Guest',
+  isAnonymous: true,
+} as unknown as User;
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -65,11 +75,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const isConfigured = isFirebaseConfigured();
 
   useEffect(() => {
+    // Check if guest session is already active
+    const savedGuest = localStorage.getItem(GUEST_STORAGE_KEY);
+    if (savedGuest) {
+      try {
+        setUser(JSON.parse(savedGuest) as User);
+        setLoading(false);
+        return;
+      } catch {
+        localStorage.removeItem(GUEST_STORAGE_KEY);
+      }
+    }
+
     // Listen for auth state changes (restores session after refresh)
     const unsubscribe = onAuthStateChanged(
       auth,
       (currentUser) => {
-        setUser(currentUser);
+        if (!localStorage.getItem(GUEST_STORAGE_KEY)) {
+          setUser(currentUser);
+        }
         setLoading(false);
       },
       (error) => {
@@ -81,6 +105,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     return () => unsubscribe();
   }, []);
+
+  const loginAsGuest = () => {
+    localStorage.setItem(GUEST_STORAGE_KEY, JSON.stringify(MOCK_GUEST_USER));
+    setUser(MOCK_GUEST_USER);
+  };
 
   const login = async (email: string, pass: string) => {
     setAuthError(null);
@@ -111,18 +140,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logout = async () => {
     setAuthError(null);
+    localStorage.removeItem(GUEST_STORAGE_KEY);
     try {
       if (user?.uid) {
         clearOnboarding(user.uid);
       } else {
         clearOnboarding();
       }
-      await signOut(auth);
+      if (isConfigured) {
+        await signOut(auth);
+      }
+    } catch {
+      // Ignore sign out errors on unconfigured firebase
+    } finally {
       setUser(null);
-    } catch (err: unknown) {
-      const msg = getFriendlyErrorMessage(err);
-      setAuthError(msg);
-      throw new Error(msg);
     }
   };
 
@@ -139,6 +170,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isConfigured,
         login,
         signup,
+        loginAsGuest,
         logout,
         clearError,
       }}
