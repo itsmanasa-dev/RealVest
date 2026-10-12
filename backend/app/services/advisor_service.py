@@ -220,6 +220,7 @@ class AdvisorService:
         # 3. Deterministic RealVest Fallback Engine
         # ----------------------------------------------------
         logger.info("Using RealVest deterministic data fallback engine.")
+        sources.append("Offline Rule-Based Knowledge Engine (Fallback)")
         fallback_reply = cls._generate_fallback_reply(
             db=db,
             msg_lower=msg_lower,
@@ -285,7 +286,7 @@ class AdvisorService:
                 max_output_tokens=450,
             )
 
-            candidate_models = [model, "gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.5-flash", "gemini-2.5-flash"]
+            candidate_models = [model, "gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.5-flash"]
             candidate_models = list(dict.fromkeys(candidate_models))
 
             for m in candidate_models:
