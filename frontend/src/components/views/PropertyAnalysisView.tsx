@@ -60,8 +60,8 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
   const [risk, setRisk] = useState<string>('Moderate');
   const [holdingPeriod, setHoldingPeriod] = useState<string>('3–5 years');
 
-  const availableProperties = properties.length > 0 ? properties : [property];
-  const otherProperty = availableProperties.find((p) => p.id !== property.id) || property;
+  const [allProperties, setAllProperties] = useState<Property[]>(properties.length > 0 ? properties : [property]);
+  const otherProperty = allProperties.find((p) => p.id !== property.id) || property;
 
   const [selectedIds, setSelectedIds] = useState<string[]>([property.id, otherProperty.id]);
   const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -73,15 +73,49 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
 
   const localitiesList = [
     'Whitefield',
-    'Electronic City',
-    'Sarjapur Road',
-    'Hebbal',
-    'Indiranagar',
     'HSR Layout',
+    'Indiranagar',
     'Koramangala',
+    'Hebbal',
+    'Electronic City',
     'Bellandur',
+    'Marathahalli',
+    'Sarjapur Road',
+    'Jayanagar',
+    'JP Nagar',
+    'Malleshwaram',
+    'Thanisandra',
+    'Bannerghatta Road',
+    'Yelahanka',
+    'Rajaji Nagar',
     'Any Bengaluru',
   ];
+
+  // Fetch full property list from backend to guarantee all Bengaluru areas are available
+  useEffect(() => {
+    async function loadAllProperties() {
+      try {
+        const live = await propertyApi.getProperties();
+        if (live && live.length > 0) {
+          setAllProperties(live);
+        }
+      } catch (err) {
+        console.warn('Backend connection fallback: Using cached properties.');
+      }
+    }
+    loadAllProperties();
+  }, []);
+
+  // Update allProperties if parent properties prop updates
+  useEffect(() => {
+    if (properties && properties.length > 0) {
+      setAllProperties((prev) => {
+        const map = new Map(prev.map((p) => [p.id, p]));
+        properties.forEach((p) => map.set(p.id, p));
+        return Array.from(map.values());
+      });
+    }
+  }, [properties]);
 
   // Run comparison when comparison IDs change
   const runComparison = async (ids: string[]) => {
@@ -120,7 +154,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
         locality: locality === 'Any Bengaluru' ? undefined : locality,
         min_budget: minBudget,
         max_budget: maxBudget,
-        property_type: propertyType,
+        property_type: propertyType === 'Any Type' ? undefined : propertyType,
         bhk: bhk === 'all' ? undefined : bhk,
         goal,
         risk,
@@ -128,21 +162,50 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
       });
 
       if (candidates && candidates.length > 0) {
-        const nextIds = [property.id, ...candidates.filter((c) => c.id !== property.id).slice(0, 1).map((c) => c.id)];
+        // Merge any new candidates into allProperties so they are available in memory
+        setAllProperties((prev) => {
+          const map = new Map(prev.map((p) => [p.id, p]));
+          candidates.forEach((c) => map.set(c.id, c));
+          return Array.from(map.values());
+        });
+
+        // Filter out property in Slot A (current property)
+        const matchedNotA = candidates.filter((c) => c.id !== property.id);
+        const topCandidate = matchedNotA[0] || candidates[0];
+
+        const nextIds = [...selectedIds];
+        nextIds[1] = topCandidate.id;
+        if (nextIds.length > 2 && matchedNotA[1]) {
+          nextIds[2] = matchedNotA[1].id;
+        }
+
         setSelectedIds(nextIds);
         await runComparison(nextIds);
       } else {
-        setErrorMessage('No exact matches found for your criteria. Showing closest available Bengaluru properties.');
+        // Fallback: check if any property exists in allProperties matching chosen locality
+        const localMatches = allProperties.filter(
+          (p) => locality === 'Any Bengaluru' || p.location.toLowerCase().includes(locality.toLowerCase())
+        );
+        if (localMatches.length > 0) {
+          const pick = localMatches.find((p) => p.id !== property.id) || localMatches[0];
+          const nextIds = [...selectedIds];
+          nextIds[1] = pick.id;
+          setSelectedIds(nextIds);
+          await runComparison(nextIds);
+        } else {
+          setErrorMessage(`No properties found for ${locality}. Showing closest available listings.`);
+        }
       }
     } catch (err: any) {
-      console.warn('Fallback to cached listings:', err.message);
+      console.warn('Fallback search error:', err.message);
+      setErrorMessage('Search error. Please verify your connection.');
     } finally {
       setIsSearching(false);
     }
   };
 
   const selectedProps = selectedIds
-    .map((id) => availableProperties.find((p) => p.id === id))
+    .map((id) => allProperties.find((p) => p.id === id))
     .filter(Boolean) as Property[];
 
   const bestProperty =
@@ -158,7 +221,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
 
   const handleAddSlot = () => {
     if (selectedIds.length < 3) {
-      const unused = availableProperties.find((p) => !selectedIds.includes(p.id)) || availableProperties[0];
+      const unused = allProperties.find((p) => !selectedIds.includes(p.id)) || allProperties[0];
       setSelectedIds([...selectedIds, unused.id]);
     }
   };
@@ -491,10 +554,13 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-ink-2">Type & BHK</label>
                 <div className="grid grid-cols-2 gap-2">
-                  <select value={propertyType} onChange={(e) => setPropertyType(e.target.value)} className="input">
-                    <option>Residential</option><option>Commercial</option><option>Land / Plot</option><option>Any Type</option>
+                  <select value={propertyType} onChange={(e) => setPropertyType(e.target.value)} className="input text-xs">
+                    <option value="Residential">Residential</option>
+                    <option value="Commercial">Commercial</option>
+                    <option value="Land / Plot">Land / Plot</option>
+                    <option value="Any Type">Any Type</option>
                   </select>
-                  <select value={bhk} onChange={(e) => setBhk(e.target.value === 'all' ? 'all' : Number(e.target.value))} className="input">
+                  <select value={bhk} onChange={(e) => setBhk(e.target.value === 'all' ? 'all' : Number(e.target.value))} className="input text-xs">
                     <option value="all">All BHK</option><option value="1">1 BHK</option><option value="2">2 BHK</option>
                     <option value="3">3 BHK</option><option value="4">4+ BHK</option>
                   </select>
@@ -503,7 +569,7 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
 
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-ink-2">Investment Goal</label>
-                <select value={goal} onChange={(e) => setGoal(e.target.value)} className="input">
+                <select value={goal} onChange={(e) => setGoal(e.target.value)} className="input text-xs">
                   <option>Capital Appreciation</option><option>Rental Income</option><option>Balanced Growth</option>
                 </select>
               </div>
@@ -522,9 +588,18 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
           {/* Property slots */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {selectedIds.map((currentId, slotIdx) => {
-              const currentProp = availableProperties.find((p) => p.id === currentId);
+              const currentProp = allProperties.find((p) => p.id === currentId);
+
+              // Group properties by locality for the selection dropdown
+              const grouped = allProperties.reduce<Record<string, Property[]>>((acc, p) => {
+                const locKey = p.location || 'Other';
+                if (!acc[locKey]) acc[locKey] = [];
+                acc[locKey].push(p);
+                return acc;
+              }, {});
+
               return (
-                <Card key={slotIdx} padded={false} className="p-3.5 border-line">
+                <Card key={slotIdx} padded={false} className="p-3.5 border-line shadow-xs">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[11px] font-semibold uppercase tracking-wide text-brand">
                       Slot {String.fromCharCode(65 + slotIdx)} {slotIdx === 0 ? '(Current Asset)' : ''}
@@ -535,21 +610,40 @@ export const PropertyAnalysisView: React.FC<PropertyAnalysisViewProps> = ({
                       </button>
                     )}
                   </div>
-                  {currentProp ? (
-                    <div className="space-y-1">
-                      <div className="font-semibold text-sm text-ink truncate">{currentProp.title}</div>
+
+                  {currentProp && (
+                    <div className="space-y-1 mb-2.5">
+                      <div className="font-semibold text-sm text-ink truncate" title={currentProp.title}>
+                        {currentProp.title}
+                      </div>
                       <div className="text-xs text-ink-3 flex items-center justify-between">
-                        <span>{currentProp.location}</span>
+                        <span className="font-medium text-brand">{currentProp.location}</span>
                         <span className="font-mono font-bold text-ink">{formatInrLakhs(currentProp.askingPriceLakhs)}</span>
                       </div>
                     </div>
-                  ) : (
-                    <select value={currentId} onChange={(e) => handleSelectSlot(slotIdx, e.target.value)} className="input text-xs">
-                      {availableProperties.map((p) => (
-                        <option key={p.id} value={p.id}>{p.title} ({formatInrLakhs(p.askingPriceLakhs)})</option>
+                  )}
+
+                  {/* Dropdown to switch/select ANY property across Bengaluru */}
+                  <div className="pt-2 border-t border-line/60">
+                    <label className="text-[10px] font-semibold uppercase tracking-wider text-ink-3 block mb-1">
+                      {slotIdx === 0 ? 'Select Base Property' : 'Choose Comparison Asset'}
+                    </label>
+                    <select
+                      value={currentId}
+                      onChange={(e) => handleSelectSlot(slotIdx, e.target.value)}
+                      className="input text-xs w-full py-1.5 font-medium bg-surface text-ink cursor-pointer"
+                    >
+                      {Object.keys(grouped).sort().map((locName) => (
+                        <optgroup key={locName} label={locName}>
+                          {grouped[locName].map((p) => (
+                            <option key={p.id} value={p.id}>
+                              {p.title} ({formatInrLakhs(p.askingPriceLakhs)})
+                            </option>
+                          ))}
+                        </optgroup>
                       ))}
                     </select>
-                  )}
+                  </div>
                 </Card>
               );
             })}
