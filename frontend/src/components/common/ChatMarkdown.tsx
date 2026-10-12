@@ -32,32 +32,32 @@ export const ChatMarkdown: React.FC<ChatMarkdownProps> = ({ content, className =
   const cleanContent = sanitizeMarkdown(content);
 
   return (
-    <div className={`chat-markdown text-xs sm:text-sm leading-relaxed ${className}`}>
+    <div className={`chat-markdown font-chat text-[13.5px] leading-relaxed text-ink/90 space-y-1.5 ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           h1: ({ children }) => (
-            <h1 className="text-base sm:text-lg font-bold text-ink mt-3 mb-1.5 tracking-tight font-display border-b border-line pb-1">
+            <h1 className="text-[15px] font-bold text-ink mt-2.5 mb-1 tracking-tight font-display border-b border-line/60 pb-1">
               {children}
             </h1>
           ),
           h2: ({ children }) => (
-            <h2 className="text-sm sm:text-base font-bold text-ink mt-2.5 mb-1 tracking-tight">
+            <h2 className="text-[14px] font-bold text-ink mt-2 mb-1 tracking-tight font-display">
               {children}
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="text-xs sm:text-sm font-semibold text-ink mt-2 mb-1">
+            <h3 className="text-[13.5px] font-semibold text-ink mt-1.5 mb-0.5">
               {children}
             </h3>
           ),
           h4: ({ children }) => (
-            <h4 className="text-xs font-semibold text-ink-2 mt-1.5 mb-0.5 uppercase tracking-wide">
+            <h4 className="text-[12px] font-semibold text-ink-3 uppercase tracking-wider mt-1 mb-0.5">
               {children}
             </h4>
           ),
           p: ({ children }) => (
-            <p className="my-1.5 leading-relaxed text-ink-2 first:mt-0 last:mb-0">
+            <p className="my-1 leading-[1.6] text-ink/90 first:mt-0 last:mb-0">
               {children}
             </p>
           ),
@@ -65,55 +65,55 @@ export const ChatMarkdown: React.FC<ChatMarkdownProps> = ({ content, className =
             <strong className="font-semibold text-ink">{children}</strong>
           ),
           em: ({ children }) => (
-            <em className="italic text-ink-2">{children}</em>
+            <em className="italic text-ink/80">{children}</em>
           ),
           ul: ({ children }) => (
-            <ul className="my-1.5 space-y-1 list-disc list-outside pl-4 text-ink-2">
+            <ul className="my-1 space-y-1 list-disc list-outside pl-4 text-ink/90">
               {children}
             </ul>
           ),
           ol: ({ children }) => (
-            <ol className="my-1.5 space-y-1 list-decimal list-outside pl-4 text-ink-2">
+            <ol className="my-1 space-y-1 list-decimal list-outside pl-4 text-ink/90">
               {children}
             </ol>
           ),
           li: ({ children }) => (
-            <li className="leading-relaxed pl-0.5">{children}</li>
+            <li className="leading-[1.55] pl-0.5">{children}</li>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="my-2 border-l-2 border-brand/70 pl-3 py-0.5 bg-brand-soft/20 text-ink-2 italic rounded-r-md">
+            <blockquote className="my-1.5 border-l-2 border-brand pl-3 py-0.5 bg-brand-soft/30 text-ink/90 italic rounded-r-lg text-[13px]">
               {children}
             </blockquote>
           ),
           table: ({ children }) => (
-            <div className="my-2.5 overflow-x-auto rounded-lg border border-line shadow-xs max-w-full">
+            <div className="my-2 overflow-x-auto rounded-xl border border-line bg-surface shadow-xs max-w-full">
               <table className="min-w-full text-xs text-left divide-y divide-line">
                 {children}
               </table>
             </div>
           ),
           thead: ({ children }) => (
-            <thead className="bg-surface-soft text-ink font-semibold border-b border-line">
+            <thead className="bg-surface-soft/80 text-ink font-semibold border-b border-line text-[11px] uppercase tracking-wider">
               {children}
             </thead>
           ),
           tbody: ({ children }) => (
-            <tbody className="divide-y divide-line/60 bg-surface">
+            <tbody className="divide-y divide-line/50 bg-surface">
               {children}
             </tbody>
           ),
           tr: ({ children }) => (
-            <tr className="hover:bg-surface-soft/50 transition-colors">
+            <tr className="hover:bg-surface-soft/40 transition-colors">
               {children}
             </tr>
           ),
           th: ({ children }) => (
-            <th className="px-3 py-2 text-[11px] font-semibold text-ink-2 whitespace-nowrap">
+            <th className="px-3 py-2 text-[11px] font-semibold text-ink whitespace-nowrap">
               {children}
             </th>
           ),
           td: ({ children }) => (
-            <td className="px-3 py-2 text-xs text-ink-2 whitespace-normal">
+            <td className="px-3 py-2 text-[12.5px] text-ink/90 whitespace-normal">
               {children}
             </td>
           ),
@@ -121,7 +121,7 @@ export const ChatMarkdown: React.FC<ChatMarkdownProps> = ({ content, className =
             if (inline) {
               return (
                 <code
-                  className="px-1.5 py-0.5 rounded bg-surface-soft border border-line font-mono text-[11px] text-brand font-medium"
+                  className="px-1.5 py-0.5 rounded bg-surface-soft border border-line font-mono text-[11.5px] text-brand font-medium"
                   {...props}
                 >
                   {children}
@@ -129,14 +129,14 @@ export const ChatMarkdown: React.FC<ChatMarkdownProps> = ({ content, className =
               );
             }
             return (
-              <div className="my-2 overflow-x-auto rounded-lg bg-surface-soft border border-line p-3 font-mono text-xs text-ink">
+              <div className="my-1.5 overflow-x-auto rounded-xl bg-surface-soft border border-line p-2.5 font-mono text-xs text-ink">
                 <code className={codeClass} {...props}>
                   {children}
                 </code>
               </div>
             );
           },
-          hr: () => <hr className="my-3 border-line" />,
+          hr: () => <hr className="my-2.5 border-line/60" />,
         }}
       >
         {cleanContent}
